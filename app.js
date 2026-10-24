@@ -5,6 +5,12 @@ const RELEASE = {
   url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.6.0/Rotiva-Setup-1.6.0.exe',
 };
 
+// Link donasi (Saweria/Trakteer/Ko-fi/...). Kosongkan url untuk menyembunyikan bagian donasi.
+const DONATE = {
+  label: 'Traktir kopi',
+  url: 'https://sociabuzz.com/kianaldrich',
+};
+
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ------------------------------------------------------------------
@@ -543,6 +549,11 @@ function initFormats() {
    ------------------------------------------------------------------ */
 function initPage() {
   document.querySelectorAll('[data-download]').forEach(a => { a.href = RELEASE.url; });
+  if (DONATE.url) {
+    document.querySelectorAll('[data-donate]').forEach(a => { a.href = DONATE.url; });
+    document.querySelectorAll('[data-donate-label]').forEach(s => { s.textContent = DONATE.label; });
+    document.querySelectorAll('[data-donate-section]').forEach(s => { s.hidden = false; });
+  }
   document.querySelectorAll('[data-version]').forEach(s => { s.textContent = 'v' + RELEASE.version; });
   document.querySelectorAll('[data-size]').forEach(s => { s.textContent = RELEASE.size; });
   document.querySelectorAll('[data-filename]').forEach(s => { s.textContent = RELEASE.url.split('/').pop(); });

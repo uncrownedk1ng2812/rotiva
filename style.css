@@ -290,6 +290,23 @@ h3 { font-size: 24px; text-transform: uppercase; letter-spacing: .02em; }
 .note { color: var(--muted); font-size: 14px; margin: 22px 0 0; max-width: 46em; }
 @media (max-width: 760px) { .dl-steps { grid-template-columns: 1fr; } }
 
+/* ---------- Donasi ---------- */
+.donate { padding-top: 0; border-top: 0; }
+.donate-card {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 28px; align-items: center;
+  background: linear-gradient(120deg, rgba(255, 138, 31, .14), transparent 55%), var(--surface);
+  border: 1px solid rgba(255, 138, 31, .25); border-radius: var(--radius); padding: 32px 36px;
+}
+.donate-card h2 { font-size: clamp(30px, 3.4vw, 40px); }
+.donate-card p { color: var(--muted); margin: 8px 0 0; max-width: 40em; }
+.donate-heart { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 138, 31, .14); }
+.donate-heart svg { width: 30px; height: 30px; fill: var(--accent); animation: beat 2.4s ease-in-out infinite; }
+@keyframes beat { 0%, 40%, 100% { transform: none; } 10%, 30% { transform: scale(1.18); } 20% { transform: scale(1.05); } }
+.footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .brand { color: var(--text); }
+@media (max-width: 760px) { .donate-card { grid-template-columns: 1fr; justify-items: start; padding: 24px; gap: 18px; } }
+
 /* ---------- FAQ ---------- */
 .faq { margin-top: 36px; display: grid; gap: 10px; }
 .faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0 20px; transition: border-color .2s; }
