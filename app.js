@@ -1,8 +1,8 @@
 // Ganti url ke lokasi installer (mis. GitHub Releases) setiap rilis versi baru.
 const RELEASE = {
-  version: '1.6.0',
+  version: '1.7.0',
   size: '±247 MB',
-  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.6.0/Rotiva-Setup-1.6.0.exe',
+  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.7.0/Rotiva-Setup-1.7.0.exe',
 };
 
 // Link donasi (Saweria/Trakteer/Ko-fi/...). Kosongkan url untuk menyembunyikan bagian donasi.
@@ -20,6 +20,8 @@ const T = (label, desc, ext, icon, action = 'convert') => ({ label, desc, ext, i
 const compress = desc => T('KOMPRES', desc, '', 'shrink', 'compress');
 const extractText = desc => T('TEKS', desc, '.txt', 'text', 'text');
 const MERGE = T('GABUNG', 'Jadikan satu PDF', '.pdf', 'stack', 'merge');
+const ZIP = T('ZIP', 'Kompres jadi .zip', '.zip', 'zip', 'zip');
+const EXTRACT = T('EKSTRAK', 'Buka ke folder', '', 'folder', 'extract');
 
 const CATEGORIES = [
   {
@@ -36,6 +38,7 @@ const CATEGORIES = [
       T('TIFF', 'Kualitas cetak', '.tiff', 'image'),
       extractText('Salin teks (OCR)'),
       MERGE,
+      ZIP,
     ],
   },
   {
@@ -51,6 +54,7 @@ const CATEGORIES = [
       T('GIF', 'Animasi tanpa suara', '.gif', 'image'),
       T('MP3', 'Ambil audionya saja', '.mp3', 'audio'),
       T('WAV', 'Audio lossless', '.wav', 'audio'),
+      ZIP,
     ],
   },
   {
@@ -63,6 +67,7 @@ const CATEGORIES = [
       T('OGG', 'Vorbis', '.ogg', 'audio'),
       T('OPUS', 'Paling efisien', '.opus', 'audio'),
       T('M4A', 'AAC untuk Apple', '.m4a', 'audio'),
+      ZIP,
     ],
   },
   {
@@ -77,6 +82,7 @@ const CATEGORIES = [
       T('MD', 'Markdown', '.md', 'doc'),
       T('RTF', 'Rich Text', '.rtf', 'doc'),
       MERGE,
+      ZIP,
     ],
   },
   {
@@ -90,6 +96,7 @@ const CATEGORIES = [
       T('XLS', 'Excel 97-2003', '.xls', 'sheet'),
       T('HTML', 'Tabel halaman web', '.html', 'doc'),
       MERGE,
+      ZIP,
     ],
   },
   {
@@ -104,16 +111,28 @@ const CATEGORIES = [
       extractText('Salin semua teksnya'),
       T('PISAH', 'PDF per halaman', '.pdf', 'stack', 'split'),
       MERGE,
+      ZIP,
     ],
+  },
+  {
+    id: 'archive', name: 'Arsip', color: '#b8892a',
+    exts: ['zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'bz2', 'xz'],
+    targets: [EXTRACT, ZIP],
   },
 ];
 
-const categoryOf = ext => CATEGORIES.find(c => c.exts.includes(ext.toLowerCase()));
+// Folder dan file yang jenisnya belum didukung: hanya bisa dijadikan ZIP.
+const OTHER = { id: 'other', name: 'File', color: '#5a5a66', exts: [], targets: [ZIP] };
+const FOLDER = { ...OTHER, id: 'folder', name: 'Folder' };
 
-/** Sama seperti FormatCatalog.ForFile: buang format yang sama, GABUNG hanya untuk banyak file. */
-function targetsFor(ext, multiple) {
-  return categoryOf(ext).targets.filter(t =>
-    t.action === 'convert' ? t.ext !== '.' + ext : t.action === 'merge' ? multiple : true);
+const categoryOf = ext => CATEGORIES.find(c => c.exts.includes(ext.toLowerCase()));
+const categoryFor = file => file.folder ? FOLDER : categoryOf(file.ext) ?? OTHER;
+
+/** Sama seperti FormatCatalog.ForFile: buang format yang sama, GABUNG & ZIP hanya untuk banyak file. */
+function targetsFor(category, ext, multiple) {
+  if (category.targets === OTHER.targets) return category.targets;
+  return category.targets.filter(t =>
+    t.action === 'convert' ? t.ext !== '.' + ext : ['merge', 'zip'].includes(t.action) ? multiple : true);
 }
 
 /* ------------------------------------------------------------------
@@ -121,7 +140,7 @@ function targetsFor(ext, multiple) {
    ------------------------------------------------------------------ */
 const NS = 'http://www.w3.org/2000/svg';
 const R_OUT = 280, R_IN = 122, GAP = 6, POP = 12, SEL_R = R_OUT + 12, RING_R = R_OUT + 30, CENTER_R = R_IN - 14;
-const HALF = R_OUT + 44, DEAD_ZONE = R_IN * 0.4;
+const HALF = R_OUT + 44, DEAD_ZONE = R_IN * 0.4, MIN_SLOTS = 4;
 
 const ICONS = {
   image: 'M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4M15.5 9.5h.01',
@@ -133,6 +152,8 @@ const ICONS = {
   shrink: 'M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7',
   stack: 'M8 4h9l3 3v11H8zM4 8v12h11',
   text: 'M4 7V4h3M17 4h3v3M20 17v3h-3M7 20H4v-3M8 9h8M8 12h8M8 15h5',
+  zip: 'M4 7h6l2 2h8v10H4zM14 9v2h-2v2h2v2h-2',
+  folder: 'M3 7h6l2 2h10v10H3zM12 12v5m0 0-2.5-2.5M12 17l2.5-2.5',
 };
 
 const pt = (deg, r) => { const a = deg * Math.PI / 180; return [r * Math.sin(a), -r * Math.cos(a)]; };
@@ -204,21 +225,25 @@ class Wheel {
     this.segLayer.replaceChildren();
     this.segments = [];
 
-    const span = 360 / targets.length;
-    targets.forEach((t, i) => {
+    // Pilihan sedikit (misal folder: hanya ZIP): sisanya slot kosong seperti di GTA V.
+    const slots = Math.max(targets.length, MIN_SLOTS);
+    const span = 360 / slots;
+    for (let i = 0; i < slots; i++) {
+      const t = targets[i];
       const a0 = i * span - span / 2, a1 = a0 + span;
       const [dx, dy] = pt(i * span, POP);
       const enter = el('g', { class: 'enter', style: `--i:${i}` }, this.segLayer);
-      const seg = el('g', { class: 'seg', style: `--dx:${f(dx)}px;--dy:${f(dy)}px` }, enter);
+      const seg = el('g', { class: t ? 'seg' : 'seg empty', style: `--dx:${f(dx)}px;--dy:${f(dy)}px` }, enter);
       el('path', { d: sectorPath(a0, a1, R_IN, R_OUT) }, seg);
+      this.segments.push(seg);
+      if (!t) continue;
       const [ix, iy] = pt(i * span, 224);
       el('path', { class: 'glyph', d: ICONS[t.icon], transform: `translate(${f(ix - 12)} ${f(iy - 12)})` }, seg);
       const [tx, ty] = pt(i * span, 178);
       const label = el('text', { x: f(tx), y: f(ty) }, seg);
       label.textContent = t.label;
-      if (t.label.length > 5) label.setAttribute('textLength', Math.min(t.label.length * 13, 2 * Math.PI * 178 / targets.length - 18));
-      this.segments.push(seg);
-    });
+      if (t.label.length > 5) label.setAttribute('textLength', Math.min(t.label.length * 13, 2 * Math.PI * 178 / slots - 18));
+    }
 
     this.selector.setAttribute('d', arcPath(-span / 2, span / 2, SEL_R));
     this.selector.style.transition = 'none';
@@ -250,9 +275,15 @@ class Wheel {
   }
 
   select(index) {
+    if (index >= this.targets.length) index = -1; // slot kosong: tidak ada pilihan
     if (index === this.selected) return;
     this.segments[this.selected]?.classList.remove('on');
     this.selected = index;
+    if (index < 0) {
+      this.root.classList.remove('has-sel');
+      this.updateCenter(true);
+      return;
+    }
     this.segments[index].classList.add('on');
 
     const target = index * 360 / this.segments.length;
@@ -284,7 +315,10 @@ class Wheel {
     this.cTitle.textContent = t ? t.label : this.sourceExt;
     this.cDesc.textContent = t ? t.desc : 'Arahkan kursor';
     this.bSrc.textContent = this.sourceExt;
-    this.bDst.textContent = !t ? '?' : t.action === 'compress' ? this.sourceExt : t.ext.slice(1).toUpperCase();
+    this.bDst.textContent = !t ? '?'
+      : t.action === 'compress' ? this.sourceExt
+      : t.action === 'extract' ? 'FOLDER'
+      : t.ext.slice(1).toUpperCase();
     if (animate && !reduceMotion) {
       this.center.classList.remove('swap');
       void this.center.offsetWidth;
@@ -300,7 +334,7 @@ function initHero() {
   const host = document.getElementById('heroVisual');
   const wheel = new Wheel(document.getElementById('heroWheel'));
   const image = CATEGORIES[0];
-  wheel.load(image, targetsFor('heic', true), 'heic');
+  wheel.load(image, targetsFor(image, 'heic', false), 'heic');
   wheel.entrance();
 
   let hovering = false, step = 1;
@@ -333,10 +367,12 @@ const DEMO_FILES = [
   { name: 'penjualan.xlsx', ext: 'xlsx' },
   { name: 'scan.pdf', ext: 'pdf' },
   { name: '3 foto', ext: 'jpg', count: 3 },
+  { name: 'tugas.rar', ext: 'rar' },
+  { name: 'Proyek', ext: '', folder: true },
 ];
 
 function fileIcon(ext, { count = 1, folder = false } = {}) {
-  const color = folder ? '' : `style="--c:${categoryOf(ext).color}"`;
+  const color = folder ? '' : `style="--c:${(categoryOf(ext) ?? OTHER).color}"`;
   return `<span class="ficon${count > 1 ? ' stack' : ''}${folder ? ' folder' : ''}" ${color}>${folder ? '' : ext.toUpperCase()}</span>`;
 }
 
@@ -360,7 +396,7 @@ function initDemo() {
     btn.className = 'file' + (fresh ? ' fresh' : '');
     btn.innerHTML = fileIcon(file.ext, file) + `<span class="file-name">${file.name}</span>`;
     btn.file = file;
-    if (!file.folder) btn.addEventListener('pointerdown', e => startDrag(e, btn));
+    btn.addEventListener('pointerdown', e => startDrag(e, btn));
     desk.appendChild(btn);
     return btn;
   };
@@ -388,7 +424,8 @@ function initDemo() {
     drag.open = true;
     clearTimeout(drag.hold);
     const { file } = drag;
-    wheel.load(categoryOf(file.ext), targetsFor(file.ext, (file.count ?? 1) > 1), file.ext);
+    const category = categoryFor(file);
+    wheel.load(category, targetsFor(category, file.ext, (file.count ?? 1) > 1), file.ext || category.name);
 
     // Roda muncul di posisi kursor, digeser masuk kalau terlalu dekat ke tepi.
     const size = wheelEl.offsetWidth, W = stage.clientWidth, H = stage.clientHeight;
@@ -461,12 +498,14 @@ function initDemo() {
   });
 
   function convert(file, target) {
-    const base = file.name.replace(/\.[^.]+$/, '');
+    const base = file.folder ? file.name : file.name.replace(/\.[^.]+$/, '');
     const src = file.ext;
     let out;
     switch (target.action) {
       case 'compress': out = { name: `${base} (kompres).${src}`, ext: src }; break;
       case 'merge': out = { name: 'Gabungan.pdf', ext: 'pdf' }; break;
+      case 'zip': out = { name: file.count > 1 ? 'Arsip.zip' : `${base}.zip`, ext: 'zip' }; break;
+      case 'extract': out = { name: base.replace(/\.tar$/i, ''), ext: '', folder: true }; break;
       case 'text': out = { name: `${base}.txt`, ext: 'txt' }; break;
       case 'split': out = { name: `${base} (halaman)`, ext: 'pdf', folder: true }; break;
       default:
@@ -474,7 +513,10 @@ function initDemo() {
           ? { name: file.count > 1 ? `foto ${target.label}` : `${base} (${target.label})`, ext: target.ext.slice(1), folder: true }
           : { name: base + target.ext, ext: target.ext.slice(1) };
     }
-    const verb = { compress: 'Mengompres', merge: 'Menggabungkan', text: 'Membaca teks', split: 'Memisah halaman' }[target.action] ?? `Ke ${target.label}`;
+    const verb = {
+      compress: 'Mengompres', merge: 'Menggabungkan', text: 'Membaca teks', split: 'Memisah halaman',
+      zip: 'Membuat ZIP', extract: 'Mengekstrak',
+    }[target.action] ?? `Ke ${target.label}`;
     toast.run(verb, file.name, out.name, target.action === 'text', () => {
       const btn = addFile({ ...out, result: true }, true);
       results.push(btn);
@@ -530,7 +572,9 @@ function initFormats() {
     panel.innerHTML = `
       <div><h4>Bisa dari</h4><div class="chips">${cat.exts.map(e => `<span class="chip">.${e}</span>`).join('')}</div></div>
       <div><h4>Bisa jadi</h4><div class="targets">${targets}</div></div>
-      ${cat.targets.includes(MERGE) ? '<p class="format-note"><b>GABUNG</b> hanya muncul saat beberapa file di-drag sekaligus.</p>' : ''}`;
+      <p class="format-note">${cat.targets.includes(MERGE) ? '<b>GABUNG</b> dan <b>ZIP</b> muncul' : '<b>ZIP</b> muncul'} saat beberapa file di-drag sekaligus.${cat.id === 'archive'
+        ? ' RAR bisa dibuka, tapi tidak bisa dibuat (formatnya milik WinRAR).'
+        : ' Folder dan file jenis lain juga bisa langsung dijadikan ZIP.'}</p>`;
   };
   CATEGORIES.forEach((cat, i) => {
     const b = document.createElement('button');

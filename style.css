@@ -121,6 +121,7 @@ h3 { font-size: 24px; text-transform: uppercase; letter-spacing: .02em; }
 .wheel .seg.on path { fill: url(#cwHover); }
 .wheel .seg.on text { fill: #101012; }
 .wheel .seg.on .glyph { stroke: var(--accent); }
+.wheel .seg.empty path { fill: rgba(28, 28, 34, .5); stroke: rgba(255, 255, 255, .03); }
 .wheel .seg.flash path { animation: flash .35s ease-out; }
 @keyframes flash { 0% { fill: var(--accent); } 100% { fill: url(#cwHover); } }
 .wheel .enter { opacity: 0; }
