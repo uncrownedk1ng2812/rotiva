@@ -225,7 +225,7 @@ class Wheel {
     this.segLayer.replaceChildren();
     this.segments = [];
 
-    // Pilihan sedikit (misal folder: hanya ZIP): sisanya slot kosong seperti di GTA V.
+    // Pilihan sedikit (misal folder: hanya ZIP): sisanya slot kosong supaya roda tetap terbaca.
     const slots = Math.max(targets.length, MIN_SLOTS);
     const span = 360 / slots;
     for (let i = 0; i < slots; i++) {
