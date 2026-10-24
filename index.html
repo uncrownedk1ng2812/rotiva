@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rotiva</title>
+  <meta name="description" content="Drag file, tekan Shift, lepas di roda. Rotiva mengonversi gambar, video, audio, dokumen, tabel, dan PDF langsung di Windows — tanpa upload, tanpa buka aplikasi.">
+  <meta property="og:title" content="Rotiva — konversi file ala weapon wheel">
+  <meta property="og:description" content="Drag file, tekan Shift, lepas di roda. Beres.">
+  <meta property="og:url" content="https://uncrownedk1ng2812.github.io/rotiva/">
+  <meta property="og:image" content="https://uncrownedk1ng2812.github.io/rotiva/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0b0b0d">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a href="#top" class="brand" aria-label="Rotiva"><img src="assets/wordmark.svg" alt="Rotiva" height="24"></a>
+      <nav class="nav-links" aria-label="Navigasi">
+        <a href="#cara">Cara pakai</a>
+        <a href="#coba">Coba</a>
+        <a href="#format">Format</a>
+        <a href="#fitur">Fitur</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a href="#unduh" class="btn btn-sm">Unduh</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Untuk Windows 10 &amp; 11</p>
+          <h1 class="reveal">Drag. <span class="nowrap"><span class="kbd-inline">Shift</span>.</span> Lepas.<br><em>Beres.</em></h1>
+          <p class="lead reveal">Roda pilihan ala <b>weapon wheel GTA V</b> untuk file kamu. Lagi nge-drag foto, video, atau dokumen? Tekan Shift, arahkan ke format tujuan, lepas — file langsung dikonversi di sebelah file aslinya.</p>
+          <div class="hero-cta reveal">
+            <a class="btn btn-lg" data-download href="#unduh">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+              Unduh untuk Windows
+            </a>
+            <a class="btn btn-ghost btn-lg" href="#coba">Coba di browser</a>
+          </div>
+          <p class="meta reveal"><span data-version>v1.6.0</span> · Gratis · <span data-size>±247 MB</span> · Tanpa admin · Offline</p>
+        </div>
+        <div class="hero-visual reveal" id="heroVisual">
+          <div class="wheel" id="heroWheel"></div>
+          <div class="hero-hint"><span class="kbd">Drag</span><span class="plus">+</span><span class="kbd kbd-accent">Shift</span><span class="arrow">→</span><span>arahkan &amp; lepas</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARA PAKAI -->
+    <section class="section" id="cara">
+      <div class="wrap">
+        <h2 class="reveal">Tiga gerakan. Nol jendela baru.</h2>
+        <p class="section-lead reveal">Rotiva diam di system tray. Dia baru muncul saat kamu butuh, lalu hilang lagi.</p>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step-num">01</span>
+            <div class="step-art art-drag"><span class="mini-file">HEIC</span><span class="mini-cursor"></span></div>
+            <h3>Drag file</h3>
+            <p>Dari Explorer, desktop, atau folder mana pun. Satu file atau beberapa sekaligus.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">02</span>
+            <div class="step-art art-shift"><span class="kbd kbd-big">Shift</span></div>
+            <h3>Tekan Shift</h3>
+            <p>Layar melambat ala slow-mo GTA, lalu roda format muncul tepat di posisi kursor.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">03</span>
+            <div class="step-art art-drop"><span class="mini-ring"></span><span class="mini-check">PNG</span></div>
+            <h3>Arahkan &amp; lepas</h3>
+            <p>Pilihan ditentukan arah kursor, bukan harus tepat di atas segmen. Lepas — selesai.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section class="section" id="coba">
+      <div class="wrap">
+        <h2 class="reveal">Coba langsung di sini</h2>
+        <p class="section-lead reveal" id="demoLead">Drag salah satu file di bawah, <b>tekan Shift</b> sambil masih menahan klik, arahkan ke format, lalu lepas.</p>
+        <div class="stage reveal" id="stage">
+          <div class="desk" id="desk"></div>
+          <div class="vignette"></div>
+          <div class="stage-wheel wheel" id="stageWheel"></div>
+          <div class="ghost" id="ghost" aria-hidden="true"></div>
+          <div class="stage-hint" id="hint" role="status" aria-live="polite"></div>
+          <div class="gta-keys" id="gtaKeys" aria-hidden="true">
+            <span><span class="kbd">Lepas</span> Konversi</span>
+            <span><span class="kbd">Esc</span> Batal</span>
+          </div>
+          <div class="toast" id="toast" role="status" aria-live="polite">
+            <div class="toast-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" class="t-ring"/><path d="m7.5 12.5 3 3 6-6.5" class="t-check"/></svg></div>
+            <div class="toast-body">
+              <b id="toastTitle">Mengonversi…</b>
+              <span id="toastText"></span>
+              <div class="toast-bar"><i id="toastFill"></i></div>
+            </div>
+          </div>
+        </div>
+        <p class="stage-note">Ini simulasi — tidak ada file sungguhan yang diproses atau diunggah.</p>
+      </div>
+    </section>
+
+    <!-- FORMAT -->
+    <section class="section" id="format">
+      <div class="wrap">
+        <h2 class="reveal">Roda menyesuaikan file yang kamu drag</h2>
+        <p class="section-lead reveal">Enam kategori, puluhan format sumber. Format yang sama dengan file asli otomatis disembunyikan.</p>
+        <div class="tabs reveal" role="tablist" id="formatTabs"></div>
+        <div class="format-panel reveal" id="formatPanel"></div>
+      </div>
+    </section>
+
+    <!-- FITUR -->
+    <section class="section" id="fitur">
+      <div class="wrap">
+        <h2 class="reveal">Bukan cuma ganti ekstensi</h2>
+        <div class="features">
+          <article class="feature reveal">
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></div>
+            <h3>Kompres</h3>
+            <p>Perkecil foto, video (MP4 maks. 1080p), dan PDF hasil scan (150 dpi) tanpa ganti format.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M8 4h9l3 3v11H8z"/><path d="M4 8v12h11"/></svg></div>
+            <h3>Gabung jadi 1 PDF</h3>
+            <p>Drag beberapa gambar, dokumen, tabel, atau PDF sekaligus — segmen <b>GABUNG</b> muncul otomatis.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M4 7V4h3M17 4h3v3M20 17v3h-3M7 20H4v-3M8 9h8M8 12h8M8 15h5"/></svg></div>
+            <h3>Ambil teks (OCR)</h3>
+            <p>Segmen <b>TEKS</b> membaca tulisan dari gambar atau PDF scan pakai OCR bawaan Windows — langsung masuk clipboard.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M4 12h16" stroke-dasharray="2 2"/></svg></div>
+            <h3>Pisah PDF</h3>
+            <p>Satu PDF jadi PDF per halaman, atau ekspor semua halaman jadi PNG/JPG dalam satu folder.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <h3>100% offline</h3>
+            <p>FFmpeg, ImageMagick, Ghostscript, LibreOffice &amp; Pandoc sudah dibundel. File tidak pernah keluar dari PC kamu.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="f-icon"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+            <h3>Antre di background</h3>
+            <p>Hasil disimpan di samping file asli, progresnya tampil di notifikasi kecil. Kerjaanmu tidak terganggu.</p>
+          </article>
+        </div>
+
+        <div class="spotlight reveal">
+          <div class="spot-copy">
+            <h3>Lebih suka klik kanan? Juga bisa.</h3>
+            <p>Semua pilihan di roda juga ada di menu klik kanan Explorer, di bawah <b>Rotiva ▸</b>. Di Windows 11 ada di <i>Show more options</i> (Shift+F10). Bisa dimatikan dari ikon tray.</p>
+          </div>
+          <div class="ctx" aria-hidden="true">
+            <div class="ctx-menu">
+              <div class="ctx-item">Open</div>
+              <div class="ctx-item">Open with ›</div>
+              <div class="ctx-sep"></div>
+              <div class="ctx-item ctx-hot"><img src="assets/icon.svg" alt="" width="16" height="16"> Rotiva <span>›</span></div>
+              <div class="ctx-item">Copy</div>
+              <div class="ctx-item">Rename</div>
+            </div>
+            <div class="ctx-menu ctx-sub">
+              <div class="ctx-item">Kompres (perkecil ukuran)</div>
+              <div class="ctx-item ctx-sel">Ke PNG</div>
+              <div class="ctx-item">Ke WEBP</div>
+              <div class="ctx-item">Ke PDF</div>
+              <div class="ctx-item">Salin teks (OCR)</div>
+              <div class="ctx-item">Gabung jadi 1 PDF</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UNDUH -->
+    <section class="section download" id="unduh">
+      <div class="wrap">
+        <div class="dl-card reveal">
+          <img src="assets/icon.svg" alt="" width="96" height="96" class="dl-icon">
+          <h2>Unduh Rotiva</h2>
+          <p class="section-lead">Installer lengkap: aplikasi + semua engine konversi. Tidak perlu install .NET atau apa pun.</p>
+          <a class="btn btn-lg" data-download href="#">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+            Unduh installer (.exe)
+          </a>
+          <p class="meta"><span data-version>v1.6.0</span> · <span data-size>±247 MB</span> · Windows 10/11 64-bit</p>
+          <div class="dl-steps">
+            <div><b>1</b><span>Jalankan <code data-filename>Rotiva-Setup-1.6.0.exe</code></span></div>
+            <div><b>2</b><span>Muncul SmartScreen? Klik <i>More info</i> → <i>Run anyway</i></span></div>
+            <div><b>3</b><span>Selesai. Cari ikon roda di system tray, lalu drag file + Shift</span></div>
+          </div>
+          <p class="note">Terpasang per-user di <code>%LOCALAPPDATA%\Programs\Rotiva</code> — tanpa hak admin. Konversi dokumen &amp; tabel (LibreOffice + Pandoc) bisa dipilih saat instalasi.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="wrap narrow">
+        <h2 class="reveal">Pertanyaan umum</h2>
+        <div class="faq">
+          <details class="reveal"><summary>Gratis?</summary><p>Ya, gratis tanpa batas pemakaian dan tanpa iklan.</p></details>
+          <details class="reveal"><summary>Kenapa muncul peringatan SmartScreen?</summary><p>Installer belum ditandatangani sertifikat code-signing berbayar, jadi Windows belum "mengenal" penerbitnya. Klik <i>More info</i> lalu <i>Run anyway</i>.</p></details>
+          <details class="reveal"><summary>Apakah file saya diunggah ke internet?</summary><p>Tidak. Semua konversi berjalan di PC kamu memakai engine yang ikut terpasang (FFmpeg, ImageMagick, Ghostscript, LibreOffice, Pandoc). OCR memakai fitur bawaan Windows.</p></details>
+          <details class="reveal"><summary>Hasil konversinya disimpan di mana?</summary><p>Di folder yang sama dengan file aslinya. File asli tidak diubah; kalau nama sudah dipakai, hasil diberi nomor seperti <code>foto (1).png</code>.</p></details>
+          <details class="reveal"><summary>Rodanya tidak muncul saat tekan Shift.</summary><p>Pastikan ikon Rotiva ada di system tray dan kamu menekan Shift <b>sambil</b> masih men-drag file (klik kiri masih ditahan). Jenis file yang tidak didukung, termasuk folder, tidak memunculkan roda.</p></details>
+          <details class="reveal"><summary>Bagaimana supaya jalan otomatis saat Windows menyala?</summary><p>Centang opsi saat instalasi, atau klik kanan ikon tray → <i>Jalankan saat Windows menyala</i>.</p></details>
+          <details class="reveal"><summary>Cara uninstall?</summary><p>Settings → Apps → Installed apps → Rotiva → Uninstall. Menu klik kanan dan autostart ikut dibersihkan.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <a href="#top" class="brand" aria-label="Rotiva"><img src="assets/wordmark.svg" alt="Rotiva" height="20"></a>
+      <p>© <span id="year">2026</span> Rotiva. Dibuat untuk yang malas buka converter online.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
