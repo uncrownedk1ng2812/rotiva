@@ -22,6 +22,12 @@
 
 ---
 
+> [!IMPORTANT]
+> **Rotiva dibuat dari nol oleh Denish Chairany. Seluruh hak cipta dilindungi.**
+> Repo ini **bukan untuk di-fork, disalin, atau didistribusikan ulang.** Kamu bebas mengunduh dan
+> memakai aplikasinya, tapi kode, nama, logo, dan desain Rotiva tidak boleh dipakai tanpa izin
+> tertulis. Penggunaan yang diizinkan **wajib mencantumkan kredit** ke pembuatnya. Lihat [LICENSE](LICENSE).
+
 ## Apa itu Rotiva?
 
 Rotiva adalah aplikasi kecil untuk Windows yang diam di system tray. Saat kamu sedang men-drag
@@ -89,3 +95,17 @@ Uninstall lewat *Settings → Apps → Installed apps → Rotiva*.
 
 Rotiva gratis dan tanpa iklan. Kalau Rotiva menghemat waktumu, kamu bisa
 [traktir kopi buat pengembangnya](https://uncrownedk1ng2812.github.io/rotiva/#dukung) ☕
+
+## Hak cipta & lisensi
+
+Copyright © 2026 **Denish Chairany**. All Rights Reserved.
+
+Rotiva bukan proyek open source. Yang **boleh**: mengunduh installer resmi dan memakai aplikasinya,
+serta membagikan link repo/website ini. Yang **tidak boleh** tanpa izin tertulis: menyalin atau
+memodifikasi kode, mengunggah ulang atau menjual installer, memakai nama/logo/desain Rotiva untuk
+produk lain, atau mengaku sebagai pembuatnya. Fork di GitHub tidak memberi hak-hak tersebut.
+
+Kalau kamu mendapat izin, cantumkan kredit:
+`Rotiva by Denish Chairany — https://github.com/uncrownedk1ng2812/rotiva`
+
+Pelanggaran dapat ditindak melalui DMCA takedown dan jalur hukum. Teks lengkap ada di [LICENSE](LICENSE).
