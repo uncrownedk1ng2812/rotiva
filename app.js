@@ -1,8 +1,8 @@
 // Point url at the installer (e.g. GitHub Releases) on every new release.
 const RELEASE = {
-  version: '1.7.0',
+  version: '1.8.0',
   size: '±247 MB',
-  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.7.0/Rotiva-Setup-1.7.0.exe',
+  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.8.0/Rotiva-Setup-1.8.0.exe',
 };
 
 // Donation links, matched to [data-donate="<key>"]. Leave a url empty to hide its button;
