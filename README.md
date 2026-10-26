@@ -18,6 +18,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 Website & live demo</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Download the installer</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://ko-fi.com/denishchairany"><b>☕ Support on Ko-fi</b></a>
 </p>
 
 ---
@@ -93,7 +95,8 @@ Uninstall via *Settings → Apps → Installed apps → Rotiva*.
 ## Support Rotiva
 
 Rotiva is free and ad-free. If it saves you time, you can
-[buy the developer a coffee](https://uncrownedk1ng2812.github.io/rotiva/#support) ☕
+[buy the developer a coffee](https://ko-fi.com/denishchairany) ☕ on Ko-fi.
+Donating from Indonesia? Use [SociaBuzz](https://sociabuzz.com/kianaldrich) (QRIS, e-wallet, bank transfer).
 
 ## Copyright & license
 

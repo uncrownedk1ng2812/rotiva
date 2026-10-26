@@ -300,6 +300,8 @@ h3 { font-size: 24px; text-transform: uppercase; letter-spacing: .02em; }
 }
 .donate-card h2 { font-size: clamp(30px, 3.4vw, 40px); }
 .donate-card p { color: var(--muted); margin: 8px 0 0; max-width: 40em; }
+.donate-actions { display: grid; gap: 10px; justify-items: stretch; text-align: center; }
+.donate-actions [hidden] { display: none; }
 .donate-heart { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 138, 31, .14); }
 .donate-heart svg { width: 30px; height: 30px; fill: var(--accent); animation: beat 2.4s ease-in-out infinite; }
 @keyframes beat { 0%, 40%, 100% { transform: none; } 10%, 30% { transform: scale(1.18); } 20% { transform: scale(1.05); } }

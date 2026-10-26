@@ -5,10 +5,11 @@ const RELEASE = {
   url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.7.0/Rotiva-Setup-1.7.0.exe',
 };
 
-// Donation link (Ko-fi/SociaBuzz/...). Leave url empty to hide the support section.
+// Donation links, matched to [data-donate="<key>"]. Leave a url empty to hide its button;
+// with every url empty the support section is hidden.
 const DONATE = {
-  label: 'Buy me a coffee',
-  url: 'https://sociabuzz.com/kianaldrich',
+  kofi: 'https://ko-fi.com/denishchairany',          // international (card / PayPal)
+  sociabuzz: 'https://sociabuzz.com/kianaldrich',    // Indonesia (QRIS, e-wallet, bank)
 };
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -593,9 +594,11 @@ function initFormats() {
    ------------------------------------------------------------------ */
 function initPage() {
   document.querySelectorAll('[data-download]').forEach(a => { a.href = RELEASE.url; });
-  if (DONATE.url) {
-    document.querySelectorAll('[data-donate]').forEach(a => { a.href = DONATE.url; });
-    document.querySelectorAll('[data-donate-label]').forEach(s => { s.textContent = DONATE.label; });
+  document.querySelectorAll('[data-donate]').forEach(a => {
+    const url = DONATE[a.dataset.donate];
+    if (url) a.href = url; else a.hidden = true;
+  });
+  if (Object.values(DONATE).some(Boolean)) {
     document.querySelectorAll('[data-donate-section]').forEach(s => { s.hidden = false; });
   }
   document.querySelectorAll('[data-version]').forEach(s => { s.textContent = 'v' + RELEASE.version; });
