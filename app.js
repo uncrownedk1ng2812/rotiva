@@ -6,7 +6,13 @@ const RELEASE = {
 };
 
 // Releases on GitHub, for the total download count (summed over every release asset).
+// The count stays hidden until it reaches DOWNLOADS_MIN: a small number looks worse than none.
 const DOWNLOADS_API = 'https://api.github.com/repos/uncrownedk1ng2812/rotiva/releases?per_page=100';
+const DOWNLOADS_MIN = 500;
+
+// GoatCounter site code (the "xxx" in xxx.goatcounter.com). Empty = no analytics.
+// Download & send-to-PC buttons are counted as events via data-goatcounter-click.
+const GOATCOUNTER = '';
 
 // Donation links, matched to [data-donate="<key>"]. Leave a url empty to hide its button;
 // with every url empty the support section is hidden.
@@ -609,6 +615,8 @@ function initPage() {
   document.querySelectorAll('[data-filename]').forEach(s => { s.textContent = RELEASE.url.split('/').pop(); });
   document.getElementById('year').textContent = new Date().getFullYear();
   showDownloadCount();
+  initPhone();
+  initAnalytics();
 
   const nav = document.getElementById('nav');
   const onScroll = () => nav.classList.toggle('scrolled', scrollY > 10);
@@ -635,10 +643,55 @@ async function showDownloadCount() {
     if (!res.ok) return;
     const releases = await res.json();
     const total = releases.reduce((sum, r) => sum + r.assets.reduce((n, a) => n + a.download_count, 0), 0);
-    if (!total) return;
+    if (total < DOWNLOADS_MIN) return;
     document.querySelectorAll('[data-downloads-count]').forEach(s => { s.textContent = total.toLocaleString('en-US'); });
     document.querySelectorAll('[data-downloads]').forEach(s => { s.hidden = false; });
   } catch { /* offline or blocked */ }
+}
+
+// Visitors from TikTok are mostly on phones, where the installer is useless:
+// point the download buttons at the "send it to your PC" card instead.
+function initPhone() {
+  const ua = navigator.userAgent;
+  const phone = /Android|iPhone|iPad|iPod|Mobile/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (!phone) return;
+
+  const url = location.origin + location.pathname + '?utm_source=phone#download';
+  const hero = document.querySelector('[data-hero-cta]');
+  hero.href = '#download';
+  hero.querySelector('[data-cta-label]').textContent = 'Send it to my PC';
+  const dl = document.querySelector('[data-dl-cta]');
+  dl.classList.add('btn-ghost');
+  dl.querySelector('[data-cta-label]').textContent = 'Download anyway (.exe)';
+  document.querySelectorAll('[data-phone-only]').forEach(n => { n.hidden = false; });
+  document.querySelectorAll('[data-share-url]').forEach(n => { n.textContent = url; });
+
+  document.querySelector('[data-email-link]').href = 'mailto:?subject=' + encodeURIComponent('Rotiva: install on my PC') +
+    '&body=' + encodeURIComponent('Download Rotiva on your Windows PC:\n' + url);
+
+  const copyBtn = document.querySelector('[data-copy-link]');
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      copyBtn.textContent = 'Link copied ✓';
+      setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2000);
+    } catch { /* the link is still shown below the buttons */ }
+  };
+  copyBtn.addEventListener('click', copy);
+  document.querySelector('[data-send-pc]').addEventListener('click', async () => {
+    if (!navigator.share) return copy();
+    try { await navigator.share({ title: 'Rotiva', text: 'Install Rotiva on my Windows PC', url }); }
+    catch (e) { if (e.name !== 'AbortError') copy(); }
+  });
+}
+
+function initAnalytics() {
+  if (!GOATCOUNTER) return;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = `https://${GOATCOUNTER}.goatcounter.com/count`;
+  document.head.appendChild(s);
 }
 
 initPage();

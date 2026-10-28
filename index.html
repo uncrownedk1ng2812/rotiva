@@ -43,9 +43,9 @@
           <h1 class="reveal">Drag. <span class="nowrap"><span class="kbd-inline">Shift</span>.</span> Drop.<br><em>Done.</em></h1>
           <p class="lead reveal">Convert files <b>without opening any app</b>. While dragging a photo, video or document, press Shift — a format wheel pops up right at your cursor. Pick one, let go, and the result is saved right next to the original.</p>
           <div class="hero-cta reveal">
-            <a class="btn btn-lg" data-download href="#download">
+            <a class="btn btn-lg" data-download data-hero-cta data-goatcounter-click="download-hero" href="#download">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
-              Download for Windows
+              <span data-cta-label>Download for Windows</span>
             </a>
             <a class="btn btn-ghost btn-lg" href="#try">Try it in your browser</a>
           </div>
@@ -195,9 +195,22 @@
           <img src="assets/icon.svg" alt="" width="96" height="96" class="dl-icon">
           <h2>Download Rotiva</h2>
           <p class="section-lead">Complete installer: the app plus every conversion engine. No .NET or anything else to install.</p>
-          <a class="btn btn-lg" data-download href="#">
+          <div class="dl-phone" data-phone-only hidden>
+            <h3>You're on a phone</h3>
+            <p>Rotiva runs on Windows PCs and laptops. Send yourself the link and open it on your computer later — it only takes a second.</p>
+            <div class="dl-phone-actions">
+              <button class="btn btn-lg" type="button" data-send-pc data-goatcounter-click="phone-share">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 3v12m0-12-4 4m4-4 4 4"/></svg>
+                <span>Send link to my PC</span>
+              </button>
+              <button class="btn btn-ghost" type="button" data-copy-link data-goatcounter-click="phone-copy">Copy link</button>
+              <a class="btn btn-ghost" data-email-link data-goatcounter-click="phone-email" href="#">Email it to myself</a>
+            </div>
+            <code data-share-url></code>
+          </div>
+          <a class="btn btn-lg" data-download data-dl-cta data-goatcounter-click="download-section" href="#">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
-            Download installer (.exe)
+            <span data-cta-label>Download installer (.exe)</span>
           </a>
           <p class="meta"><span data-version>v1.8.0</span><span data-downloads hidden> · <span data-downloads-count></span> downloads</span> · <span data-size>±247 MB</span> · Windows 10/11 64-bit</p>
           <div class="dl-steps">
