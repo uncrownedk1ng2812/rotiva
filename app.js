@@ -5,6 +5,9 @@ const RELEASE = {
   url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.8.0/Rotiva-Setup-1.8.0.exe',
 };
 
+// Releases on GitHub, for the total download count (summed over every release asset).
+const DOWNLOADS_API = 'https://api.github.com/repos/uncrownedk1ng2812/rotiva/releases?per_page=100';
+
 // Donation links, matched to [data-donate="<key>"]. Leave a url empty to hide its button;
 // with every url empty the support section is hidden.
 const DONATE = {
@@ -605,6 +608,7 @@ function initPage() {
   document.querySelectorAll('[data-size]').forEach(s => { s.textContent = RELEASE.size; });
   document.querySelectorAll('[data-filename]').forEach(s => { s.textContent = RELEASE.url.split('/').pop(); });
   document.getElementById('year').textContent = new Date().getFullYear();
+  showDownloadCount();
 
   const nav = document.getElementById('nav');
   const onScroll = () => nav.classList.toggle('scrolled', scrollY > 10);
@@ -622,6 +626,19 @@ function initPage() {
     node.style.transitionDelay = `${(i % 4) * 70}ms`;
     io.observe(node);
   });
+}
+
+// Stays hidden if the API is unreachable or rate-limited.
+async function showDownloadCount() {
+  try {
+    const res = await fetch(DOWNLOADS_API, { headers: { Accept: 'application/vnd.github+json' } });
+    if (!res.ok) return;
+    const releases = await res.json();
+    const total = releases.reduce((sum, r) => sum + r.assets.reduce((n, a) => n + a.download_count, 0), 0);
+    if (!total) return;
+    document.querySelectorAll('[data-downloads-count]').forEach(s => { s.textContent = total.toLocaleString('en-US'); });
+    document.querySelectorAll('[data-downloads]').forEach(s => { s.hidden = false; });
+  } catch { /* offline or blocked */ }
 }
 
 initPage();

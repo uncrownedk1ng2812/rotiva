@@ -9,6 +9,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Latest version"></a>
+  <a href="https://github.com/uncrownedk1ng2812/rotiva/releases"><img src="https://img.shields.io/github/downloads/uncrownedk1ng2812/rotiva/total?label=downloads&color=ff8a1f" alt="Total downloads"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/price-free-1f9d55" alt="Free">
   <img src="https://img.shields.io/badge/100%25-offline-5a5a66" alt="100% offline">
