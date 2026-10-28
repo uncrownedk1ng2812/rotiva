@@ -21,12 +21,97 @@ const DONATE = {
   sociabuzz: 'https://sociabuzz.com/kianaldrich',    // Indonesia (QRIS, e-wallet, bank)
 };
 
+// Indonesian strings for id/index.html, keyed by the English text; anything missing stays English.
+const LANG = document.documentElement.lang;
+const ID = {
+  'Combine into one PDF': 'Gabung jadi satu PDF',
+  'Pack into a .zip': 'Satukan jadi .zip',
+  'Unpack to a folder': 'Ekstrak ke folder',
+  'Shrink file size': 'Perkecil ukuran file',
+  'Lossless, transparent': 'Tanpa susut, transparan',
+  'Small size': 'Ukuran kecil',
+  'Modern, for the web': 'Modern, untuk web',
+  'Best compression': 'Kompresi terbaik',
+  'PDF document': 'Dokumen PDF',
+  'Windows icon': 'Ikon Windows',
+  'Print quality': 'Kualitas cetak',
+  'Copy text (OCR)': 'Salin teks (OCR)',
+  'MP4 up to 1080p': 'MP4 hingga 1080p',
+  'H.264, most compatible': 'H.264, paling kompatibel',
+  'VP9 for the web': 'VP9 untuk web',
+  'Legacy format': 'Format lama',
+  'Silent animation': 'Animasi tanpa suara',
+  'Audio only': 'Audio saja',
+  'Lossless audio': 'Audio tanpa susut',
+  'Uncompressed': 'Tanpa kompresi',
+  'Compressed lossless': 'Terkompresi tanpa susut',
+  'Most efficient': 'Paling efisien',
+  'AAC for Apple': 'AAC untuk Apple',
+  'Ready to print & share': 'Siap cetak & bagikan',
+  'Plain text': 'Teks biasa',
+  'Web page': 'Halaman web',
+  'Comma-separated text': 'Teks dipisah koma',
+  'Web page table': 'Tabel halaman web',
+  'Images downscaled to 150 dpi': 'Gambar diturunkan ke 150 dpi',
+  'Every page': 'Setiap halaman',
+  'Copy all the text': 'Salin semua teks',
+  'One PDF per page': 'Satu PDF per halaman',
+  'Image': 'Gambar',
+  'Document': 'Dokumen',
+  'Archive': 'Arsip',
+  'File': 'File',
+  'Folder': 'Folder',
+  'Point at a format': 'Arahkan ke format',
+  'vacation.heic': 'liburan.heic',
+  'presentation.mp4': 'presentasi.mp4',
+  'recording.wav': 'rekaman.wav',
+  'report.docx': 'laporan.docx',
+  'sales.xlsx': 'penjualan.xlsx',
+  '3 photos': '3 foto',
+  'homework.rar': 'tugas.rar',
+  'Project': 'Proyek',
+  'Press &amp; hold a file, move it a little, then <b>hold still</b> — the wheel appears. Point your finger at a format, then let go.':
+    'Tekan &amp; tahan sebuah file, geser sedikit, lalu <b>diamkan</b> — rodanya muncul. Arahkan jari ke sebuah format, lalu lepas.',
+  'Now press <span class="kbd kbd-accent">Shift</span>': 'Sekarang tekan <span class="kbd kbd-accent">Shift</span>',
+  'Hold still to open the wheel…': 'Diamkan untuk membuka roda…',
+  'Press <span class="kbd kbd-accent">Shift</span> <b>before</b> releasing the click':
+    'Tekan <span class="kbd kbd-accent">Shift</span> <b>sebelum</b> melepas klik',
+  'compressed': 'dikompres',
+  'Merged.pdf': 'Gabungan.pdf',
+  'Archive.zip': 'Arsip.zip',
+  'pages': 'halaman',
+  'photos': 'foto',
+  'Compressing': 'Mengompres',
+  'Merging': 'Menggabungkan',
+  'Reading text': 'Membaca teks',
+  'Splitting pages': 'Memecah halaman',
+  'Zipping': 'Membuat ZIP',
+  'Extracting': 'Mengekstrak',
+  'To': 'Ke',
+  'Done': 'Selesai',
+  'text copied to clipboard': 'teks disalin ke clipboard',
+  'Converts from': 'Dari format',
+  'Converts to': 'Ke format',
+  '<b>MERGE</b> and <b>ZIP</b> appear when you drag several files at once.': '<b>MERGE</b> dan <b>ZIP</b> muncul saat kamu men-drag beberapa file sekaligus.',
+  '<b>ZIP</b> appears when you drag several files at once.': '<b>ZIP</b> muncul saat kamu men-drag beberapa file sekaligus.',
+  'RAR files can be opened but not created (the format belongs to WinRAR).': 'File RAR bisa dibuka tapi tidak bisa dibuat (formatnya milik WinRAR).',
+  'Folders and other file types can be zipped too.': 'Folder dan jenis file lain juga bisa di-ZIP.',
+  'Send it to my PC': 'Kirim ke PC saya',
+  'Download anyway (.exe)': 'Tetap download (.exe)',
+  'Rotiva: install on my PC': 'Rotiva: install di PC saya',
+  'Download Rotiva on your Windows PC:': 'Download Rotiva di PC Windows kamu:',
+  'Link copied ✓': 'Link disalin ✓',
+  'Copy link': 'Salin link',
+  'Install Rotiva on my Windows PC': 'Install Rotiva di PC Windows saya',
+};
+const tr = text => (LANG === 'id' && ID[text]) || text;
+
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ------------------------------------------------------------------
    Format catalog — mirrors src/Rotiva/Models/FormatCatalog.cs
    ------------------------------------------------------------------ */
-const T = (label, desc, ext, icon, action = 'convert') => ({ label, desc, ext, icon, action });
+const T = (label, desc, ext, icon, action = 'convert') => ({ label, desc: tr(desc), ext, icon, action });
 const compress = desc => T('COMPRESS', desc, '', 'shrink', 'compress');
 const extractText = desc => T('TEXT', desc, '.txt', 'text', 'text');
 const MERGE = T('MERGE', 'Combine into one PDF', '.pdf', 'stack', 'merge');
@@ -321,9 +406,9 @@ class Wheel {
 
   updateCenter(animate) {
     const t = this.target;
-    this.cCat.textContent = this.category.name;
+    this.cCat.textContent = tr(this.category.name);
     this.cTitle.textContent = t ? t.label : this.sourceExt;
-    this.cDesc.textContent = t ? t.desc : 'Point at a format';
+    this.cDesc.textContent = t ? t.desc : tr('Point at a format');
     this.bSrc.textContent = this.sourceExt;
     this.bDst.textContent = !t ? '?'
       : t.action === 'compress' ? this.sourceExt
@@ -379,7 +464,7 @@ const DEMO_FILES = [
   { name: '3 photos', ext: 'jpg', count: 3 },
   { name: 'homework.rar', ext: 'rar' },
   { name: 'Project', ext: '', folder: true },
-];
+].map(file => ({ ...file, name: tr(file.name) }));
 
 function fileIcon(ext, { count = 1, folder = false } = {}) {
   const color = folder ? '' : `style="--c:${(categoryOf(ext) ?? OTHER).color}"`;
@@ -396,7 +481,7 @@ function initDemo() {
   const toast = initToast();
   const touchFirst = matchMedia('(pointer: coarse)').matches;
   if (touchFirst) {
-    document.getElementById('demoLead').innerHTML = 'Press &amp; hold a file, move it a little, then <b>hold still</b> — the wheel appears. Point your finger at a format, then let go.';
+    document.getElementById('demoLead').innerHTML = tr('Press &amp; hold a file, move it a little, then <b>hold still</b> — the wheel appears. Point your finger at a format, then let go.');
   }
 
   const results = [];
@@ -435,7 +520,7 @@ function initDemo() {
     clearTimeout(drag.hold);
     const { file } = drag;
     const category = categoryFor(file);
-    wheel.load(category, targetsFor(category, file.ext, (file.count ?? 1) > 1), file.ext || category.name);
+    wheel.load(category, targetsFor(category, file.ext, (file.count ?? 1) > 1), file.ext || tr(category.name));
 
     // The wheel opens at the cursor, nudged inward when too close to an edge.
     const size = wheelEl.offsetWidth, W = stage.clientWidth, H = stage.clientHeight;
@@ -467,8 +552,8 @@ function initDemo() {
       ghost.innerHTML = fileIcon(drag.file.ext, drag.file) + (drag.file.count > 1 ? `<span class="count">${drag.file.count}</span>` : '');
       ghost.classList.add('show');
       showHint(drag.type === 'mouse'
-        ? 'Now press <span class="kbd kbd-accent">Shift</span>'
-        : 'Hold still to open the wheel…');
+        ? tr('Now press <span class="kbd kbd-accent">Shift</span>')
+        : tr('Hold still to open the wheel…'));
     }
     if (drag.open) {
       wheel.point(drag.x - drag.cx, drag.y - drag.cy);
@@ -489,7 +574,7 @@ function initDemo() {
     showHint('');
     if (!d.open) {
       if (d.moved && d.type === 'mouse' && !cancelled) {
-        showHint('Press <span class="kbd kbd-accent">Shift</span> <b>before</b> releasing the click');
+        showHint(tr('Press <span class="kbd kbd-accent">Shift</span> <b>before</b> releasing the click'));
         setTimeout(() => !drag && showHint(''), 2200);
       }
       return;
@@ -512,21 +597,21 @@ function initDemo() {
     const src = file.ext;
     let out;
     switch (target.action) {
-      case 'compress': out = { name: `${base} (compressed).${src}`, ext: src }; break;
-      case 'merge': out = { name: 'Merged.pdf', ext: 'pdf' }; break;
-      case 'zip': out = { name: file.count > 1 ? 'Archive.zip' : `${base}.zip`, ext: 'zip' }; break;
+      case 'compress': out = { name: `${base} (${tr('compressed')}).${src}`, ext: src }; break;
+      case 'merge': out = { name: tr('Merged.pdf'), ext: 'pdf' }; break;
+      case 'zip': out = { name: file.count > 1 ? tr('Archive.zip') : `${base}.zip`, ext: 'zip' }; break;
       case 'extract': out = { name: base.replace(/\.tar$/i, ''), ext: '', folder: true }; break;
       case 'text': out = { name: `${base}.txt`, ext: 'txt' }; break;
-      case 'split': out = { name: `${base} (pages)`, ext: 'pdf', folder: true }; break;
+      case 'split': out = { name: `${base} (${tr('pages')})`, ext: 'pdf', folder: true }; break;
       default:
         out = file.count > 1 || (src === 'pdf' && target.icon === 'image')
-          ? { name: file.count > 1 ? `photos ${target.label}` : `${base} (${target.label})`, ext: target.ext.slice(1), folder: true }
+          ? { name: file.count > 1 ? `${tr('photos')} ${target.label}` : `${base} (${target.label})`, ext: target.ext.slice(1), folder: true }
           : { name: base + target.ext, ext: target.ext.slice(1) };
     }
-    const verb = {
+    const verb = tr({
       compress: 'Compressing', merge: 'Merging', text: 'Reading text', split: 'Splitting pages',
       zip: 'Zipping', extract: 'Extracting',
-    }[target.action] ?? `To ${target.label}`;
+    }[target.action] ?? '') || `${tr('To')} ${target.label}`;
     toast.run(verb, file.name, out.name, target.action === 'text', () => {
       const btn = addFile({ ...out, result: true }, true);
       results.push(btn);
@@ -560,8 +645,8 @@ function initToast() {
       setTimeout(() => {
         if (id !== job) return;
         box.classList.add('done');
-        title.textContent = 'Done';
-        text.textContent = clipboard ? `${to} · text copied to clipboard` : to;
+        title.textContent = tr('Done');
+        text.textContent = clipboard ? `${to} · ${tr('text copied to clipboard')}` : to;
         onDone();
         hideTimer = setTimeout(() => box.classList.remove('show'), 2600);
       }, duration);
@@ -580,18 +665,20 @@ function initFormats() {
     const targets = cat.targets.map((t, i) =>
       `<div class="target${t.action !== 'convert' ? ' special' : ''}" style="--i:${i}"><b>${t.label}</b><span>${t.desc}</span></div>`).join('');
     panel.innerHTML = `
-      <div><h4>Converts from</h4><div class="chips">${cat.exts.map(e => `<span class="chip">.${e}</span>`).join('')}</div></div>
-      <div><h4>Converts to</h4><div class="targets">${targets}</div></div>
-      <p class="format-note">${cat.targets.includes(MERGE) ? '<b>MERGE</b> and <b>ZIP</b> appear' : '<b>ZIP</b> appears'} when you drag several files at once.${cat.id === 'archive'
-        ? ' RAR files can be opened but not created (the format belongs to WinRAR).'
-        : ' Folders and other file types can be zipped too.'}</p>`;
+      <div><h4>${tr('Converts from')}</h4><div class="chips">${cat.exts.map(e => `<span class="chip">.${e}</span>`).join('')}</div></div>
+      <div><h4>${tr('Converts to')}</h4><div class="targets">${targets}</div></div>
+      <p class="format-note">${tr(cat.targets.includes(MERGE)
+        ? '<b>MERGE</b> and <b>ZIP</b> appear when you drag several files at once.'
+        : '<b>ZIP</b> appears when you drag several files at once.')} ${tr(cat.id === 'archive'
+        ? 'RAR files can be opened but not created (the format belongs to WinRAR).'
+        : 'Folders and other file types can be zipped too.')}</p>`;
   };
   CATEGORIES.forEach((cat, i) => {
     const b = document.createElement('button');
     b.className = 'tab';
     b.setAttribute('role', 'tab');
     b.dataset.id = cat.id;
-    b.textContent = cat.name;
+    b.textContent = tr(cat.name);
     b.addEventListener('click', () => show(cat));
     tabs.appendChild(b);
     if (i === 0) show(cat);
@@ -614,6 +701,10 @@ function initPage() {
   document.querySelectorAll('[data-size]').forEach(s => { s.textContent = RELEASE.size; });
   document.querySelectorAll('[data-filename]').forEach(s => { s.textContent = RELEASE.url.split('/').pop(); });
   document.getElementById('year').textContent = new Date().getFullYear();
+  // Remember a manual language pick so the English page stops redirecting to /id/.
+  document.querySelectorAll('[data-lang]').forEach(a => a.addEventListener('click', () => {
+    try { localStorage.setItem('rotiva-lang', a.dataset.lang); } catch { /* storage blocked */ }
+  }));
   showDownloadCount();
   initPhone();
   initAnalytics();
@@ -659,28 +750,28 @@ function initPhone() {
   const url = location.origin + location.pathname + '?utm_source=phone#download';
   const hero = document.querySelector('[data-hero-cta]');
   hero.href = '#download';
-  hero.querySelector('[data-cta-label]').textContent = 'Send it to my PC';
+  hero.querySelector('[data-cta-label]').textContent = tr('Send it to my PC');
   const dl = document.querySelector('[data-dl-cta]');
   dl.classList.add('btn-ghost');
-  dl.querySelector('[data-cta-label]').textContent = 'Download anyway (.exe)';
+  dl.querySelector('[data-cta-label]').textContent = tr('Download anyway (.exe)');
   document.querySelectorAll('[data-phone-only]').forEach(n => { n.hidden = false; });
   document.querySelectorAll('[data-share-url]').forEach(n => { n.textContent = url; });
 
-  document.querySelector('[data-email-link]').href = 'mailto:?subject=' + encodeURIComponent('Rotiva: install on my PC') +
-    '&body=' + encodeURIComponent('Download Rotiva on your Windows PC:\n' + url);
+  document.querySelector('[data-email-link]').href = 'mailto:?subject=' + encodeURIComponent(tr('Rotiva: install on my PC')) +
+    '&body=' + encodeURIComponent(tr('Download Rotiva on your Windows PC:') + '\n' + url);
 
   const copyBtn = document.querySelector('[data-copy-link]');
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(url);
-      copyBtn.textContent = 'Link copied ✓';
-      setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 2000);
+      copyBtn.textContent = tr('Link copied ✓');
+      setTimeout(() => { copyBtn.textContent = tr('Copy link'); }, 2000);
     } catch { /* the link is still shown below the buttons */ }
   };
   copyBtn.addEventListener('click', copy);
   document.querySelector('[data-send-pc]').addEventListener('click', async () => {
     if (!navigator.share) return copy();
-    try { await navigator.share({ title: 'Rotiva', text: 'Install Rotiva on my Windows PC', url }); }
+    try { await navigator.share({ title: 'Rotiva', text: tr('Install Rotiva on my Windows PC'), url }); }
     catch (e) { if (e.name !== 'AbortError') copy(); }
   });
 }

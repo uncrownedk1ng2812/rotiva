@@ -11,6 +11,16 @@
   <meta property="og:image" content="https://uncrownedk1ng2812.github.io/rotiva/assets/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0b0b0d">
+  <link rel="canonical" href="https://uncrownedk1ng2812.github.io/rotiva/">
+  <link rel="alternate" hreflang="en" href="https://uncrownedk1ng2812.github.io/rotiva/">
+  <link rel="alternate" hreflang="id" href="https://uncrownedk1ng2812.github.io/rotiva/id/">
+  <script>
+    // Indonesian browsers go to /id/ unless the visitor picked English with the switch.
+    try {
+      if (localStorage.getItem('rotiva-lang') !== 'en' && /^id\b|^in\b/i.test(navigator.language))
+        location.replace('id/' + location.search + location.hash);
+    } catch { /* storage blocked */ }
+  </script>
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -30,6 +40,7 @@
         <a href="#features">Features</a>
         <a href="#faq">FAQ</a>
       </nav>
+      <a href="id/" class="lang-switch" data-lang="id" hreflang="id" lang="id" title="Bahasa Indonesia">ID</a>
       <a href="#download" class="btn btn-sm">Download</a>
     </div>
   </header>

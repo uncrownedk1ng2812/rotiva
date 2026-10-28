@@ -77,7 +77,9 @@ h3 { font-size: 24px; text-transform: uppercase; letter-spacing: .02em; }
 .nav-links { display: flex; gap: 22px; margin-left: auto; }
 .nav-links a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: color .2s; }
 .nav-links a:hover { color: var(--text); }
-@media (max-width: 760px) { .nav-links { display: none; } .nav-inner .btn { margin-left: auto; } }
+.lang-switch { color: var(--muted); text-decoration: none; font: 600 14px/1 var(--display); letter-spacing: .08em; padding: 8px 10px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--line-2); transition: color .2s, box-shadow .2s; }
+.lang-switch:hover { color: var(--text); box-shadow: inset 0 0 0 1.5px var(--text); }
+@media (max-width: 760px) { .nav-links { display: none; } .lang-switch { margin-left: auto; } }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; padding: 120px 0 80px; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }

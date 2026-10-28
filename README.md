@@ -20,6 +20,8 @@
 <p align="center">
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 Website & live demo</b></a>
   &nbsp;·&nbsp;
+  <a href="https://uncrownedk1ng2812.github.io/rotiva/id/"><b>🇮🇩 Bahasa Indonesia</b></a>
+  &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Download the installer</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Support on Ko-fi</b></a>
