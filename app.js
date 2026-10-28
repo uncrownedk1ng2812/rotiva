@@ -12,7 +12,7 @@ const DOWNLOADS_MIN = 500;
 
 // GoatCounter site code (the "xxx" in xxx.goatcounter.com). Empty = no analytics.
 // Download & send-to-PC buttons are counted as events via data-goatcounter-click.
-const GOATCOUNTER = '';
+const GOATCOUNTER = 'rotiva';
 
 // Donation links, matched to [data-donate="<key>"]. Leave a url empty to hide its button;
 // with every url empty the support section is hidden.
