@@ -51,7 +51,7 @@ dotnet run --project src/Rotiva.Desktop -- ~/Pictures/photo.heic    # opens the 
 dotnet run --project src/Rotiva.Desktop                             # tray / menu bar only
 ```
 
-- The wheel opens in **click mode** right at the mouse cursor (where you right-clicked or dropped the
+- From **Open With**, the tray or the command line, the wheel opens in **click mode** right at the mouse cursor (where you right-clicked or dropped the
   file; the center of the screen if the cursor position can't be read, e.g. pure Wayland or WSL):
   point at a format and click (or use the arrow keys + Enter). Click the center or press Esc to
   cancel. Pick files from the tray menu (**Convert files…**), or launch `Rotiva <files>` again while
@@ -59,12 +59,20 @@ dotnet run --project src/Rotiva.Desktop                             # tray / men
 - **Linux file managers**: on start Rotiva adds itself (per user, no root) to **Open With**
   (`~/.local/share/applications/rotiva.desktop`), Nautilus (**Scripts → Convert with Rotiva**),
   Dolphin and Nemo (**Convert with Rotiva**). Turn it off with **File manager menu** in the tray.
-- Engines come from the system: `brew install ffmpeg imagemagick ghostscript pandoc sevenzip` and
+- Engines come from the system: `brew install ffmpeg imagemagick ghostscript pandoc sevenzip tesseract` and
   LibreOffice.app on macOS, or `apt install ffmpeg imagemagick ghostscript pandoc 7zip libreoffice`
   on Debian/Ubuntu. Images need **ImageMagick 7** (the `magick` command): Debian 13 has it, but
   Ubuntu 24.04 still ships version 6, so there use the AppImage from imagemagick.org on your `PATH`.
-- Not there yet: the drag + Shift gesture, Finder menus, OCR (the TEXT slice is hidden),
-  and signed `.dmg` / AppImage packages. On GNOME the tray icon needs the AppIndicator extension.
+- **Drag + Shift** works like on Windows: Rotiva polls the left button and Shift (X11
+  `XQueryPointer`, macOS `CGEventSource`) and opens an invisible drop window at the cursor; the wheel
+  only shows when files are dragged in. Needs X11/XWayland on Linux. Tray switch: **Drag + Shift opens
+  the wheel**.
+- **TEXT (OCR)** uses Tesseract when it's installed (`brew install tesseract`, `apt install
+  tesseract-ocr`; add `tesseract-lang` / `tesseract-ocr-ind` for Indonesian).
+- **macOS app:** `installer/build-macos.sh 1.10.0 arm64` (or `x64`) builds `Rotiva.app` (menu bar only,
+  listed in Finder **Open With**) and a `.dmg`, signed ad hoc. Not notarized yet (needs a paid Apple
+  Developer account), so macOS asks for confirmation the first time.
+- Not there yet: notarized `.dmg`. On GNOME the tray icon needs the AppIndicator extension.
 
 **AppImage (Linux).** `installer/build-appimage.sh 1.9.0` builds `dist/Rotiva-1.9.0-x86_64.AppImage`
 (needs Linux x86_64, the .NET 8 SDK and curl; appimagetool and the AppImage runtime are downloaded at

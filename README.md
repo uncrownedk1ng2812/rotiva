@@ -13,6 +13,7 @@
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases"><img src="https://img.shields.io/github/downloads/uncrownedk1ng2812/rotiva/total?label=downloads&color=ff8a1f" alt="Total downloads"></a>
   -->
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
+  <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/tag/v1.10.0-preview.1"><img src="https://img.shields.io/badge/macOS%20%26%20Linux-preview-8a8a96" alt="macOS & Linux preview"></a>
   <img src="https://img.shields.io/badge/price-free-1f9d55" alt="Free">
   <img src="https://img.shields.io/badge/100%25-offline-5a5a66" alt="100% offline">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="License: GPL-3.0"></a>
@@ -102,6 +103,15 @@ Uninstall via *Settings → Apps → Installed apps → Rotiva*.
 
 Click the tray icon for the Rotiva menu: start with Windows, the Explorer right-click menu, wheel size,
 and links to the website, GitHub and support.
+
+### macOS & Linux (preview)
+
+A first preview for **macOS** (Apple Silicon and Intel `.dmg`) and **Linux** (`AppImage`) is on the
+[1.10.0-preview.1 release](https://github.com/uncrownedk1ng2812/rotiva/releases/tag/v1.10.0-preview.1).
+Same wheel and conversions: right-click files → **Open With → Rotiva**, or drag files and press
+<kbd>Shift</kbd>. The conversion engines come from your system (`brew install …` / `apt install …`);
+the release notes list the commands. The macOS app isn't notarized yet, so allow it once in
+*System Settings → Privacy & Security*.
 
 ## Open source
 
