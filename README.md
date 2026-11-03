@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/price-free-1f9d55" alt="Free">
   <img src="https://img.shields.io/badge/100%25-offline-5a5a66" alt="100% offline">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="License: GPL-3.0"></a>
 </p>
 
 <p align="center">
@@ -29,11 +30,10 @@
 
 ---
 
-> [!IMPORTANT]
-> **Rotiva was built from scratch by Denish Chairany. All rights reserved.**
-> This repository is **not for forking, copying or redistribution.** You're free to download and use
-> the app, but Rotiva's code, name, logo and design may not be used without written permission.
-> Any permitted use **must credit** the author. See [LICENSE](LICENSE).
+> [!NOTE]
+> **Rotiva was built from scratch by Denish Chairany** and is open source under [GPL-3.0](LICENSE).
+> Forks are welcome, but they must stay open source, credit the author, and use **a different name and
+> logo**. See [TRADEMARKS.md](TRADEMARKS.md).
 
 ## What is Rotiva?
 
@@ -54,8 +54,8 @@ No uploading to online converters, no ads, no queues.
 | | Step | Details |
 |---|---|---|
 | **1** | **Drag a file** | From Explorer, the desktop or any folder. One file or several at once. |
-| **2** | **Press <kbd>Shift</kbd>** | While still holding the left mouse button. The screen dims and the format wheel appears at your cursor. |
-| **3** | **Point & drop** | The direction of your cursor picks the format — no need to land exactly on a segment. Done. |
+| **2** | **Press <kbd>Shift</kbd>** | While still holding the left mouse button. The format wheel appears right at your cursor. |
+| **3** | **Point & drop** | The direction of your cursor picks the format — no need to land exactly on a segment. Drop in the center to cancel. |
 
 Prefer right-click? Everything on the wheel is also in the Explorer right-click menu under
 **Rotiva ▸** (Windows 11: *Show more options*).
@@ -85,6 +85,9 @@ The wheel adapts to the file you drag. The file's own format is hidden automatic
 - **Grab text (OCR)** — read the words in an image or scanned PDF with Windows' built-in OCR, straight to your clipboard.
 - **Split PDFs** — one PDF per page, or export every page as PNG/JPG.
 - **ZIP & extract** — pack many files/folders into one ZIP; .zip, .rar, .7z and .tar.gz extract in one move.
+- **Light & fast** — the wheel is a small window right at your cursor, with no full-screen effects, so it opens
+  instantly even on 4K screens. Pick **S / M / L** size from the tray menu.
+- **Changed your mind?** Move back to the center of the wheel and let go: nothing is converted.
 - **100% offline** — FFmpeg, ImageMagick, Ghostscript, LibreOffice, Pandoc & 7-Zip come bundled. Your files never leave your PC.
 
 ## Installation
@@ -97,6 +100,33 @@ The wheel adapts to the file you drag. The file's own format is hidden automatic
 Installs per user to `%LOCALAPPDATA%\Programs\Rotiva` — no admin rights and no .NET install needed.
 Uninstall via *Settings → Apps → Installed apps → Rotiva*.
 
+Click the tray icon for the Rotiva menu: start with Windows, the Explorer right-click menu, wheel size,
+and links to the website, GitHub and support.
+
+## Open source
+
+Rotiva is open source under **GPL-3.0**. The app is in [`src/Rotiva`](src/Rotiva) (C# / .NET 8 / WPF) and
+the installer in [`installer/`](installer). See [BUILDING.md](BUILDING.md) to run it from source or
+build the installer.
+
+Bug reports, ideas and pull requests are welcome in [Issues](https://github.com/uncrownedk1ng2812/rotiva/issues).
+
+## Bundled engines
+
+Rotiva does the conversions with these excellent open-source programs, bundled in the installer under
+their own licenses:
+
+| Engine | License | Used for |
+|---|---|---|
+| [FFmpeg](https://ffmpeg.org) | GPL-3.0 | Video & audio |
+| [ImageMagick](https://imagemagick.org) | ImageMagick License | Images |
+| [Ghostscript](https://ghostscript.com) | AGPL-3.0 | PDF compress, merge & split |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Documents & spreadsheets |
+| [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML & RTF |
+| [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP & extract |
+
+Versions, license files and source code links: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+
 ## Support Rotiva
 
 Rotiva is free and ad-free. If it saves you time, you can
@@ -105,14 +135,16 @@ Donating from Indonesia? Use [SociaBuzz](https://sociabuzz.com/kianaldrich) (QRI
 
 ## Copyright & license
 
-Copyright © 2026 **Denish Chairany**. All Rights Reserved.
+Copyright © 2026 **Denish Chairany**. Licensed under the
+[GNU General Public License v3.0](LICENSE).
 
-Rotiva is not open source. You **may** download the official installer, use the app, and share links to
-this repository or website. You **may not**, without written permission: copy or modify the code,
-re-upload or sell the installer, use the Rotiva name/logo/design for another product, or claim to be its
-author. Forking on GitHub does not grant any of these rights.
+- ✅ Use Rotiva for free, for personal or commercial work.
+- ✅ Study, modify and share the code.
+- 🔁 A modified version you distribute must also be **GPL-3.0 with its full source code**, and must keep
+  the copyright notice.
+- 🏷️ The **Rotiva name, logo and icon are not part of the license.** A fork needs its own name and logo,
+  and must credit: `Based on Rotiva by Denish Chairany — https://github.com/uncrownedk1ng2812/rotiva`.
+  Details in [TRADEMARKS.md](TRADEMARKS.md).
 
-If you are granted permission, include this credit:
-`Rotiva by Denish Chairany — https://github.com/uncrownedk1ng2812/rotiva`
-
-Violations may result in a DMCA takedown and legal action. Full text in [LICENSE](LICENSE).
+The bundled engines are separate programs under their own licenses, listed in
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

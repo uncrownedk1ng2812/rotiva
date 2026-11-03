@@ -1,0 +1,9 @@
+# Hasil build .NET
+bin/
+obj/
+*.user
+.vs/
+
+# Hasil build installer (stage, cache engine, Rotiva-Setup-*.exe): terlalu besar untuk git,
+# installer dirilis lewat GitHub Releases.
+dist/

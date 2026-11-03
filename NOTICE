@@ -1,0 +1,41 @@
+Rotiva
+Copyright (C) 2026 Denish Chairany
+
+Rotiva is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, version 3 of the License (GPL-3.0). The full license text is in
+the LICENSE file.
+
+Rotiva is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+IN SHORT
+  - You may use Rotiva for free, for personal or commercial work.
+  - You may study, modify and share the source code.
+  - If you distribute a modified version, it must also be released under
+    GPL-3.0, with its full source code, and it must keep this copyright notice
+    and credit the original author.
+
+NAME AND LOGO ARE NOT INCLUDED
+As permitted by section 7(e) of GPL-3.0, this license does not grant any
+rights to the name "Rotiva", the Rotiva logo, or the Rotiva icon. A modified
+version must use a different name and logo. See TRADEMARKS.md for details.
+
+ATTRIBUTION
+A fork or derivative work must state clearly, for example in its README and
+its About screen:
+  "Based on Rotiva by Denish Chairany - https://github.com/uncrownedk1ng2812/rotiva"
+
+THIRD-PARTY ENGINES
+The engines bundled in the installer are separate programs under their own
+licenses. Their license files are installed next to each engine in the tools
+folder. Versions and source code links: THIRD-PARTY-NOTICES.
+
+  FFmpeg 9.0.2 ........ GPL-3.0             https://ffmpeg.org
+  ImageMagick 7.1.2 ... ImageMagick License https://imagemagick.org
+  Ghostscript 10.08 ... AGPL-3.0            https://ghostscript.com
+  LibreOffice 26.8 .... MPL-2.0             https://www.libreoffice.org
+  Pandoc 3.12.1 ....... GPL-2.0-or-later    https://pandoc.org
+  7-Zip 25.01 ......... LGPL-2.1-or-later   https://www.7-zip.org
+  .NET 8 runtime ...... MIT                 https://dotnet.microsoft.com
