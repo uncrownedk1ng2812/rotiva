@@ -57,6 +57,11 @@ public static class ToolLocator
         ? [Path.Combine(ProgramFiles, @"7-Zip\7z.exe")]
         : [.. InUnixBin("7zz"), .. PathDirectories().Select(dir => Path.Combine(dir, "7zz")), .. InUnixBin("7z")]);
 
+    // OCR untuk macOS/Linux (Windows memakai OCR bawaan Windows).
+    public static string? Tesseract => Locate(Exe("tesseract"), () => OperatingSystem.IsWindows()
+        ? [Path.Combine(ProgramFiles, @"Tesseract-OCR\tesseract.exe")]
+        : InUnixBin("tesseract"));
+
     /// <summary>Nama file program di OS ini: "ffmpeg.exe" di Windows, "ffmpeg" di macOS/Linux.</summary>
     internal static string Exe(string name) => OperatingSystem.IsWindows() ? name + ".exe" : name;
 

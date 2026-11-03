@@ -18,6 +18,9 @@ sealed class DesktopSettings
     /// <summary>Linux: "Convert with Rotiva" di file manager dan "Open With" (default menyala).</summary>
     public bool FileManagerMenu { get; set; } = true;
 
+    /// <summary>macOS/Linux: drag file lalu tekan Shift untuk membuka roda (default menyala).</summary>
+    public bool DragShiftGesture { get; set; } = true;
+
     /// <summary>Skala roda terhadap ukuran desainnya (sama dengan versi Windows).</summary>
     public double WheelScale => WheelSize switch
     {

@@ -70,6 +70,28 @@ jobs:
           ls ~/.local/share/applications ~/.local/share/nautilus/scripts >> shots/notes.txt 2>&1 || true
           test -f sample/tone.mp3
           grep '\[rotiva\]' shots/app.log
+      - name: Test the drag + Shift gesture on X11
+        run: |
+          set -x
+          export DISPLAY=:99
+          xinput list || true
+          # Gesture: tombol kiri ditahan, kursor bergerak, lalu Shift. Tanpa file yang di-drag
+          # jendela drop memang tidak menampilkan roda; yang dicek: gesture terdeteksi dan jendela
+          # drop dibuka di kursor, lalu tertutup lagi saat tombol dilepas.
+          xdotool mousedown 1
+          sleep 0.3
+          xdotool mousemove_relative --sync 40 30 || xdotool mousemove 840 480
+          sleep 0.3
+          xdotool getmouselocation
+          xdotool keydown shift
+          sleep 1
+          import -window root shots/4-gesture.png
+          xwininfo -root -tree | grep -i rotiva | tee -a shots/notes.txt || true
+          xdotool keyup shift
+          xdotool mouseup 1
+          sleep 1
+          grep '\[rotiva\]' shots/app.log | tail -8 | tee shots/gesture.txt
+          grep -q 'gesture at' shots/app.log
       - uses: actions/upload-artifact@v7
         if: always()
         with:

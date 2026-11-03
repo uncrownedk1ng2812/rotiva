@@ -26,6 +26,7 @@ sealed class App : Application
     DesktopSettings _settings = new();
     ToastWindow? _toast;
     WheelWindow? _wheel;
+    DragShiftGesture? _gesture;
 
     public override void Initialize()
     {
@@ -37,9 +38,21 @@ sealed class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         _settings = DesktopSettings.Load();
+        // TEXT (OCR) muncul di roda kalau Tesseract terpasang.
+        Converter.TextRecognizer = TesseractTextRecognizer.TryCreate();
         _toast = new ToastWindow();
         _wheel = new WheelWindow();
         _wheel.ConvertRequested += (files, target) => _conversions.Enqueue(files, target, _toast);
+
+        // Gesture drag + Shift (Windows memakai aplikasi WPF-nya sendiri).
+        var wheel = _wheel;
+        _gesture = DragShiftGesture.TryCreate(() => wheel.Screens.All);
+        if (_gesture is not null)
+        {
+            _gesture.ShiftPressedDuringDrag += cursor => wheel.BeginDrag(cursor, _settings.WheelScale);
+            _gesture.DragEnded += wheel.EndDrag;
+            _gesture.Enabled = _settings.DragShiftGesture;
+        }
 
         CreateTrayIcon();
         if (OperatingSystem.IsLinux() && _settings.FileManagerMenu)
@@ -76,6 +89,14 @@ sealed class App : Application
         var menu = new NativeMenu();
         menu.Items.Add(Item("Convert files…", PickFiles));
         menu.Items.Add(new NativeMenuItemSeparator());
+        if (_gesture is not null)
+        {
+            menu.Items.Add(Toggle("Drag + Shift opens the wheel", _settings.DragShiftGesture, enabled =>
+            {
+                _settings.DragShiftGesture = enabled;
+                _gesture.Enabled = enabled;
+            }));
+        }
         menu.Items.Add(new NativeMenuItem("Wheel size") { Menu = WheelSizeMenu() });
         if (OperatingSystem.IsLinux())
             menu.Items.Add(FileManagerMenuItem());
@@ -126,22 +147,24 @@ sealed class App : Application
     }
 
     [System.Runtime.Versioning.SupportedOSPlatform("linux")]
-    NativeMenuItem FileManagerMenuItem()
+    NativeMenuItem FileManagerMenuItem() => Toggle("File manager menu", _settings.FileManagerMenu, enabled =>
     {
-        var item = new NativeMenuItem("File manager menu")
-        {
-            ToggleType = NativeMenuItemToggleType.CheckBox,
-            IsChecked = _settings.FileManagerMenu,
-        };
+        _settings.FileManagerMenu = enabled;
+        if (enabled)
+            LinuxIntegration.Register();
+        else
+            LinuxIntegration.Unregister();
+    });
+
+    /// <summary>Pilihan nyala/mati di menu tray; <paramref name="changed"/> lalu pengaturan disimpan.</summary>
+    NativeMenuItem Toggle(string header, bool initial, Action<bool> changed)
+    {
+        var item = new NativeMenuItem(header) { ToggleType = NativeMenuItemToggleType.CheckBox, IsChecked = initial };
         item.Click += (_, _) =>
         {
-            _settings.FileManagerMenu = !_settings.FileManagerMenu;
+            item.IsChecked = !item.IsChecked;
+            changed(item.IsChecked);
             _settings.Save();
-            item.IsChecked = _settings.FileManagerMenu;
-            if (_settings.FileManagerMenu)
-                LinuxIntegration.Register();
-            else
-                LinuxIntegration.Unregister();
         };
         return item;
     }

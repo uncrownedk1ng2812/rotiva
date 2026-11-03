@@ -97,6 +97,24 @@ sealed class WheelControl : Control, ICustomHitTest
 
     int SlotCount => _wedges.Length;
 
+    /// <summary>
+    /// Drag mode sebelum file masuk: ukuran roda sudah dipesan (jendela diletakkan di kursor),
+    /// tapi belum ada yang digambar.
+    /// </summary>
+    public void Prepare(double scale)
+    {
+        _category = null;
+        _targets = [];
+        _wedges = [];
+        _scale = scale;
+        Width = Height = DesignSize * scale;
+        InvalidateVisual();
+    }
+
+    /// <summary>Arahkan ke titik di control ini (dipakai selama drag: drag tidak memicu PointerMoved).</summary>
+    public void PointAt(Point position) =>
+        UpdatePointer((position - new Point(Bounds.Width / 2, Bounds.Height / 2)) / _scale);
+
     public void Load(FileCategory category, IReadOnlyList<ConvertTarget> targets, double scale)
     {
         _category = category;

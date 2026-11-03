@@ -700,7 +700,7 @@ public static partial class Converter
         return $"{(int)separator},34,{(utf8 ? 76 : 1)},1{language}";
     }
 
-    static async Task RunAsync(string exe, IEnumerable<string> args,
+    internal static async Task RunAsync(string exe, IEnumerable<string> args,
         Action<string>? onStdout = null, Action<string>? onStderr = null, Dictionary<string, string>? environment = null,
         TimeSpan? timeout = null)
     {
