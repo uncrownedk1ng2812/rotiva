@@ -51,14 +51,19 @@ dotnet run --project src/Rotiva.Desktop -- ~/Pictures/photo.heic    # opens the 
 dotnet run --project src/Rotiva.Desktop                             # tray / menu bar only
 ```
 
-- The wheel opens in **click mode**: point at a format and click (or use the arrow keys + Enter).
-  Click the center or press Esc to cancel. Pick files from the tray menu (**Convert files…**), or
-  launch `Rotiva <files>` again while it's running: the files go to the running instance.
+- The wheel opens in **click mode** right at the mouse cursor (where you right-clicked or dropped the
+  file; the center of the screen if the cursor position can't be read, e.g. pure Wayland or WSL):
+  point at a format and click (or use the arrow keys + Enter). Click the center or press Esc to
+  cancel. Pick files from the tray menu (**Convert files…**), or launch `Rotiva <files>` again while
+  it's running: the files go to the running instance.
+- **Linux file managers**: on start Rotiva adds itself (per user, no root) to **Open With**
+  (`~/.local/share/applications/rotiva.desktop`), Nautilus (**Scripts → Convert with Rotiva**),
+  Dolphin and Nemo (**Convert with Rotiva**). Turn it off with **File manager menu** in the tray.
 - Engines come from the system: `brew install ffmpeg imagemagick ghostscript pandoc sevenzip` and
   LibreOffice.app on macOS, or `apt install ffmpeg imagemagick ghostscript pandoc 7zip libreoffice`
   on Debian/Ubuntu. Images need **ImageMagick 7** (the `magick` command): Debian 13 has it, but
   Ubuntu 24.04 still ships version 6, so there use the AppImage from imagemagick.org on your `PATH`.
-- Not there yet: the drag + Shift gesture, Finder/Nautilus menus, OCR (the TEXT slice is hidden),
+- Not there yet: the drag + Shift gesture, Finder menus, OCR (the TEXT slice is hidden),
   and signed `.dmg` / AppImage packages. On GNOME the tray icon needs the AppIndicator extension.
 
 Every push builds unsigned previews for `linux-x64`, `osx-arm64` and `osx-x64` as artifacts of the

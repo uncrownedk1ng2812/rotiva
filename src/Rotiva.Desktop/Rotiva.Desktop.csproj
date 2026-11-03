@@ -17,6 +17,8 @@
     <Authors>Denish Chairany</Authors>
     <Copyright>Copyright (c) 2026 Denish Chairany. Licensed under GPL-3.0.</Copyright>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <!-- LibraryImport (posisi kursor per OS) menghasilkan kode unsafe. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

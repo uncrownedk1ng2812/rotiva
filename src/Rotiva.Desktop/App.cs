@@ -42,6 +42,8 @@ sealed class App : Application
         _wheel.ConvertRequested += (files, target) => _conversions.Enqueue(files, target, _toast);
 
         CreateTrayIcon();
+        if (OperatingSystem.IsLinux() && _settings.FileManagerMenu)
+            LinuxIntegration.Register();
         InstanceChannel.Listen(OpenWheel);
         if (StartupFiles.Count > 0)
             OpenWheel(StartupFiles);
@@ -56,6 +58,8 @@ sealed class App : Application
         menu.Items.Add(Item("Convert files…", PickFiles));
         menu.Items.Add(new NativeMenuItemSeparator());
         menu.Items.Add(new NativeMenuItem("Wheel size") { Menu = WheelSizeMenu() });
+        if (OperatingSystem.IsLinux())
+            menu.Items.Add(FileManagerMenuItem());
         menu.Items.Add(new NativeMenuItemSeparator());
         menu.Items.Add(Item("Website", () => Shell.OpenUrl(WebsiteUrl)));
         menu.Items.Add(Item("GitHub", () => Shell.OpenUrl(GitHubUrl)));
@@ -100,6 +104,27 @@ sealed class App : Application
             sizeMenu.Items.Add(item);
         }
         return sizeMenu;
+    }
+
+    [System.Runtime.Versioning.SupportedOSPlatform("linux")]
+    NativeMenuItem FileManagerMenuItem()
+    {
+        var item = new NativeMenuItem("File manager menu")
+        {
+            ToggleType = NativeMenuItemToggleType.CheckBox,
+            IsChecked = _settings.FileManagerMenu,
+        };
+        item.Click += (_, _) =>
+        {
+            _settings.FileManagerMenu = !_settings.FileManagerMenu;
+            _settings.Save();
+            item.IsChecked = _settings.FileManagerMenu;
+            if (_settings.FileManagerMenu)
+                LinuxIntegration.Register();
+            else
+                LinuxIntegration.Unregister();
+        };
+        return item;
     }
 
     static NativeMenuItem Item(string header, Action action)

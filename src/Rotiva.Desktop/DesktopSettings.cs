@@ -15,6 +15,9 @@ sealed class DesktopSettings
 
     public WheelSize WheelSize { get; set; } = WheelSize.Medium;
 
+    /// <summary>Linux: "Convert with Rotiva" di file manager dan "Open With" (default menyala).</summary>
+    public bool FileManagerMenu { get; set; } = true;
+
     /// <summary>Skala roda terhadap ukuran desainnya (sama dengan versi Windows).</summary>
     public double WheelScale => WheelSize switch
     {

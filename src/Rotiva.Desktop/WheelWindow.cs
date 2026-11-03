@@ -34,9 +34,6 @@ sealed class WheelWindow : Window
         ShowInTaskbar = false;
         CanResize = false;
         SizeToContent = SizeToContent.WidthAndHeight;
-        // Tanpa posisi kursor global (tahap 3) roda dibuka di tengah layar. Diserahkan ke Avalonia:
-        // di Linux window manager bisa mengabaikan Position yang diatur sebelum jendela tampil.
-        WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
         var hintBar = new Border
         {
@@ -71,9 +68,41 @@ sealed class WheelWindow : Window
         string what = files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('/', '\\')) : $"{files.Count} items";
         _hint.Text = $"{what}  ·  click a format  ·  Esc to cancel";
 
+        var position = PlaceAtCursor(scale);
         Show();
+        // Window manager Linux bisa mengabaikan Position yang diatur sebelum jendela tampil.
+        if (position is { } p)
+            Position = p;
         Activate();
         _wheel.Focus();
+    }
+
+    /// <summary>
+    /// Titik tengah roda di kursor (tempat file dipilih atau dilepas), digeser seperlunya supaya
+    /// tidak terpotong pinggir layar. Kalau posisi kursor tidak terbaca: tengah layar.
+    /// </summary>
+    PixelPoint? PlaceAtCursor(double scale)
+    {
+        if (CursorPosition.Get(Screens.All) is not { } cursor || Screens.ScreenFromPoint(cursor) is not { } screen)
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            return null;
+        }
+
+        var content = (Control)Content!;
+        content.Measure(Size.Infinity);
+        double k = screen.Scaling;
+        int width = (int)(content.DesiredSize.Width * k);
+        int height = (int)(content.DesiredSize.Height * k);
+        // Roda ada di bagian atas jendela, bar petunjuk di bawahnya.
+        int wheelCenterY = (int)(WheelControl.DesignSize * scale / 2 * k);
+        var area = screen.WorkingArea;
+        var position = new PixelPoint(
+            Math.Clamp(cursor.X - width / 2, area.X, Math.Max(area.X, area.Right - width)),
+            Math.Clamp(cursor.Y - wheelCenterY, area.Y, Math.Max(area.Y, area.Bottom - height)));
+        WindowStartupLocation = WindowStartupLocation.Manual;
+        Position = position;
+        return position;
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
