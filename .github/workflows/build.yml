@@ -19,8 +19,8 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: 8.0.x
       - run: dotnet test src/Rotiva.Core.Tests --configuration Release
@@ -29,8 +29,8 @@ jobs:
   windows-app:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: 8.0.x
       - run: dotnet build src/Rotiva/Rotiva.csproj --configuration Release
