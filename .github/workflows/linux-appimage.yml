@@ -1,0 +1,69 @@
+name: Linux AppImage
+
+# Membuat Rotiva-<versi>-x86_64.AppImage dan mengetesnya di layar X11 virtual (Xvfb):
+# kursor dipindah ke titik tertentu, roda dibuka untuk WAV contoh (harus muncul di kursor),
+# segmen dipilih dengan keyboard, dan file hasil dicek. Screenshot tiap langkah disimpan.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version number for the AppImage file name
+        default: 0.0.0
+  push:
+    branches: [main]
+    paths: ['src/Rotiva.Core/**', 'src/Rotiva.Desktop/**', 'installer/build-appimage.sh', '.github/workflows/linux-appimage.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  appimage:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 8.0.x
+      - name: Build AppImage
+        run: bash installer/build-appimage.sh "${{ inputs.version || '0.0.0' }}"
+      - name: Install test tools and engines
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb xdotool imagemagick ffmpeg x11-utils >/dev/null
+      - name: Test the AppImage on X11
+        run: |
+          set -x
+          mkdir -p shots sample
+          ffmpeg -v error -f lavfi -i "sine=frequency=440:duration=2" sample/tone.wav
+          Xvfb :99 -screen 0 1600x900x24 &
+          export DISPLAY=:99
+          sleep 2
+          # Kursor di kanan bawah: roda harus muncul di sana, bukan di tengah layar.
+          xdotool mousemove 1150 600
+          app=$(ls dist/Rotiva-*.AppImage)
+          APPIMAGE_EXTRACT_AND_RUN=1 "$app" "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
+          sleep 8
+          import -window root shots/1-wheel.png
+          xdotool search --onlyvisible --name '^Rotiva$' getwindowgeometry >> shots/notes.txt || echo "no wheel window" >> shots/notes.txt
+          win=$(xdotool search --onlyvisible --name '^Rotiva$' | head -1)
+          xdotool windowfocus --sync "$win" || true
+          xdotool key Right
+          sleep 0.5
+          import -window root shots/2-selected.png
+          xdotool key Return
+          sleep 4
+          import -window root shots/3-result.png
+          ls -la sample | tee shots/files.txt
+          ls ~/.local/share/applications ~/.local/share/nautilus/scripts >> shots/notes.txt 2>&1 || true
+          test -f sample/tone.mp3
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: linux-appimage-test
+          path: shots
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        with:
+          name: rotiva-appimage
+          path: dist/Rotiva-*.AppImage
+          retention-days: 30

@@ -1,0 +1,2 @@
+# Skrip shell harus LF, juga saat repo di-checkout di Windows (dijalankan di Linux/WSL/CI).
+*.sh text eol=lf
