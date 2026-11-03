@@ -37,8 +37,12 @@ jobs:
           sleep 1
           screencapture -x shots/2-selected.png
           osascript -e 'tell application "System Events" to key code 36' || true
-          sleep 6
-          screencapture -x shots/3-result.png
+          # Beruntun: progres lalu hasil konversi di toast.
+          for i in 1 2 3 4 5 6; do
+            sleep 0.7
+            screencapture -x "shots/3-result-$i.png"
+          done
+          osascript -e 'tell application "System Events" to get name of every window of every process whose name is "Rotiva"' >> shots/notes.txt 2>&1 || true
           ls -la sample > shots/files.txt
           pgrep -fl publish/Rotiva >> shots/notes.txt || echo "Rotiva is not running" >> shots/notes.txt
       - uses: actions/upload-artifact@v7
