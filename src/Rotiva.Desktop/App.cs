@@ -45,9 +45,28 @@ sealed class App : Application
         if (OperatingSystem.IsLinux() && _settings.FileManagerMenu)
             LinuxIntegration.Register();
         InstanceChannel.Listen(OpenWheel);
+        ListenForFileActivation();
         if (StartupFiles.Count > 0)
             OpenWheel(StartupFiles);
         base.OnFrameworkInitializationCompleted();
+    }
+
+    /// <summary>
+    /// macOS: Finder ("Open With → Rotiva", menyeret file ke ikon app) mengirim file lewat Apple Event,
+    /// bukan argumen baris perintah. Avalonia meneruskannya sebagai aktivasi file.
+    /// </summary>
+    void ListenForFileActivation()
+    {
+        if (this.TryGetFeature<IActivatableLifetime>() is not { } activatable)
+            return;
+        activatable.Activated += (_, e) =>
+        {
+            if (e is not FileActivatedEventArgs { Files: { Count: > 0 } items })
+                return;
+            var files = items.Select(item => item.TryGetLocalPath()).OfType<string>().ToList();
+            if (files.Count > 0)
+                OpenWheel(files);
+        };
     }
 
     void OpenWheel(IReadOnlyList<string> files) => _wheel!.Open(files, _settings.WheelScale);

@@ -1,35 +1,44 @@
 name: macOS preview
 
-# Menjalankan Rotiva.Desktop di Mac sungguhan (runner GitHub) dan menyimpan screenshot tiap langkah:
-# roda terbuka, segmen dipilih (panah kanan), lalu konversi (Enter) dan toast hasilnya.
-# Dipakai karena belum ada Mac untuk dites; gesture drag + Shift tidak bisa dites di sini
-# (butuh izin Accessibility untuk Rotiva).
+# Membuat Rotiva.app + .dmg (Apple Silicon & Intel) lalu mengetesnya di Mac sungguhan (runner GitHub):
+# file dibuka lewat `open -a Rotiva.app file` (jalur Apple Event yang sama dengan Finder "Open With"),
+# segmen dipilih dengan keyboard, dan file hasil dicek. Screenshot tiap langkah disimpan; .dmg-nya
+# jadi artifact. Gesture drag + Shift tidak bisa dites di sini (butuh izin Accessibility).
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Version number for the .dmg file names
+        default: 0.0.0
   push:
     branches: [main]
-    paths: ['src/Rotiva.Core/**', 'src/Rotiva.Desktop/**', '.github/workflows/macos-preview.yml']
+    paths: ['src/Rotiva.Core/**', 'src/Rotiva.Desktop/**', 'installer/build-macos.sh', '.github/workflows/macos-preview.yml']
 
 permissions:
   contents: read
 
 jobs:
-  screenshots:
+  macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: 8.0.x
-      - name: Install FFmpeg
-        run: brew install ffmpeg
-      - name: Publish Rotiva for macOS
-        run: dotnet publish src/Rotiva.Desktop --configuration Release --runtime osx-arm64 --self-contained true -o publish
-      - name: Run Rotiva and take screenshots
+      - name: Install tools and engines
+        run: brew install librsvg ffmpeg
+      - name: Build Rotiva.app and .dmg (arm64 + x64)
+        run: |
+          bash installer/build-macos.sh "${{ inputs.version || '0.0.0' }}" arm64
+          bash installer/build-macos.sh "${{ inputs.version || '0.0.0' }}" x64
+          ls -la dist/*.dmg
+      - name: Open a file with Rotiva.app and take screenshots
         run: |
           mkdir -p shots sample
           ffmpeg -v error -f lavfi -i "sine=frequency=440:duration=2" sample/tone.wav
-          ./publish/Rotiva "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
+          app="$PWD/dist/macos-arm64/Rotiva.app"
+          # Seperti Finder "Open With": file datang lewat Apple Event, bukan argumen.
+          open -a "$app" "$PWD/sample/tone.wav"
           sleep 10
           screencapture -x shots/1-wheel.png
           # Keyboard butuh izin Accessibility untuk osascript; kalau ditolak, langkah ini dilewati.
@@ -37,17 +46,21 @@ jobs:
           sleep 1
           screencapture -x shots/2-selected.png
           osascript -e 'tell application "System Events" to key code 36' || true
-          # Beruntun: progres lalu hasil konversi di toast.
-          for i in 1 2 3 4 5 6; do
+          for i in 1 2 3 4; do
             sleep 0.7
             screencapture -x "shots/3-result-$i.png"
           done
-          osascript -e 'tell application "System Events" to get name of every window of every process whose name is "Rotiva"' >> shots/notes.txt 2>&1 || true
-          ls -la sample > shots/files.txt
-          pgrep -fl publish/Rotiva >> shots/notes.txt || echo "Rotiva is not running" >> shots/notes.txt
+          ls -la sample | tee shots/files.txt
+          pgrep -fl "Rotiva.app" >> shots/notes.txt || echo "Rotiva is not running" >> shots/notes.txt
+          test -f sample/tone.mp3
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: macos-screenshots
           path: shots
           retention-days: 14
+      - uses: actions/upload-artifact@v7
+        with:
+          name: rotiva-macos-dmg
+          path: dist/*.dmg
+          retention-days: 30
