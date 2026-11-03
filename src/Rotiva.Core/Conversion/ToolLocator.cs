@@ -23,9 +23,13 @@ public static class ToolLocator
         ]
         : InUnixBin("ffmpeg"));
 
+    // ImageMagick 7 bernama magick. Distro yang masih memaketkan versi 6 (mis. Ubuntu 24.04) hanya
+    // punya convert, yang menerima argumen yang sama. Di Windows convert.exe adalah alat bawaan
+    // Windows (konversi FAT ke NTFS), jadi tidak dipakai di sana.
     public static string? ImageMagick => Locate(Exe("magick"), () => OperatingSystem.IsWindows()
         ? Glob(ProgramFiles, "ImageMagick*", "magick.exe")
-        : InUnixBin("magick"));
+        : InUnixBin("magick"))
+        ?? (OperatingSystem.IsWindows() ? null : Locate("convert", () => InUnixBin("convert")));
 
     // Di Windows program konsolnya gswin64c.exe; di macOS/Linux namanya gs.
     public static string? Ghostscript => Locate(OperatingSystem.IsWindows() ? "gswin64c.exe" : "gs", () => OperatingSystem.IsWindows()

@@ -34,6 +34,9 @@ sealed class WheelWindow : Window
         ShowInTaskbar = false;
         CanResize = false;
         SizeToContent = SizeToContent.WidthAndHeight;
+        // Tanpa posisi kursor global (tahap 3) roda dibuka di tengah layar. Diserahkan ke Avalonia:
+        // di Linux window manager bisa mengabaikan Position yang diatur sebelum jendela tampil.
+        WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
         var hintBar = new Border
         {
@@ -68,22 +71,9 @@ sealed class WheelWindow : Window
         string what = files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('/', '\\')) : $"{files.Count} items";
         _hint.Text = $"{what}  ·  click a format  ·  Esc to cancel";
 
-        PlaceOnScreen(scale);
         Show();
         Activate();
         _wheel.Focus();
-    }
-
-    // Tanpa posisi kursor global (tahap 3), roda dibuka di tengah layar utama.
-    void PlaceOnScreen(double scale)
-    {
-        var screen = Screens.Primary ?? Screens.All.FirstOrDefault();
-        if (screen is null)
-            return;
-        double side = WheelControl.DesignSize * scale;
-        var area = screen.WorkingArea;
-        var size = new PixelSize((int)(side * screen.Scaling), (int)((side + 30) * screen.Scaling));
-        Position = new PixelPoint(area.X + (area.Width - size.Width) / 2, area.Y + (area.Height - size.Height) / 2);
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
