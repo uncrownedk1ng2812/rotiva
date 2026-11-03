@@ -29,7 +29,15 @@ jobs:
       - name: Install test tools and engines
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq xvfb xdotool imagemagick ffmpeg x11-utils >/dev/null
+          sudo apt-get install -y -qq xvfb xdotool imagemagick ffmpeg x11-utils \
+            libice6 libsm6 libfontconfig1 libx11-6 libxrandr2 libxcursor1 libxi6 >/dev/null
+      - name: Check the AppImage contents
+        run: |
+          app=$(ls dist/Rotiva-*.AppImage)
+          cd /tmp && "$GITHUB_WORKSPACE/$app" --appimage-extract >/dev/null && cd -
+          ls -la /tmp/squashfs-root /tmp/squashfs-root/usr/bin | head -20
+          # Library sistem yang tidak ditemukan oleh native library di dalam AppImage.
+          for so in /tmp/squashfs-root/usr/bin/*.so; do ldd "$so" | grep "not found" | sed "s|^|$(basename "$so"): |"; done || true
       - name: Test the AppImage on X11
         run: |
           set -x
@@ -42,8 +50,12 @@ jobs:
           xdotool mousemove 1150 600
           app=$(ls dist/Rotiva-*.AppImage)
           APPIMAGE_EXTRACT_AND_RUN=1 "$app" "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
+          pid=$!
           sleep 8
           import -window root shots/1-wheel.png
+          { echo "== process"; ps -o pid,stat,etime,cmd -p "$pid" || echo "exited: $(wait $pid; echo $?)";
+            echo "== windows"; xwininfo -root -tree | grep -iE 'rotiva|avalonia' || true; } >> shots/notes.txt 2>&1
+          cat shots/app.log
           xdotool search --onlyvisible --name '^Rotiva$' getwindowgeometry >> shots/notes.txt || echo "no wheel window" >> shots/notes.txt
           win=$(xdotool search --onlyvisible --name '^Rotiva$' | head -1)
           xdotool windowfocus --sync "$win" || true
