@@ -83,7 +83,14 @@ sealed class WheelWindow : Window
     /// </summary>
     PixelPoint? PlaceAtCursor(double scale)
     {
-        if (CursorPosition.Get(Screens.All) is not { } cursor || Screens.ScreenFromPoint(cursor) is not { } screen)
+        var cursor = CursorPosition.Get(Screens.All);
+        var screen = cursor is { } c ? Screens.ScreenFromPoint(c) : null;
+        if (Environment.GetEnvironmentVariable("ROTIVA_DEBUG") == "1")
+        {
+            Console.Error.WriteLine($"[rotiva] cursor={cursor?.ToString() ?? "null"} screen={screen?.Bounds.ToString() ?? "null"} " +
+                $"screens={string.Join("; ", Screens.All.Select(s => $"{s.Bounds} x{s.Scaling} work={s.WorkingArea}"))}");
+        }
+        if (cursor is not { } point || screen is null)
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             return null;
@@ -98,8 +105,8 @@ sealed class WheelWindow : Window
         int wheelCenterY = (int)(WheelControl.DesignSize * scale / 2 * k);
         var area = screen.WorkingArea;
         var position = new PixelPoint(
-            Math.Clamp(cursor.X - width / 2, area.X, Math.Max(area.X, area.Right - width)),
-            Math.Clamp(cursor.Y - wheelCenterY, area.Y, Math.Max(area.Y, area.Bottom - height)));
+            Math.Clamp(point.X - width / 2, area.X, Math.Max(area.X, area.Right - width)),
+            Math.Clamp(point.Y - wheelCenterY, area.Y, Math.Max(area.Y, area.Bottom - height)));
         WindowStartupLocation = WindowStartupLocation.Manual;
         Position = position;
         return position;

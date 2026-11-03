@@ -46,10 +46,13 @@ jobs:
           Xvfb :99 -screen 0 1600x900x24 &
           export DISPLAY=:99
           sleep 2
+          xdpyinfo | grep -E 'dimensions|RANDR' || true
+          xrandr --query || true
           # Kursor di kanan bawah: roda harus muncul di sana, bukan di tengah layar.
           xdotool mousemove 1150 600
+          xdotool getmouselocation
           app=$(ls dist/Rotiva-*.AppImage)
-          APPIMAGE_EXTRACT_AND_RUN=1 "$app" "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
+          ROTIVA_DEBUG=1 APPIMAGE_EXTRACT_AND_RUN=1 "$app" "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
           pid=$!
           sleep 8
           import -window root shots/1-wheel.png
