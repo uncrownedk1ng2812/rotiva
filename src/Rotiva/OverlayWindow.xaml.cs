@@ -185,17 +185,7 @@ public partial class OverlayWindow : Window
         Wheel.FlashSelected();
         SoundFx.Confirm();
 
-        // Gabung PDF menerima campuran gambar/PDF/dokumen, diurutkan seperti di Explorer; ZIP menerima
-        // semuanya, termasuk folder. Selain itu hanya file sejenis yang bisa dikonversi ke format ini.
-        var files = target.Action switch
-        {
-            TargetAction.MergePdf => FilesToMerge(_files),
-            TargetAction.Zip => _files.ToList(),
-            _ => _files
-                .Where(file => FormatCatalog.ForFile(file) is var category
-                    && category.Name == _category.Name && category.Targets.Contains(target))
-                .ToList(),
-        };
+        var files = FormatCatalog.FilesFor(target, _category, _files, ExplorerOrder);
         var area = CurrentMonitorArea();
         await Task.Delay(200);
         CloseWheel();
@@ -207,10 +197,12 @@ public partial class OverlayWindow : Window
     void Convert(IReadOnlyList<string> files, ConvertTarget target, Rect area) =>
         _conversions.Enqueue(files, target, new ToastReporter(_toast, area));
 
+    // Urutan nama ala Explorer: "foto 2" sebelum "foto 10".
+    static readonly IComparer<string?> ExplorerOrder =
+        Comparer<string?>.Create((a, b) => NativeMethods.StrCmpLogicalW(a!, b!));
+
     static List<string> FilesToMerge(IEnumerable<string> files) =>
-        files.Where(FormatCatalog.CanMergeToPdf)
-            .OrderBy(Path.GetFileName, Comparer<string?>.Create((a, b) => NativeMethods.StrCmpLogicalW(a!, b!)))
-            .ToList();
+        files.Where(FormatCatalog.CanMergeToPdf).OrderBy(Path.GetFileName, ExplorerOrder).ToList();
 
     /// <summary>
     /// Perintah dari menu klik kanan Explorer (sudah dikumpulkan per kode tujuan). File dari jenis

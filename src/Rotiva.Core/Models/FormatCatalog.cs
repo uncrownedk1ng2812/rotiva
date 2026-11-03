@@ -262,6 +262,22 @@ public static class FormatCatalog
     public static bool CanMergeToPdf(string path) =>
         ForFile(path, multipleFiles: true).Targets.Contains(MergePdf);
 
+    /// <summary>
+    /// File yang ikut saat beberapa file dilepas di <paramref name="target"/> pada roda kategori
+    /// <paramref name="category"/>. Gabung PDF menerima campuran gambar/PDF/dokumen, diurutkan
+    /// dengan <paramref name="nameOrder"/> (urutan nama seperti di file manager); ZIP menerima
+    /// semuanya, termasuk folder. Selain itu hanya file sejenis yang bisa dikonversi ke format ini.
+    /// </summary>
+    public static List<string> FilesFor(ConvertTarget target, FileCategory category, IEnumerable<string> files,
+        IComparer<string?> nameOrder) => target.Action switch
+    {
+        TargetAction.MergePdf => files.Where(CanMergeToPdf).OrderBy(Path.GetFileName, nameOrder).ToList(),
+        TargetAction.Zip => files.ToList(),
+        _ => files
+            .Where(file => ForFile(file) is var own && own.Name == category.Name && own.Targets.Contains(target))
+            .ToList(),
+    };
+
     public static string Normalize(string extension) => extension.ToLowerInvariant() switch
     {
         ".jpeg" => ".jpg",

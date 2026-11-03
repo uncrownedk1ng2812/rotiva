@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Rotiva lintas platform (macOS & Linux, juga jalan di Windows) dengan Avalonia, di atas Rotiva.Core.
+    Tahap 2: roda mode klik (file dari baris perintah / "Open with" / menu tray), toast, dan tray.
+    Deteksi drag + Shift global menyusul per OS (tahap 3).
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Rotiva</AssemblyName>
+    <RootNamespace>Rotiva.Desktop</RootNamespace>
+    <ApplicationIcon>..\Rotiva\Assets\app.ico</ApplicationIcon>
+    <Product>Rotiva</Product>
+    <Authors>Denish Chairany</Authors>
+    <Copyright>Copyright (c) 2026 Denish Chairany. Licensed under GPL-3.0.</Copyright>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rotiva.Core\Rotiva.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -8,6 +8,7 @@ Rotiva is a C# / .NET 8 / WPF app for Windows 10 and 11.
 src/Rotiva.Core/        conversion core: formats, engines, queue (plain .NET 8, any OS)
 src/Rotiva.Core.Tests/  xUnit tests for the core (run on Windows, macOS and Linux in CI)
 src/Rotiva/             the Windows app (WPF): wheel, hooks, tray, toast, Explorer menu, Windows OCR
+src/Rotiva.Desktop/     macOS & Linux app (Avalonia, preview): click-mode wheel, toast, tray
 installer/              Inno Setup script + build.ps1
 assets/, id/, index.html, ...   the website (GitHub Pages)
 ```
@@ -39,6 +40,31 @@ dotnet test src/Rotiva.Core.Tests     # works on macOS and Linux too
 
 Conversions need the engines. During development Rotiva also finds them when they are installed
 system-wide (FFmpeg, LibreOffice, Pandoc via winget).
+
+## macOS & Linux (preview)
+
+`src/Rotiva.Desktop` runs the same conversion core with an Avalonia UI. It also runs on Windows, which
+is handy for testing.
+
+```
+dotnet run --project src/Rotiva.Desktop -- ~/Pictures/photo.heic    # opens the wheel for that file
+dotnet run --project src/Rotiva.Desktop                             # tray / menu bar only
+```
+
+- The wheel opens in **click mode**: point at a format and click (or use the arrow keys + Enter).
+  Click the center or press Esc to cancel. Pick files from the tray menu (**Convert files…**), or
+  launch `Rotiva <files>` again while it's running: the files go to the running instance.
+- Engines come from the system: `brew install ffmpeg imagemagick ghostscript pandoc sevenzip` and
+  LibreOffice.app on macOS, or `apt install ffmpeg imagemagick ghostscript pandoc 7zip libreoffice`
+  on Debian/Ubuntu. Images need **ImageMagick 7** (the `magick` command): Debian 13 has it, but
+  Ubuntu 24.04 still ships version 6, so there use the AppImage from imagemagick.org on your `PATH`.
+- Not there yet: the drag + Shift gesture, Finder/Nautilus menus, OCR (the TEXT slice is hidden),
+  and signed `.dmg` / AppImage packages. On GNOME the tray icon needs the AppIndicator extension.
+
+Every push builds unsigned previews for `linux-x64`, `osx-arm64` and `osx-x64` as artifacts of the
+[Build workflow](https://github.com/uncrownedk1ng2812/rotiva/actions/workflows/build.yml). On macOS,
+right-click → Open the first time (the app isn't notarized), or run `xattr -dr com.apple.quarantine`
+on it.
 
 ## Build the installer
 

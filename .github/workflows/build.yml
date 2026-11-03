@@ -34,3 +34,26 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - run: dotnet build src/Rotiva/Rotiva.csproj --configuration Release
+
+  # Rotiva untuk macOS & Linux (Avalonia, pratinjau). Hasil publish disimpan sebagai artifact
+  # untuk dicoba; belum ada installer, tanda tangan, atau notarization.
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, rid: linux-x64 }
+          - { os: macos-latest, rid: osx-arm64 }
+          - { os: macos-latest, rid: osx-x64 }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet publish src/Rotiva.Desktop --configuration Release --runtime ${{ matrix.rid }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
+      - uses: actions/upload-artifact@v7
+        with:
+          name: rotiva-${{ matrix.rid }}
+          path: publish
+          retention-days: 30
