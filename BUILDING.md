@@ -66,7 +66,16 @@ dotnet run --project src/Rotiva.Desktop                             # tray / men
 - Not there yet: the drag + Shift gesture, Finder menus, OCR (the TEXT slice is hidden),
   and signed `.dmg` / AppImage packages. On GNOME the tray icon needs the AppIndicator extension.
 
-Every push builds unsigned previews for `linux-x64`, `osx-arm64` and `osx-x64` as artifacts of the
+**AppImage (Linux).** `installer/build-appimage.sh 1.9.0` builds `dist/Rotiva-1.9.0-x86_64.AppImage`
+(needs Linux x86_64, the .NET 8 SDK and curl; appimagetool and the AppImage runtime are downloaded at
+pinned versions and checked against their SHA-256). The
+[Linux AppImage workflow](https://github.com/uncrownedk1ng2812/rotiva/actions/workflows/linux-appimage.yml)
+builds it on every push, runs it on a virtual X11 screen, converts a file with it and keeps the
+AppImage as an artifact. To use it: `chmod +x Rotiva-*.AppImage && ./Rotiva-*.AppImage`. Without FUSE
+(containers, WSL) run it with `APPIMAGE_EXTRACT_AND_RUN=1`. The engines are not inside the AppImage;
+install them from your distribution as above.
+
+Every push also builds unsigned previews for `linux-x64`, `osx-arm64` and `osx-x64` as artifacts of the
 [Build workflow](https://github.com/uncrownedk1ng2812/rotiva/actions/workflows/build.yml). On macOS,
 right-click → Open the first time (the app isn't notarized), or run `xattr -dr com.apple.quarantine`
 on it.

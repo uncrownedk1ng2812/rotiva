@@ -17,6 +17,21 @@ output="$dist/Rotiva-$version-x86_64.AppImage"
 tool_version="1.9.1"
 tool_sha256="ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0"
 tool="$dist/cache/appimagetool-$tool_version-x86_64.AppImage"
+# Runtime AppImage (bagian depan file .AppImage) juga versi tetap; tanpa ini appimagetool
+# mengunduh build "continuous" yang bisa berubah sewaktu-waktu.
+runtime_version="20251108"
+runtime_sha256="2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d"
+runtime="$dist/cache/appimage-runtime-$runtime_version-x86_64"
+
+# download <url> <sha256> <tujuan>: unduh sekali, cek hash, simpan di dist/cache.
+download() {
+  [ -f "$3" ] && return
+  echo "==> Unduh $(basename "$3")"
+  mkdir -p "$(dirname "$3")"
+  curl -fsSL -o "$3.part" "$1"
+  echo "$2  $3.part" | sha256sum --check --quiet
+  mv "$3.part" "$3"
+}
 
 echo "==> Publish Rotiva.Desktop $version (linux-x64, self-contained)"
 rm -rf "$dist/appimage"
@@ -46,16 +61,13 @@ exec "$here/usr/bin/Rotiva" "$@"
 EOF
 chmod +x "$appdir/AppRun" "$appdir/usr/bin/Rotiva"
 
-if [ ! -f "$tool" ]; then
-  echo "==> Unduh appimagetool $tool_version"
-  mkdir -p "$dist/cache"
-  curl -fsSL -o "$tool.part" "https://github.com/AppImage/appimagetool/releases/download/$tool_version/appimagetool-x86_64.AppImage"
-  echo "$tool_sha256  $tool.part" | sha256sum --check --quiet
-  mv "$tool.part" "$tool"
-  chmod +x "$tool"
-fi
+download "https://github.com/AppImage/appimagetool/releases/download/$tool_version/appimagetool-x86_64.AppImage" \
+  "$tool_sha256" "$tool"
+chmod +x "$tool"
+download "https://github.com/AppImage/type2-runtime/releases/download/$runtime_version/runtime-x86_64" \
+  "$runtime_sha256" "$runtime"
 
 echo "==> Buat AppImage"
 # Tanpa FUSE (CI, container, WSL): appimagetool membongkar dirinya sendiri lalu jalan.
-ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN=1 "$tool" --no-appstream "$appdir" "$output"
+ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN=1 "$tool" --no-appstream --runtime-file "$runtime" "$appdir" "$output"
 echo "==> Selesai: $output ($(du -h "$output" | cut -f1))"

@@ -1,8 +1,8 @@
 name: Linux AppImage
 
-# Membuat Rotiva-<versi>-x86_64.AppImage dan mengetesnya di layar X11 virtual (Xvfb):
-# kursor dipindah ke titik tertentu, roda dibuka untuk WAV contoh (harus muncul di kursor),
-# segmen dipilih dengan keyboard, dan file hasil dicek. Screenshot tiap langkah disimpan.
+# Membuat Rotiva-<versi>-x86_64.AppImage dan mengetesnya di layar X11 virtual (Xvfb): roda dibuka
+# untuk WAV contoh (titik tengahnya di kursor X11), segmen dipilih dengan keyboard, dan file hasil
+# dicek. Screenshot tiap langkah disimpan; AppImage-nya jadi artifact.
 on:
   workflow_dispatch:
     inputs:
@@ -46,13 +46,8 @@ jobs:
           Xvfb :99 -screen 0 1600x900x24 &
           export DISPLAY=:99
           sleep 2
-          # Kursor di kanan bawah: roda harus muncul di sana, bukan di tengah layar. Xvfb tanpa
-          # jendela kadang belum menerima gerakan pertama, jadi diulang sampai posisinya benar.
-          for i in 1 2 3 4 5; do
-            xdotool mousemove --sync 1150 600 || true
-            xdotool getmouselocation | grep -q 'x:1150 y:600' && break
-            sleep 0.5
-          done
+          # Xvfb di runner tidak mau memindahkan kursor (tetap di tengah layar), jadi yang dicek:
+          # Rotiva membaca kursor X11 dan menaruh titik tengah roda di sana (log [rotiva] di bawah).
           xdotool getmouselocation | tee -a shots/notes.txt
           app=$(ls dist/Rotiva-*.AppImage)
           ROTIVA_DEBUG=1 APPIMAGE_EXTRACT_AND_RUN=1 "$app" "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
