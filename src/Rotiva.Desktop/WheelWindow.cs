@@ -94,9 +94,18 @@ sealed class WheelWindow : Window
         _wasActivated = false;
         ShowActivated = true;
         ShowAt(PlaceAt(CursorPosition.Get(Screens.All), scale));
+        ActivateWhenShown();
+    }
+
+    // Di X11 jendela baru tampil sesaat setelah Show(); fokus ke jendela yang belum tampil ditolak
+    // (BadMatch). Jadi aktivasi menunggu giliran berikutnya di UI thread, setelah jendela tampil.
+    void ActivateWhenShown() => Dispatcher.UIThread.Post(() =>
+    {
+        if (!IsVisible || _dragMode)
+            return;
         Activate();
         _wheel.Focus();
-    }
+    }, DispatcherPriority.Background);
 
     /// <summary>
     /// Mode drag: Shift ditekan saat men-drag. Jendela tak terlihat di kursor menunggu drag masuk;

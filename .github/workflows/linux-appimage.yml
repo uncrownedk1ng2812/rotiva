@@ -52,7 +52,12 @@ jobs:
           app=$(ls dist/Rotiva-*.AppImage)
           ROTIVA_DEBUG=1 APPIMAGE_EXTRACT_AND_RUN=1 "$app" "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
           pid=$!
-          sleep 8
+          # Tunggu jendela roda (paling lama 15 detik; start pertama membongkar AppImage dulu).
+          for i in $(seq 1 30); do
+            xdotool search --onlyvisible --name '^Rotiva$' >/dev/null 2>&1 && break
+            sleep 0.5
+          done
+          sleep 1
           import -window root shots/1-wheel.png
           { echo "== process"; ps -o pid,stat,etime,cmd -p "$pid" || echo "exited: $(wait $pid; echo $?)";
             echo "== windows"; xwininfo -root -tree | grep -iE 'rotiva|avalonia' || true; } >> shots/notes.txt 2>&1

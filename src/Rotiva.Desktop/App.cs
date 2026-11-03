@@ -6,6 +6,7 @@ using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
+using Avalonia.Threading;
 using Rotiva.Conversion;
 
 namespace Rotiva.Desktop;
@@ -59,9 +60,11 @@ sealed class App : Application
             LinuxIntegration.Register();
         InstanceChannel.Listen(OpenWheel);
         ListenForFileActivation();
-        if (StartupFiles.Count > 0)
-            OpenWheel(StartupFiles);
         base.OnFrameworkInitializationCompleted();
+        // Roda untuk file dari baris perintah dibuka setelah event loop berjalan, bukan selama
+        // inisialisasi: di X11 jendela yang ditampilkan sebelum itu kadang tidak pernah muncul.
+        if (StartupFiles.Count > 0)
+            Dispatcher.UIThread.Post(() => OpenWheel(StartupFiles), DispatcherPriority.Background);
     }
 
     /// <summary>

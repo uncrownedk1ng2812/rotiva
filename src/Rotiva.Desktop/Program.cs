@@ -27,5 +27,7 @@ static class Program
         AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
+            // macOS: hidup di menu bar saja, tanpa ikon di Dock (Avalonia mengabaikan LSUIElement).
+            .With(new MacOSPlatformOptions { ShowInDock = false })
             .LogToTrace();
 }
