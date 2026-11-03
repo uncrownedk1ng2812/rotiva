@@ -1,26 +1,28 @@
 ﻿using System.IO;
-using System.Windows;
 using Rotiva.Models;
 
 namespace Rotiva.Conversion;
 
 /// <summary>
 /// Menjalankan konversi satu per satu (drop berikutnya menunggu giliran) dan
-/// melaporkan progresnya lewat <see cref="ToastWindow"/>.
+/// melaporkan progresnya lewat <see cref="IConversionReporter"/>.
 /// </summary>
-internal sealed class ConversionQueue(ToastWindow toast)
+public sealed class ConversionQueue
 {
     readonly SemaphoreSlim _gate = new(1, 1);
 
-    /// <param name="area">Area monitor (DIP) tempat notifikasi ditampilkan.</param>
-    public async void Enqueue(IReadOnlyList<string> files, ConvertTarget target, Rect area)
+    /// <summary>
+    /// Dipanggil di UI thread: <see cref="Progress{T}"/> dibuat di sini, jadi laporan progres dan
+    /// hasil kembali ke UI thread lewat SynchronizationContext-nya.
+    /// </summary>
+    public async void Enqueue(IReadOnlyList<string> files, ConvertTarget target, IConversionReporter reporter)
     {
         await _gate.WaitAsync();
         try
         {
             if (target.Action is TargetAction.MergePdf or TargetAction.Zip)
             {
-                await CombineAsync(files, target, area);
+                await CombineAsync(files, target, reporter);
                 return;
             }
 
@@ -38,10 +40,9 @@ internal sealed class ConversionQueue(ToastWindow toast)
                     _ => "CONVERTING",
                 };
                 string header = files.Count > 1 ? $"{verb} {i + 1}/{files.Count}" : verb;
-                toast.ShowProgress(header, $"{name}   →   {target.Label}", area);
+                reporter.ShowProgress(header, $"{name}   →   {target.Label}");
 
-                // Progress<T> dibuat di UI thread, jadi laporannya otomatis kembali ke UI thread.
-                var progress = new Progress<double?>(toast.SetProgress);
+                var progress = new Progress<double?>(reporter.SetProgress);
                 try
                 {
                     lastOutput = await Task.Run(() => Converter.ConvertAsync(file, target, progress));
@@ -56,19 +57,19 @@ internal sealed class ConversionQueue(ToastWindow toast)
             int succeeded = files.Count - failures.Count;
             if (failures.Count == 0)
             {
-                string message = files.Count == 1 && target.Action == TargetAction.ExtractText && TryCopyText(lastOutput!)
+                string message = files.Count == 1 && target.Action == TargetAction.ExtractText && TryCopyText(reporter, lastOutput!)
                     ? $"Text copied to clipboard · {Path.GetFileName(lastOutput)}"
                     : files.Count == 1
                     ? $"Saved as {Path.GetFileName(lastOutput)}"
                     : target.Action == TargetAction.Compress
                         ? $"{files.Count} files compressed"
                         : $"{files.Count} files converted to {target.Label}";
-                toast.ShowResult(success: true, "DONE", message, area, revealPath: lastOutput);
+                reporter.ShowResult(success: true, "DONE", message, revealPath: lastOutput);
             }
             else
             {
                 string header = succeeded == 0 ? "FAILED" : $"{succeeded} SUCCEEDED, {failures.Count} FAILED";
-                toast.ShowResult(success: false, header, failures[0], area);
+                reporter.ShowResult(success: false, header, failures[0]);
             }
         }
         finally
@@ -77,27 +78,25 @@ internal sealed class ConversionQueue(ToastWindow toast)
         }
     }
 
-    // Dipanggil di UI thread (clipboard butuh STA). Clipboard bisa sedang dikunci aplikasi lain.
-    static bool TryCopyText(string textFile)
+    static bool TryCopyText(IConversionReporter reporter, string textFile)
     {
         try
         {
-            Clipboard.SetText(File.ReadAllText(textFile));
-            return true;
+            return reporter.TryCopyText(File.ReadAllText(textFile));
         }
-        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or IOException)
+        catch (IOException)
         {
             return false;
         }
     }
 
     /// <summary>Semua file jadi satu hasil: gabung PDF atau ZIP.</summary>
-    async Task CombineAsync(IReadOnlyList<string> files, ConvertTarget target, Rect area)
+    static async Task CombineAsync(IReadOnlyList<string> files, ConvertTarget target, IConversionReporter reporter)
     {
         bool zip = target.Action == TargetAction.Zip;
         string items = files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('\\', '/')) : $"{files.Count} items";
-        toast.ShowProgress(zip ? "ZIPPING" : "MERGING", $"{items}   →   {target.Label}", area);
-        var progress = new Progress<double?>(toast.SetProgress);
+        reporter.ShowProgress(zip ? "ZIPPING" : "MERGING", $"{items}   →   {target.Label}");
+        var progress = new Progress<double?>(reporter.SetProgress);
         try
         {
             string output = await Task.Run(() => zip
@@ -106,12 +105,12 @@ internal sealed class ConversionQueue(ToastWindow toast)
             string message = zip
                 ? $"Saved as {Path.GetFileName(output)}"
                 : $"{files.Count} files merged into {Path.GetFileName(output)}";
-            toast.ShowResult(success: true, "DONE", message, area, revealPath: output);
+            reporter.ShowResult(success: true, "DONE", message, revealPath: output);
         }
         catch (Exception ex) when (ex is ConversionException or IOException or UnauthorizedAccessException
                                        or System.ComponentModel.Win32Exception)
         {
-            toast.ShowResult(success: false, "FAILED", ex.Message, area);
+            reporter.ShowResult(success: false, "FAILED", ex.Message);
         }
     }
 }

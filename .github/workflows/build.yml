@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'Rotiva.sln', '.github/workflows/build.yml']
+  pull_request:
+    paths: ['src/**', 'Rotiva.sln', '.github/workflows/build.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  # Inti konversi harus tetap lintas platform: dites di ketiga OS.
+  core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test src/Rotiva.Core.Tests --configuration Release
+
+  # Aplikasi Windows (WPF) hanya bisa di-build di Windows.
+  windows-app:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet build src/Rotiva/Rotiva.csproj --configuration Release

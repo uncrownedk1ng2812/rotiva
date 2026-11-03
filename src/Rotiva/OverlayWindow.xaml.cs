@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -32,7 +32,8 @@ public partial class OverlayWindow : Window
 
     enum OverlayState { Hidden, Probing, Open, Closing }
 
-    readonly ConversionQueue _conversions = new(new ToastWindow());
+    readonly ConversionQueue _conversions = new();
+    readonly ToastWindow _toast = new();
     OverlayState _state;
     FileCategory? _category;
     string[] _files = [];
@@ -199,8 +200,12 @@ public partial class OverlayWindow : Window
         await Task.Delay(200);
         CloseWheel();
         if (files.Count > 0)
-            _conversions.Enqueue(files, target, area);
+            Convert(files, target, area);
     }
+
+    /// <summary>Antrekan konversi; progres dan hasilnya tampil sebagai toast di <paramref name="area"/>.</summary>
+    void Convert(IReadOnlyList<string> files, ConvertTarget target, Rect area) =>
+        _conversions.Enqueue(files, target, new ToastReporter(_toast, area));
 
     static List<string> FilesToMerge(IEnumerable<string> files) =>
         files.Where(FormatCatalog.CanMergeToPdf)
@@ -218,7 +223,7 @@ public partial class OverlayWindow : Window
         {
             var items = files.Where(path => File.Exists(path) || Directory.Exists(path)).ToList();
             if (items.Count > 0)
-                _conversions.Enqueue(items, FormatCatalog.ForFile(items[0], multipleFiles: true).Targets
+                Convert(items, FormatCatalog.ForFile(items[0], multipleFiles: true).Targets
                     .First(t => t.Action == TargetAction.Zip), area);
             return;
         }
@@ -234,7 +239,7 @@ public partial class OverlayWindow : Window
                 ? FormatCatalog.ForFile(mergeable[0], multipleFiles: true).Targets.First(t => t.Action == TargetAction.MergePdf)
                 : null;
             if (merge is not null)
-                _conversions.Enqueue(mergeable, merge, area);
+                Convert(mergeable, merge, area);
             return;
         }
 
@@ -244,7 +249,7 @@ public partial class OverlayWindow : Window
             // Format tujuan sama dengan format asli (misal "Ke PNG" untuk file .png): dilewati.
             var sameTarget = group.Where(file => FormatCatalog.ForFile(file).Targets.Contains(target)).ToList();
             if (target is not null && sameTarget.Count > 0)
-                _conversions.Enqueue(sameTarget, target, area);
+                Convert(sameTarget, target, area);
         }
     }
 

@@ -5,10 +5,17 @@ Rotiva is a C# / .NET 8 / WPF app for Windows 10 and 11.
 ## Layout
 
 ```
-src/Rotiva/   the app (WPF)
-installer/    Inno Setup script + build.ps1
+src/Rotiva.Core/        conversion core: formats, engines, queue (plain .NET 8, any OS)
+src/Rotiva.Core.Tests/  xUnit tests for the core (run on Windows, macOS and Linux in CI)
+src/Rotiva/             the Windows app (WPF): wheel, hooks, tray, toast, Explorer menu, Windows OCR
+installer/              Inno Setup script + build.ps1
 assets/, id/, index.html, ...   the website (GitHub Pages)
 ```
+
+The core has no UI and no Windows-only APIs. Anything platform-specific is plugged in by the app:
+OCR through `ITextRecognizer` (`Converter.TextRecognizer`), progress and results through
+`IConversionReporter`. A future macOS/Linux app reuses the core and provides its own UI and these two
+pieces.
 
 | Part              | Choice                                     |
 |-------------------|--------------------------------------------|
@@ -27,6 +34,7 @@ assets/, id/, index.html, ...   the website (GitHub Pages)
 ```
 winget install Microsoft.DotNet.SDK.8
 dotnet run --project src/Rotiva
+dotnet test src/Rotiva.Core.Tests     # works on macOS and Linux too
 ```
 
 Conversions need the engines. During development Rotiva also finds them when they are installed

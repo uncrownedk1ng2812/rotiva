@@ -12,13 +12,12 @@ namespace Rotiva.Conversion;
 /// Bahasa mengikuti bahasa Windows; kalau paket OCR-nya tidak ada, dipakai bahasa OCR apa pun yang
 /// terpasang (huruf Latin, jadi mesin bahasa Inggris tetap bisa membaca teks bahasa Indonesia).
 /// </summary>
-internal static class TextRecognizer
+internal sealed class WindowsTextRecognizer : ITextRecognizer
 {
     /// <summary>Batas sisi gambar yang diterima mesin OCR Windows (biasanya 10000 px).</summary>
-    public static uint MaxImageDimension => OcrEngine.MaxImageDimension;
+    public uint MaxImageDimension => OcrEngine.MaxImageDimension;
 
-    /// <summary>Baca teks dari gambar PNG (sudah diperkecil di bawah <see cref="MaxImageDimension"/>).</summary>
-    public static async Task<string> RecognizeAsync(string pngPath)
+    public async Task<string> RecognizeAsync(string pngPath)
     {
         var engine = OcrEngine.TryCreateFromUserProfileLanguages()
             ?? OcrEngine.AvailableRecognizerLanguages.Select(OcrEngine.TryCreateFromLanguage).FirstOrDefault(e => e is not null)

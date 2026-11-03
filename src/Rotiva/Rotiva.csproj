@@ -19,6 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Rotiva.Core\Rotiva.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- Hindari bentrok nama dengan WPF (Application, Point, Color, ...). -->
     <Using Remove="System.Windows.Forms" />
     <Using Remove="System.Drawing" />

@@ -8,14 +8,20 @@ using Rotiva.Models;
 
 namespace Rotiva.Conversion;
 
-internal sealed class ConversionException(string message) : Exception(message);
+public sealed class ConversionException(string message) : Exception(message);
 
 /// <summary>
 /// Menjalankan satu konversi. Hasil disimpan di folder yang sama dengan file asli,
 /// dengan nama yang sama dan ekstensi baru; kalau sudah ada, diberi akhiran " (1)", " (2)", dst.
 /// </summary>
-internal static partial class Converter
+public static partial class Converter
 {
+    /// <summary>Mesin OCR sistem operasi untuk segmen TEXT; diisi aplikasi saat start.</summary>
+    public static ITextRecognizer? TextRecognizer { get; set; }
+
+    static ITextRecognizer Ocr => TextRecognizer
+        ?? throw new ConversionException("Text recognition isn't available on this system.");
+
     // Batas waktu untuk gambar & dokumen. FFmpeg tidak dibatasi karena video panjang memang lama.
     static readonly TimeSpan ToolTimeout = TimeSpan.FromMinutes(3);
 
@@ -136,13 +142,13 @@ internal static partial class Converter
         // Lewat ImageMagick dulu: semua format (HEIC, AVIF, ...) jadi PNG, rotasi EXIF diterapkan,
         // dan ukuran dijaga di bawah batas mesin OCR.
         string png = Path.Combine(tempDir, "ocr.png");
-        uint max = TextRecognizer.MaxImageDimension;
+        uint max = Ocr.MaxImageDimension;
         await RunMagickAsync(Magick,
         [
             source + "[0]", "-auto-orient", "-resize", $"{max}x{max}>",
             "-background", "white", "-alpha", "remove", "-alpha", "off", png,
         ]);
-        return await TextRecognizer.RecognizeAsync(png);
+        return await Ocr.RecognizeAsync(png);
     }
 
     static async Task<string> ExtractPdfTextAsync(string source, string tempDir, IProgress<double?> progress)
@@ -164,7 +170,7 @@ internal static partial class Converter
             progress.Report((double)i / pages.Count);
             if (i > 0)
                 result.AppendLine();
-            result.Append(await TextRecognizer.RecognizeAsync(pages[i]));
+            result.Append(await Ocr.RecognizeAsync(pages[i]));
         }
         return result.ToString();
     }

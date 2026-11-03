@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Inti konversi Rotiva tanpa UI dan tanpa API khusus Windows: katalog format, pemanggilan
+    engine (FFmpeg, ImageMagick, Ghostscript, LibreOffice, Pandoc, 7-Zip), dan antrean konversi.
+    Dipakai aplikasi Windows (src/Rotiva) dan nanti versi macOS/Linux.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Rotiva</RootNamespace>
+    <Product>Rotiva</Product>
+    <Authors>Denish Chairany</Authors>
+    <Copyright>Copyright (c) 2026 Denish Chairany. Licensed under GPL-3.0.</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Rotiva.Core.Tests" />
+  </ItemGroup>
+
+</Project>

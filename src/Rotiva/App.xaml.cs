@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Rotiva.Conversion;
 using Rotiva.Input;
 using Rotiva.Shell;
 
@@ -42,6 +43,7 @@ public partial class App : Application
             return;
         }
 
+        Converter.TextRecognizer = new WindowsTextRecognizer();
         var overlay = new OverlayWindow();
         _detector = new DragShiftDetector();
         _detector.ShiftPressedDuringDrag += overlay.BeginProbe;
