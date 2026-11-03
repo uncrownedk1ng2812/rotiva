@@ -1,0 +1,49 @@
+name: macOS preview
+
+# Menjalankan Rotiva.Desktop di Mac sungguhan (runner GitHub) dan menyimpan screenshot tiap langkah:
+# roda terbuka, segmen dipilih (panah kanan), lalu konversi (Enter) dan toast hasilnya.
+# Dipakai karena belum ada Mac untuk dites; gesture drag + Shift tidak bisa dites di sini
+# (butuh izin Accessibility untuk Rotiva).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['src/Rotiva.Core/**', 'src/Rotiva.Desktop/**', '.github/workflows/macos-preview.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  screenshots:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 8.0.x
+      - name: Install FFmpeg
+        run: brew install ffmpeg
+      - name: Publish Rotiva for macOS
+        run: dotnet publish src/Rotiva.Desktop --configuration Release --runtime osx-arm64 --self-contained true -o publish
+      - name: Run Rotiva and take screenshots
+        run: |
+          mkdir -p shots sample
+          ffmpeg -v error -f lavfi -i "sine=frequency=440:duration=2" sample/tone.wav
+          ./publish/Rotiva "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
+          sleep 10
+          screencapture -x shots/1-wheel.png
+          # Keyboard butuh izin Accessibility untuk osascript; kalau ditolak, langkah ini dilewati.
+          osascript -e 'tell application "System Events" to key code 124' || echo "key events not allowed" >> shots/notes.txt
+          sleep 1
+          screencapture -x shots/2-selected.png
+          osascript -e 'tell application "System Events" to key code 36' || true
+          sleep 6
+          screencapture -x shots/3-result.png
+          ls -la sample > shots/files.txt
+          pgrep -fl publish/Rotiva >> shots/notes.txt || echo "Rotiva is not running" >> shots/notes.txt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: macos-screenshots
+          path: shots
+          retention-days: 14
