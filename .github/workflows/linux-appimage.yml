@@ -46,11 +46,14 @@ jobs:
           Xvfb :99 -screen 0 1600x900x24 &
           export DISPLAY=:99
           sleep 2
-          xdpyinfo | grep -E 'dimensions|RANDR' || true
-          xrandr --query || true
-          # Kursor di kanan bawah: roda harus muncul di sana, bukan di tengah layar.
-          xdotool mousemove 1150 600
-          xdotool getmouselocation
+          # Kursor di kanan bawah: roda harus muncul di sana, bukan di tengah layar. Xvfb tanpa
+          # jendela kadang belum menerima gerakan pertama, jadi diulang sampai posisinya benar.
+          for i in 1 2 3 4 5; do
+            xdotool mousemove --sync 1150 600 || true
+            xdotool getmouselocation | grep -q 'x:1150 y:600' && break
+            sleep 0.5
+          done
+          xdotool getmouselocation | tee -a shots/notes.txt
           app=$(ls dist/Rotiva-*.AppImage)
           ROTIVA_DEBUG=1 APPIMAGE_EXTRACT_AND_RUN=1 "$app" "$PWD/sample/tone.wav" > shots/app.log 2>&1 &
           pid=$!
@@ -71,6 +74,7 @@ jobs:
           ls -la sample | tee shots/files.txt
           ls ~/.local/share/applications ~/.local/share/nautilus/scripts >> shots/notes.txt 2>&1 || true
           test -f sample/tone.mp3
+          grep '\[rotiva\]' shots/app.log
       - uses: actions/upload-artifact@v7
         if: always()
         with:
