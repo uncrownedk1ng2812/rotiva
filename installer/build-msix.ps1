@@ -8,13 +8,15 @@
 #
 # Pemakaian:
 #   powershell -ExecutionPolicy Bypass -File installer\build-msix.ps1 -Version 1.10.2 `
-#       -IdentityName <Name> -Publisher "CN=..." -PublisherDisplayName "Denish Chairany"
+#       -IdentityName <Name> -Publisher "CN=..." -PublisherDisplayName "Denish Chairany" -DisplayName "Rotiva Pro"
 
 param(
     [Parameter(Mandatory)][string]$Version,
     [Parameter(Mandatory)][string]$IdentityName,
     [Parameter(Mandatory)][string]$Publisher,
     [Parameter(Mandatory)][string]$PublisherDisplayName,
+    # Harus persis sama dengan nama yang direservasi di Partner Center (huruf besar/kecil dan spasi).
+    [Parameter(Mandatory)][string]$DisplayName,
     [string]$CertificatePath,
     [string]$CertificatePassword
 )
@@ -75,8 +77,9 @@ $manifest = (Get-Content (Join-Path $PSScriptRoot "msix\AppxManifest.xml") -Raw 
     Replace('$(IdentityName)', (Escape-Xml $IdentityName)).
     Replace('$(Publisher)', (Escape-Xml $Publisher)).
     Replace('$(PublisherDisplayName)', (Escape-Xml $PublisherDisplayName)).
+    Replace('$(DisplayName)', (Escape-Xml $DisplayName)).
     Replace('$(Version)', $packageVersion)
-if ($manifest -match '\$\((IdentityName|Publisher|PublisherDisplayName|Version)\)') { throw "Masih ada placeholder di AppxManifest.xml" }
+if ($manifest -match '\$\((IdentityName|Publisher|PublisherDisplayName|DisplayName|Version)\)') { throw "Masih ada placeholder di AppxManifest.xml" }
 [System.IO.File]::WriteAllText((Join-Path $layout "AppxManifest.xml"), $manifest, (New-Object System.Text.UTF8Encoding $false))
 
 # resources.pri supaya Windows memilih logo sesuai skala layar (scale-200, targetsize-24, ...).
