@@ -58,6 +58,14 @@ to WebP every day" rather than "add a WebP button"). That helps find the simples
   [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 - Rotiva works offline. Changes must not send files or data over the network.
 
+## Translating the README
+
+The README is translated in [`docs/readme/`](docs/readme) (`README.<language>.md`). When the English
+README changes, the translations should follow; fixes by native speakers are very welcome. To add a
+language, add it to `LANGUAGES` in [`docs/readme/languages.py`](docs/readme/languages.py), create the file
+with an empty `<!-- languages -->` `<!-- /languages -->` block at the top, and run
+`python docs/readme/languages.py` to refresh the language links in every README.
+
 ## License
 
 Rotiva is licensed under [GPL-3.0](LICENSE). By sending a pull request you agree that your contribution
