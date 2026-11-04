@@ -1,9 +1,8 @@
 using System.Xml.Linq;
-using Rotiva.Models;
 
 namespace Rotiva.Core.Tests;
 
-/// <summary>Menu "Convert with Rotiva" versi Microsoft Store harus muncul untuk semua format yang ada di roda.</summary>
+/// <summary>Menu "Convert with Rotiva" versi Microsoft Store (installer/msix/AppxManifest.xml).</summary>
 public class MsixManifestTests
 {
     static readonly XNamespace Desktop5 = "http://schemas.microsoft.com/appx/manifest/desktop/windows10/5";
@@ -22,18 +21,11 @@ public class MsixManifestTests
         Manifest().Descendants(Desktop5 + "ItemType").Select(t => (string)t.Attribute("Type")!).ToList();
 
     [Fact]
-    public void MenuCoversEveryFormatAndFolders()
+    public void MenuIsOnEveryFileAndFolder()
     {
-        var types = MenuTypes();
-        // Semua ekstensi yang dikenali roda, termasuk alias (.jpeg → .jpg), dan tidak lebih.
-        var expected = FormatCatalog.Categories.SelectMany(c => c.Extensions).ToHashSet();
-        var extensions = types.Where(t => t != "Directory").ToList();
-
-        Assert.All(extensions, t => Assert.Contains(FormatCatalog.Normalize(t), expected));
-        Assert.All(expected, e => Assert.Contains(e, extensions));
-        Assert.All(new[] { ".jpeg", ".tif", ".htm" }, alias => Assert.Contains(alias, extensions));
-        Assert.Contains("Directory", types);
-        Assert.Equal(types.Count, types.Distinct().Count());
+        // "*", bukan per ekstensi: menu per ekstensi tidak muncul untuk jenis file tanpa aplikasi
+        // terdaftar (.md, .odt tanpa LibreOffice, ...). File apa pun bisa di-ZIP dari roda.
+        Assert.Equal(["*", "Directory"], MenuTypes());
     }
 
     [Fact]

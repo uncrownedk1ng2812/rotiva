@@ -18,8 +18,10 @@ public static class Input {
 }
 "@
 
+# Dipotong ke jendela Explorer (1680x880): tanpa ikon desktop dan tulisan "Test Mode" runner.
+$script:Crop = New-Object System.Drawing.Rectangle 120, 80, 1680, 880
 function Shot([string]$name) {
-    $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+    $bounds = $script:Crop
     $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
     $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
     $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
@@ -74,7 +76,7 @@ Start-Process explorer.exe $work
 Start-Sleep -Seconds 4
 $explorer = (New-Object -ComObject Shell.Application).Windows() | Where-Object { $_.LocationURL -like "*Holiday*" } | Select-Object -First 1
 if ($explorer) {
-    $explorer.Left = 120; $explorer.Top = 80; $explorer.Width = $screen.Width - 240; $explorer.Height = $screen.Height - 200
+    $explorer.Left = $Crop.X; $explorer.Top = $Crop.Y; $explorer.Width = $Crop.Width; $explorer.Height = $Crop.Height
     try { $explorer.Document.CurrentViewMode = 1 } catch { }
 }
 Start-Sleep -Seconds 2

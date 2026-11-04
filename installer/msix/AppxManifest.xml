@@ -2,7 +2,6 @@
 <!--
   Manifest paket MSIX untuk Microsoft Store (nama produk = nama yang direservasi di Partner Center, persis). installer\build-msix.ps1 mengganti $(...) dengan nilai
   dari Partner Center (Product identity) dan versi rilis.
-  Daftar ekstensi harus sama dengan FormatCatalog (dicek oleh MsixManifestTests).
 -->
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -59,69 +58,12 @@
           Menu klik kanan "Convert with Rotiva" (membuka roda di kursor), di menu baru Windows 11 maupun
           menu klasik. Registry HKCU di paket MSIX divirtualisasi, jadi submenu per format versi installer
           (ShellMenu) tidak bisa dipakai; menu ini dari src\Rotiva.ShellExtension (IExplorerCommand).
-          Jenis file sama dengan FormatCatalog + folder (dicek oleh MsixManifestTests).
+          Untuk semua file ("*", juga jenis yang tidak punya aplikasi terdaftar, misal .md/.odt tanpa
+          LibreOffice; per ekstensi menu itu tidak muncul) dan folder. File lain pun bisa di-ZIP.
         -->
         <desktop4:Extension Category="windows.fileExplorerContextMenus">
           <desktop4:FileExplorerContextMenus>
-            <desktop5:ItemType Type=".png"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".jpg"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".jpeg"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".webp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".avif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".heic"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".heif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".bmp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".tiff"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".tif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".gif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".ico"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".jfif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".mp4"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".mkv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".mov"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".avi"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".webm"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".wmv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".flv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".m4v"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".3gp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".ts"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".mp3"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".wav"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".flac"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".ogg"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".opus"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".m4a"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".aac"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".wma"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".aiff"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".docx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".doc"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".odt"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".rtf"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".txt"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".md"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".html"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".htm"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".xlsx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".xls"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".csv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".tsv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".ods"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".pptx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".ppt"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".odp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".ppsx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".pps"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".pdf"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".zip"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".rar"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".7z"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".tar"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".gz"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".tgz"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".bz2"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
-            <desktop5:ItemType Type=".xz"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type="*"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
             <desktop5:ItemType Type="Directory"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
           </desktop4:FileExplorerContextMenus>
         </desktop4:Extension>

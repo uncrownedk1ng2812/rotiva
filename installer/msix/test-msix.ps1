@@ -42,6 +42,11 @@ $verbs = @($item.Verbs())
 "verbs: " + (($verbs | ForEach-Object { $_.Name }) -join " | ") | Tee-Object -FilePath (Join-Path $Out "notes.txt") -Append
 $verb = $verbs | Where-Object { $_.Name -replace "&", "" -like "*Rotiva*" } | Select-Object -First 1
 
+# Jenis file tanpa aplikasi terdaftar (di runner: .md) juga harus punya menunya.
+Set-Content (Join-Path $work "notes.md") "# Notes" -Encoding UTF8
+$mdVerb = @($shell.Namespace($work).ParseName("notes.md").Verbs()) | Where-Object { $_.Name -replace "&", "" -like "*Rotiva*" } | Select-Object -First 1
+"notes.md menu: $([bool]$mdVerb)" | Tee-Object -FilePath (Join-Path $Out "notes.txt") -Append
+
 [Input]::SetCursorPos($cx, $cy) | Out-Null
 if ($verb) {
     $verb.DoIt()
@@ -72,5 +77,6 @@ if (-not (Test-Path $result)) { throw "tone.mp3 was not created" }
 Get-AppxPackage | Where-Object { $_.InstallLocation -and (Test-Path (Join-Path $_.InstallLocation "Rotiva.exe")) } |
     Format-List Name, PackageFullName, InstallLocation | Out-String | Tee-Object -FilePath (Join-Path $Out "notes.txt") -Append
 Get-Process Rotiva -ErrorAction SilentlyContinue | Stop-Process -Force
+if (-not $mdVerb) { throw "'Convert with Rotiva' is not in the right-click menu of notes.md" }
 if (-not $verb) { throw "'Convert with Rotiva' is not in the right-click menu of tone.wav (the wheel itself worked)" }
 Write-Host "MSIX test passed"
