@@ -59,9 +59,14 @@ if (-not $vs) { throw "Visual Studio Build Tools (C++) tidak ditemukan." }
 $extension = Join-Path $root "src\Rotiva.ShellExtension"
 $objDir = Join-Path $root "dist\shellext-obj"
 New-Item -ItemType Directory -Force $objDir | Out-Null
-$cl = "cl /nologo /O2 /W4 /WX /EHsc /MT /LD /std:c++17 /DUNICODE /D_UNICODE /Fo`"$objDir\`" `"$extension\ConvertCommand.cpp`" " +
-      "/link /DEF:`"$extension\RotivaShell.def`" /OUT:`"$layout\RotivaShell.dll`" ole32.lib shell32.lib shlwapi.lib"
-cmd /c "`"$vs\VC\Auxiliary\Build\vcvars64.bat`" >nul && $cl"
+# Lewat file .cmd: quoting argumen cl.exe lewat "cmd /c" dari PowerShell mudah rusak.
+$batch = Join-Path $objDir "build.cmd"
+@"
+@echo off
+call "$vs\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1
+cl /nologo /O2 /W4 /EHsc /MT /LD /std:c++17 /DUNICODE /D_UNICODE /Fo"$objDir\ConvertCommand.obj" "$extension\ConvertCommand.cpp" /link /DEF:"$extension\RotivaShell.def" /OUT:"$layout\RotivaShell.dll" ole32.lib shell32.lib shlwapi.lib
+"@ | Set-Content $batch -Encoding ASCII
+& cmd /c $batch
 if ($LASTEXITCODE -ne 0) { throw "Compile RotivaShell.dll gagal" }
 Remove-Item (Join-Path $layout "RotivaShell.lib"), (Join-Path $layout "RotivaShell.exp") -ErrorAction SilentlyContinue
 

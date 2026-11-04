@@ -1,0 +1,31 @@
+name: Shell extension
+
+# Cek cepat bahwa RotivaShell.dll (menu klik kanan versi MSIX) bisa di-compile, tanpa membangun
+# installer lengkap. Yang dipakai di paket tetap hasil installer\build-msix.ps1.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - src/Rotiva.ShellExtension/**
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compile RotivaShell.dll
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          New-Item -ItemType Directory -Force out | Out-Null
+          @"
+          @echo off
+          call "$vs\VC\Auxiliary\Build\vcvars64.bat" >nul || exit /b 1
+          cl /nologo /O2 /W4 /EHsc /MT /LD /std:c++17 /DUNICODE /D_UNICODE /Foout\ConvertCommand.obj src\Rotiva.ShellExtension\ConvertCommand.cpp /link /DEF:src\Rotiva.ShellExtension\RotivaShell.def /OUT:out\RotivaShell.dll ole32.lib shell32.lib shlwapi.lib || exit /b 1
+          dumpbin /exports out\RotivaShell.dll
+          "@ | Set-Content build.cmd -Encoding ASCII
+          cmd /c build.cmd
+          if ($LASTEXITCODE -ne 0) { throw "compile failed" }
