@@ -1,0 +1,103 @@
+name: Windows installer
+
+# Membuat Rotiva-Setup-<versi>.exe di CI dengan installer\build.ps1, dengan engine di versi yang
+# dipatok (SHA-256 dicek). Installer tanpa tanda tangan selalu jadi artifact. Kalau SignPath sudah
+# diatur (variable SIGNPATH_ORGANIZATION_ID + secret SIGNPATH_API_TOKEN), installer dikirim ke
+# SignPath untuk ditandatangani dan hasilnya jadi artifact "rotiva-windows-signed".
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version number (e.g. 1.10.1)
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  FFMPEG_VERSION: 9.0.2
+  FFMPEG_SHA256: 759d0a9831c436a0eb331ad36f236c06cb04aaa0005da46571f0e9d3d9206f6b
+  PANDOC_VERSION: 3.12.1
+  PANDOC_SHA256: 6ef431cb20b2c24a0371fc19200dc49d452be54b1b5c9239f3462841ef53e587
+  LIBREOFFICE_VERSION: 26.8.1.1
+  LIBREOFFICE_SHA256: c6298b10cfa1748bcbedad94c62ce771e240e5021bfd6d7a967cd571b04b5312
+  INNO_VERSION: 6.7.3
+  INNO_SHA256: 9c73c3bae7ed48d44112a0f48e66742c00090bdb5bef71d9d3c056c66e97b732
+
+jobs:
+  installer:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 8.0.x
+      - name: Install build tools and engines
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ProgressPreference = 'SilentlyContinue'
+          $dl = Join-Path $env:RUNNER_TEMP 'downloads'
+          New-Item -ItemType Directory -Force $dl | Out-Null
+          function Get-Pinned($url, $sha256) {
+            $file = Join-Path $dl (Split-Path $url -Leaf)
+            Invoke-WebRequest $url -OutFile $file
+            $actual = (Get-FileHash $file -Algorithm SHA256).Hash
+            if ($actual -ne $sha256) { throw "SHA-256 mismatch for ${url}: $actual" }
+            return $file
+          }
+
+          $zip = Get-Pinned "https://github.com/GyanD/codexffmpeg/releases/download/$env:FFMPEG_VERSION/ffmpeg-$env:FFMPEG_VERSION-full_build.zip" $env:FFMPEG_SHA256
+          Expand-Archive $zip $dl
+          Move-Item (Join-Path $dl "ffmpeg-$env:FFMPEG_VERSION-full_build") "$env:ProgramFiles\ffmpeg"
+
+          $zip = Get-Pinned "https://github.com/jgm/pandoc/releases/download/$env:PANDOC_VERSION/pandoc-$env:PANDOC_VERSION-windows-x86_64.zip" $env:PANDOC_SHA256
+          Expand-Archive $zip $dl
+          Move-Item (Join-Path $dl "pandoc-$env:PANDOC_VERSION") "$env:ProgramFiles\Pandoc"
+
+          $msi = Get-Pinned "https://downloadarchive.documentfoundation.org/libreoffice/old/$env:LIBREOFFICE_VERSION/win/x86_64/LibreOffice_$($env:LIBREOFFICE_VERSION)_Win_x86-64.msi" $env:LIBREOFFICE_SHA256
+          $p = Start-Process msiexec.exe -ArgumentList '/i', "`"$msi`"", '/qn', '/norestart' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "LibreOffice install failed: $($p.ExitCode)" }
+
+          $inno = Get-Pinned "https://github.com/jrsoftware/issrc/releases/download/is-$($env:INNO_VERSION -replace '\.', '_')/innosetup-$env:INNO_VERSION.exe" $env:INNO_SHA256
+          $p = Start-Process $inno -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/ALLUSERS' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "Inno Setup install failed: $($p.ExitCode)" }
+      - name: Build installer
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File installer\build.ps1 -Version "${{ inputs.version }}"
+      - name: Checksum
+        shell: pwsh
+        run: Get-FileHash dist\Rotiva-Setup-*.exe -Algorithm SHA256 | Format-List Path, Hash
+      - id: upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: rotiva-windows-unsigned
+          path: dist/Rotiva-Setup-*.exe
+          if-no-files-found: error
+      - name: Sign with SignPath
+        if: vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: rotiva
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: installer
+          github-artifact-id: ${{ steps.upload.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: dist/signed
+      - name: Check the signature
+        if: vars.SIGNPATH_ORGANIZATION_ID != ''
+        shell: pwsh
+        run: |
+          $sig = Get-AuthenticodeSignature (Get-Item dist\signed\Rotiva-Setup-*.exe)
+          $sig | Format-List Status, StatusMessage, SignerCertificate
+          if ($sig.Status -ne 'Valid') { throw "Signature is $($sig.Status)" }
+      - if: vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: rotiva-windows-signed
+          path: dist/signed/Rotiva-Setup-*.exe
+          if-no-files-found: error

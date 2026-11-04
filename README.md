@@ -122,6 +122,23 @@ build the installer.
 
 Bug reports, ideas and pull requests are welcome in [Issues](https://github.com/uncrownedk1ng2812/rotiva/issues).
 
+## Code signing policy
+
+Windows installers are built from this repository by the
+[Windows installer workflow](.github/workflows/windows-installer.yml) and signed there; nothing built
+elsewhere is signed. Free code signing provided by [SignPath.io](https://about.signpath.io),
+certificate by [SignPath Foundation](https://signpath.org).
+
+- Committers and reviewers: [Denish Chairany](https://github.com/uncrownedk1ng2812)
+- Approvers: [Denish Chairany](https://github.com/uncrownedk1ng2812)
+
+Every release is approved by hand before it is signed.
+
+Signing is being set up: installers up to 1.10.0 are not signed yet.
+
+**Privacy:** Rotiva does not send any information to other networked systems. Conversions run on your
+computer; links in the menu (website, GitHub, support) only open your browser when you click them.
+
 ## Bundled engines
 
 Rotiva does the conversions with these excellent open-source programs, bundled in the installer under
