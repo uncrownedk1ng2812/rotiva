@@ -1,0 +1,60 @@
+name: Store screenshots
+
+# Screenshot listing Microsoft Store dari paket MSIX hasil run "Windows installer" (artifact
+# rotiva-msix-store), di layar Full HD. Lihat installer\msix\screenshots.ps1.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Run ID of the Windows installer workflow that built the MSIX
+        required: true
+      publisher:
+        description: MSIX Package/Identity/Publisher (for the throwaway test certificate)
+        default: CN=EC6B737C-0A8F-438A-B152-CD4F58E170BA
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  screenshots:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v7
+        with:
+          name: rotiva-msix-store
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ github.token }}
+          path: msix
+      - name: Full HD screen
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          Set-DisplayResolution -Width 1920 -Height 1080 -Force
+          Add-Type -AssemblyName System.Windows.Forms
+          [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+      - name: Install the MSIX with a test certificate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $package = Get-ChildItem msix\*.msix | Select-Object -First 1
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "${{ inputs.publisher }}" `
+            -CertStoreLocation Cert:\CurrentUser\My -TextExtension @('2.5.29.19={text}')
+          $pfx = Join-Path $env:RUNNER_TEMP 'test.pfx'
+          $password = ConvertTo-SecureString -String 'rotiva-ci' -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath $pfx -Password $password | Out-Null
+          Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\LocalMachine\TrustedPeople -Password $password | Out-Null
+          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Sort-Object FullName -Descending | Select-Object -First 1
+          & $signtool.FullName sign /fd SHA256 /f $pfx /p rotiva-ci $package.FullName
+          if ($LASTEXITCODE -ne 0) { throw 'signtool failed' }
+          Add-AppxPackage $package.FullName
+      - name: Take screenshots
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File installer\msix\screenshots.ps1 -Out (Join-Path $env:RUNNER_TEMP 'store')
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: store-screenshots
+          path: ${{ runner.temp }}/store
+          if-no-files-found: ignore
