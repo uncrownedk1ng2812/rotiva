@@ -1,8 +1,8 @@
 // Point url at the installer (e.g. GitHub Releases) on every new release.
 const RELEASE = {
-  version: '1.10.0',
+  version: '1.10.1',
   size: '±247 MB',
-  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.10.0/Rotiva-Setup-1.10.0.exe',
+  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.10.1/Rotiva-Setup-1.10.1.exe',
 };
 
 // Releases on GitHub, for the total download count (summed over every release asset).
@@ -54,10 +54,12 @@ const ID = {
   'Web page table': 'Tabel halaman web',
   'Images downscaled to 150 dpi': 'Gambar diturunkan ke 150 dpi',
   'Every page': 'Setiap halaman',
+  'Every slide': 'Setiap slide',
   'Copy all the text': 'Salin semua teks',
   'One PDF per page': 'Satu PDF per halaman',
   'Image': 'Gambar',
   'Document': 'Dokumen',
+  'Slides': 'Slide',
   'Archive': 'Arsip',
   'File': 'File',
   'Folder': 'Folder',
@@ -67,6 +69,7 @@ const ID = {
   'recording.wav': 'rekaman.wav',
   'report.docx': 'laporan.docx',
   'sales.xlsx': 'penjualan.xlsx',
+  'pitch.pptx': 'materi.pptx',
   '3 photos': '3 foto',
   'homework.rar': 'tugas.rar',
   'Project': 'Proyek',
@@ -195,6 +198,19 @@ const CATEGORIES = [
     ],
   },
   {
+    id: 'slides', name: 'Slides', color: '#d9622b',
+    exts: ['pptx', 'ppt', 'odp', 'ppsx', 'pps'],
+    targets: [
+      T('PDF', 'Ready to print & share', '.pdf', 'pdf'),
+      T('PPTX', 'Microsoft PowerPoint', '.pptx', 'slides'),
+      T('ODP', 'LibreOffice Impress', '.odp', 'slides'),
+      T('PNG', 'Every slide', '.png', 'image'),
+      T('JPG', 'Every slide', '.jpg', 'image'),
+      MERGE,
+      ZIP,
+    ],
+  },
+  {
     id: 'pdf', name: 'PDF', color: '#e5483b',
     exts: ['pdf'],
     targets: [
@@ -244,6 +260,7 @@ const ICONS = {
   doc: 'M6 3h8l4 4v14H6zM9 12h6M9 16h6',
   pdf: 'M6 3h8l4 4v14H6zM9 13h2a1.5 1.5 0 0 1 0 3H9v-5',
   sheet: 'M4 5h16v14H4zM4 10h16M4 15h16M10 5v14',
+  slides: 'M3 4h18v12H3zM12 16v4M8 20h8M7 12l3-3 2 2 4-4',
   shrink: 'M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7',
   stack: 'M8 4h9l3 3v11H8zM4 8v12h11',
   text: 'M4 7V4h3M17 4h3v3M20 17v3h-3M7 20H4v-3M8 9h8M8 12h8M8 15h5',
@@ -460,6 +477,7 @@ const DEMO_FILES = [
   { name: 'recording.wav', ext: 'wav' },
   { name: 'report.docx', ext: 'docx' },
   { name: 'sales.xlsx', ext: 'xlsx' },
+  { name: 'pitch.pptx', ext: 'pptx' },
   { name: 'scan.pdf', ext: 'pdf' },
   { name: '3 photos', ext: 'jpg', count: 3 },
   { name: 'homework.rar', ext: 'rar' },

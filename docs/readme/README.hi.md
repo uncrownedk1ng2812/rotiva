@@ -92,6 +92,7 @@ Rotiva एक छोटा ऐप है जो सिस्टम ट्रे 
 | 🎵 ऑडियो | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 दस्तावेज़ | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 स्प्रेडशीट | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ स्लाइड | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **स्प्लिट**, **कंप्रेस**, **टेक्स्ट (OCR)** |
 | 🗜️ आर्काइव | ZIP, RAR, 7Z, TAR.GZ, … | **एक्सट्रैक्ट**, ZIP |
 
@@ -162,7 +163,7 @@ Rotiva इन बेहतरीन ओपन-सोर्स प्रोग्
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | वीडियो और ऑडियो |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | इमेज |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | PDF कंप्रेस, जोड़ना और स्प्लिट |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | दस्तावेज़ और स्प्रेडशीट |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | दस्तावेज़, स्प्रेडशीट और स्लाइड |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML और RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP और एक्सट्रैक्ट |
 

@@ -94,6 +94,7 @@ Rotiva تطبيق صغير يعمل من علبة النظام. أثناء سح�
 | 🎵 الصوت | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 المستندات | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 جداول البيانات | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ العروض التقديمية | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **تقسيم**, **ضغط**, **نص (OCR)** |
 | 🗜️ الأرشيفات | ZIP, RAR, 7Z, TAR.GZ, … | **فك الضغط**, ZIP |
 
@@ -164,7 +165,7 @@ Rotiva مفتوح المصدر بموجب **GPL-3.0**. يوجد التطبيق �
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | الفيديو والصوت |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | الصور |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | ضغط ملفات PDF ودمجها وتقسيمها |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | المستندات وجداول البيانات |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | المستندات وجداول البيانات والعروض التقديمية |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown وHTML وRTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP وفك الضغط |
 

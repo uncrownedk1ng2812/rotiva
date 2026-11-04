@@ -92,6 +92,7 @@ Sağ tıklamayı mı tercih edersiniz? Çarktaki her şey Dosya Gezgini'nin sağ
 | 🎵 Ses | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 Belgeler | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 Tablolar | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ Sunumlar | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Böl**, **Sıkıştır**, **Metin (OCR)** |
 | 🗜️ Arşivler | ZIP, RAR, 7Z, TAR.GZ, … | **Çıkart**, ZIP |
 
@@ -163,7 +164,7 @@ Rotiva, dönüştürmeleri yükleyiciye kendi lisanslarıyla dahil edilen şu ha
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | Video ve ses |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | Görseller |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | PDF sıkıştırma, birleştirme ve bölme |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Belgeler ve tablolar |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Belgeler, tablolar ve sunumlar |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML ve RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP ve çıkartma |
 

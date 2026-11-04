@@ -92,6 +92,7 @@ Rotiva はシステムトレイに常駐する小さなアプリです。写真�
 | 🎵 音声 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 文書 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 表計算 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ スライド | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **分割**, **圧縮**, **テキスト (OCR)** |
 | 🗜️ アーカイブ | ZIP, RAR, 7Z, TAR.GZ, … | **展開**, ZIP |
 
@@ -164,7 +165,7 @@ Rotiva は、以下の優れたオープンソースソフトウェアで変換�
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | 動画と音声 |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | 画像 |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | PDF の圧縮・結合・分割 |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | 文書と表計算 |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | 文書、表計算、スライド |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown、HTML、RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP と展開 |
 

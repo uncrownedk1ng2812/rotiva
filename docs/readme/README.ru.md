@@ -92,6 +92,7 @@ Rotiva — небольшая программа, которая живёт в �
 | 🎵 Аудио | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 Документы | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 Таблицы | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ Презентации | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Разделить**, **Сжать**, **Текст (OCR)** |
 | 🗜️ Архивы | ZIP, RAR, 7Z, TAR.GZ, … | **Распаковать**, ZIP |
 
@@ -164,7 +165,7 @@ Rotiva выполняет конвертацию с помощью этих от
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | Видео и аудио |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | Изображения |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | Сжатие, объединение и разделение PDF |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Документы и таблицы |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Документы, таблицы и презентации |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML и RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP и распаковка |
 

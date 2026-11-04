@@ -92,6 +92,7 @@ Rotiva는 시스템 트레이에 상주하는 작은 앱입니다. 사진, 동�
 | 🎵 오디오 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 문서 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 스프레드시트 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ 슬라이드 | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **분할**, **압축**, **텍스트 (OCR)** |
 | 🗜️ 압축 파일 | ZIP, RAR, 7Z, TAR.GZ, … | **압축 풀기**, ZIP |
 
@@ -164,7 +165,7 @@ Rotiva는 다음의 훌륭한 오픈 소스 프로그램으로 변환을 수행�
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | 동영상과 오디오 |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | 이미지 |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | PDF 압축, 합치기, 분할 |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | 문서와 스프레드시트 |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | 문서, 스프레드시트, 슬라이드 |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML, RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP과 압축 풀기 |
 

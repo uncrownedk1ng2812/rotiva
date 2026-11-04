@@ -69,12 +69,12 @@ dotnet run --project src/Rotiva.Desktop                             # tray / men
   the wheel**.
 - **TEXT (OCR)** uses Tesseract when it's installed (`brew install tesseract`, `apt install
   tesseract-ocr`; add `tesseract-lang` / `tesseract-ocr-ind` for Indonesian).
-- **macOS app:** `installer/build-macos.sh 1.10.0 arm64` (or `x64`) builds `Rotiva.app` (menu bar only,
+- **macOS app:** `installer/build-macos.sh 1.10.1 arm64` (or `x64`) builds `Rotiva.app` (menu bar only,
   listed in Finder **Open With**) and a `.dmg`, signed ad hoc. Not notarized yet (needs a paid Apple
   Developer account), so macOS asks for confirmation the first time.
 - Not there yet: notarized `.dmg`. On GNOME the tray icon needs the AppIndicator extension.
 
-**AppImage (Linux).** `installer/build-appimage.sh 1.10.0` builds `dist/Rotiva-1.10.0-x86_64.AppImage`
+**AppImage (Linux).** `installer/build-appimage.sh 1.10.1` builds `dist/Rotiva-1.10.1-x86_64.AppImage`
 (needs Linux x86_64, the .NET 8 SDK and curl; appimagetool and the AppImage runtime are downloaded at
 pinned versions and checked against their SHA-256). The
 [Linux AppImage workflow](https://github.com/uncrownedk1ng2812/rotiva/actions/workflows/linux-appimage.yml)
@@ -95,7 +95,7 @@ winget install Gyan.FFmpeg
 winget install JRSoftware.InnoSetup
 winget install TheDocumentFoundation.LibreOffice
 winget install JohnMacFarlane.Pandoc
-powershell -ExecutionPolicy Bypass -File installer\build.ps1 -Version 1.10.0
+powershell -ExecutionPolicy Bypass -File installer\build.ps1 -Version 1.10.1
 ```
 
 ImageMagick, Ghostscript and 7-Zip are downloaded automatically into `dist\cache`. The result is

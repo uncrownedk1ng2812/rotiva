@@ -92,6 +92,7 @@ A roda se adapta ao arquivo que você arrasta. O formato do próprio arquivo é 
 | 🎵 Áudio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 Documentos | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 Planilhas | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ Apresentações | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Dividir**, **Comprimir**, **Texto (OCR)** |
 | 🗜️ Arquivos compactados | ZIP, RAR, 7Z, TAR.GZ, … | **Extrair**, ZIP |
 
@@ -164,7 +165,7 @@ suas próprias licenças:
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | Vídeo e áudio |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | Imagens |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | Comprimir, juntar e dividir PDF |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Documentos e planilhas |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Documentos, planilhas e apresentações |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML e RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP e extração |
 

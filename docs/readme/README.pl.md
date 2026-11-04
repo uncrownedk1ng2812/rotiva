@@ -92,6 +92,7 @@ Koło dopasowuje się do przeciąganego pliku. Format samego pliku jest automaty
 | 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 Dokumenty | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 Arkusze kalkulacyjne | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ Prezentacje | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Podział**, **Kompresja**, **Tekst (OCR)** |
 | 🗜️ Archiwa | ZIP, RAR, 7Z, TAR.GZ, … | **Wypakuj**, ZIP |
 
@@ -164,7 +165,7 @@ ich własnych licencjach:
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | Wideo i audio |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | Obrazy |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | Kompresja, scalanie i dzielenie PDF |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Dokumenty i arkusze |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Dokumenty, arkusze i prezentacje |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML i RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP i wypakowywanie |
 

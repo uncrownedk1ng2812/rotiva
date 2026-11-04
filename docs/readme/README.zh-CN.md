@@ -91,6 +91,7 @@ Rotiva 是一款常驻系统托盘的小应用。拖动照片、视频、文档�
 | 🎵 音频 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 文档 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 电子表格 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ 幻灯片 | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **拆分**, **压缩**, **文字 (OCR)** |
 | 🗜️ 压缩包 | ZIP, RAR, 7Z, TAR.GZ, … | **解压**, ZIP |
 
@@ -158,7 +159,7 @@ Rotiva 使用以下出色的开源程序完成转换，它们按照各自的许�
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | 视频和音频 |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | 图片 |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | PDF 压缩、合并和拆分 |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | 文档和电子表格 |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | 文档、电子表格和幻灯片 |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown、HTML 和 RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP 和解压 |
 

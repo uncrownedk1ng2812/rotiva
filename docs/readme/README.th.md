@@ -92,6 +92,7 @@ Rotiva คือแอปเล็ก ๆ ที่อยู่ในถาด�
 | 🎵 เสียง | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 เอกสาร | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 สเปรดชีต | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ สไลด์ | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **แยกหน้า**, **บีบอัด**, **ข้อความ (OCR)** |
 | 🗜️ ไฟล์บีบอัด | ZIP, RAR, 7Z, TAR.GZ, … | **แตกไฟล์**, ZIP |
 
@@ -162,7 +163,7 @@ Rotiva แปลงไฟล์ด้วยโปรแกรมโอเพน�
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | วิดีโอและเสียง |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | รูปภาพ |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | บีบอัด รวม และแยก PDF |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | เอกสารและสเปรดชีต |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | เอกสาร สเปรดชีต และสไลด์ |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML และ RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP และแตกไฟล์ |
 

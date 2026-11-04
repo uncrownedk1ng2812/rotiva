@@ -95,6 +95,7 @@ The wheel adapts to the file you drag. The file's own format is hidden automatic
 | 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 Documents | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 Spreadsheets | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ Slides | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Split**, **Compress**, **Text (OCR)** |
 | 🗜️ Archives | ZIP, RAR, 7Z, TAR.GZ, … | **Extract**, ZIP |
 
@@ -158,7 +159,7 @@ certificate by [SignPath Foundation](https://signpath.org).
 
 Every release is approved by hand before it is signed.
 
-Signing is being set up: installers up to 1.10.0 were built locally and are not signed.
+Signing is being set up: installers up to 1.10.1 were built locally and are not signed.
 
 **Privacy:** Rotiva does not send any information to other networked systems. Conversions run on your
 computer; links in the menu (website, GitHub, support) only open your browser when you click them.
@@ -173,7 +174,7 @@ their own licenses:
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | Video & audio |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | Images |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | PDF compress, merge & split |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Documents & spreadsheets |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Documents, spreadsheets & slides |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML & RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP & extract |
 

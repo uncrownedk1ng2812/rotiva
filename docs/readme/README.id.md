@@ -92,6 +92,7 @@ Roda menyesuaikan dengan file yang kamu drag. Format file itu sendiri otomatis d
 | 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
 | 📄 Dokumen | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
 | 📊 Spreadsheet | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 📽️ Slide | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Pisah**, **Kompres**, **Teks (OCR)** |
 | 🗜️ Arsip | ZIP, RAR, 7Z, TAR.GZ, … | **Ekstrak**, ZIP |
 
@@ -164,7 +165,7 @@ lisensinya masing-masing:
 | [FFmpeg](https://ffmpeg.org) | GPL-3.0 | Video & audio |
 | [ImageMagick](https://imagemagick.org) | ImageMagick License | Gambar |
 | [Ghostscript](https://ghostscript.com) | AGPL-3.0 | Kompres, gabung & pisah PDF |
-| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Dokumen & spreadsheet |
+| [LibreOffice](https://www.libreoffice.org) | MPL-2.0 | Dokumen, spreadsheet & slide |
 | [Pandoc](https://pandoc.org) | GPL-2.0-or-later | Markdown, HTML & RTF |
 | [7-Zip](https://www.7-zip.org) | LGPL-2.1-or-later | ZIP & ekstrak |
 
