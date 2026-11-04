@@ -120,7 +120,9 @@ Rotiva is open source under **GPL-3.0**. The app is in [`src/Rotiva`](src/Rotiva
 the installer in [`installer/`](installer). See [BUILDING.md](BUILDING.md) to run it from source or
 build the installer.
 
-Bug reports, ideas and pull requests are welcome in [Issues](https://github.com/uncrownedk1ng2812/rotiva/issues).
+Bug reports, ideas and pull requests are welcome in [Issues](https://github.com/uncrownedk1ng2812/rotiva/issues); see [CONTRIBUTING.md](CONTRIBUTING.md)
+and the [Code of Conduct](CODE_OF_CONDUCT.md). Security problems: please report them privately as described in
+[SECURITY.md](SECURITY.md).
 
 ## Code signing policy
 
@@ -134,7 +136,7 @@ certificate by [SignPath Foundation](https://signpath.org).
 
 Every release is approved by hand before it is signed.
 
-Signing is being set up: installers up to 1.10.0 are not signed yet.
+Signing is being set up: installers up to 1.10.0 were built locally and are not signed.
 
 **Privacy:** Rotiva does not send any information to other networked systems. Conversions run on your
 computer; links in the menu (website, GitHub, support) only open your browser when you click them.
