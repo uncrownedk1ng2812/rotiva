@@ -7,11 +7,13 @@
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  xmlns:uap2="http://schemas.microsoft.com/appx/manifest/uap/windows10/2"
-  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
   xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+  xmlns:desktop5="http://schemas.microsoft.com/appx/manifest/desktop/windows10/5"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  IgnorableNamespaces="uap uap2 uap3 desktop rescap">
+  IgnorableNamespaces="uap uap5 desktop desktop4 desktop5 com rescap">
 
   <Identity Name="$(IdentityName)" Publisher="$(Publisher)" Version="$(Version)" ProcessorArchitecture="x64" />
 
@@ -46,149 +48,90 @@
           <desktop:StartupTask TaskId="RotivaStartup" Enabled="true" DisplayName="Rotiva" />
         </desktop:Extension>
 
+        <!-- Dipakai menu klik kanan (RotivaShell.dll) untuk menjalankan Rotiva dengan identitas paket. -->
+        <uap5:Extension Category="windows.appExecutionAlias" Executable="Rotiva.exe" EntryPoint="Windows.FullTrustApplication">
+          <uap5:AppExecutionAlias>
+            <uap5:ExecutionAlias Alias="Rotiva.exe" />
+          </uap5:AppExecutionAlias>
+        </uap5:Extension>
+
         <!--
-          Menu klik kanan "Convert with Rotiva" (membuka roda di kursor). Registry HKCU di paket MSIX
-          divirtualisasi, jadi submenu per format versi installer (ShellMenu) tidak bisa dipakai di sini.
+          Menu klik kanan "Convert with Rotiva" (membuka roda di kursor), di menu baru Windows 11 maupun
+          menu klasik. Registry HKCU di paket MSIX divirtualisasi, jadi submenu per format versi installer
+          (ShellMenu) tidak bisa dipakai; menu ini dari src\Rotiva.ShellExtension (IExplorerCommand).
+          Jenis file sama dengan FormatCatalog + folder (dicek oleh MsixManifestTests).
         -->
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="image">
-            <uap:DisplayName>Image</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.png</uap:FileType>
-              <uap:FileType>.jpg</uap:FileType>
-              <uap:FileType>.jpeg</uap:FileType>
-              <uap:FileType>.webp</uap:FileType>
-              <uap:FileType>.avif</uap:FileType>
-              <uap:FileType>.heic</uap:FileType>
-              <uap:FileType>.heif</uap:FileType>
-              <uap:FileType>.bmp</uap:FileType>
-              <uap:FileType>.tiff</uap:FileType>
-              <uap:FileType>.tif</uap:FileType>
-              <uap:FileType>.gif</uap:FileType>
-              <uap:FileType>.ico</uap:FileType>
-              <uap:FileType>.jfif</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="video">
-            <uap:DisplayName>Video</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.mp4</uap:FileType>
-              <uap:FileType>.mkv</uap:FileType>
-              <uap:FileType>.mov</uap:FileType>
-              <uap:FileType>.avi</uap:FileType>
-              <uap:FileType>.webm</uap:FileType>
-              <uap:FileType>.wmv</uap:FileType>
-              <uap:FileType>.flv</uap:FileType>
-              <uap:FileType>.m4v</uap:FileType>
-              <uap:FileType>.3gp</uap:FileType>
-              <uap:FileType>.ts</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="audio">
-            <uap:DisplayName>Audio</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.mp3</uap:FileType>
-              <uap:FileType>.wav</uap:FileType>
-              <uap:FileType>.flac</uap:FileType>
-              <uap:FileType>.ogg</uap:FileType>
-              <uap:FileType>.opus</uap:FileType>
-              <uap:FileType>.m4a</uap:FileType>
-              <uap:FileType>.aac</uap:FileType>
-              <uap:FileType>.wma</uap:FileType>
-              <uap:FileType>.aiff</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="document">
-            <uap:DisplayName>Document</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.docx</uap:FileType>
-              <uap:FileType>.doc</uap:FileType>
-              <uap:FileType>.odt</uap:FileType>
-              <uap:FileType>.rtf</uap:FileType>
-              <uap:FileType>.txt</uap:FileType>
-              <uap:FileType>.md</uap:FileType>
-              <uap:FileType>.html</uap:FileType>
-              <uap:FileType>.htm</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="spreadsheet">
-            <uap:DisplayName>Spreadsheet</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.xlsx</uap:FileType>
-              <uap:FileType>.xls</uap:FileType>
-              <uap:FileType>.csv</uap:FileType>
-              <uap:FileType>.tsv</uap:FileType>
-              <uap:FileType>.ods</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="slides">
-            <uap:DisplayName>Slides</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.pptx</uap:FileType>
-              <uap:FileType>.ppt</uap:FileType>
-              <uap:FileType>.odp</uap:FileType>
-              <uap:FileType>.ppsx</uap:FileType>
-              <uap:FileType>.pps</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="pdf">
-            <uap:DisplayName>PDF</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.pdf</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
-        <uap3:Extension Category="windows.fileTypeAssociation">
-          <uap3:FileTypeAssociation Name="archive">
-            <uap:DisplayName>Archive</uap:DisplayName>
-            <uap:SupportedFileTypes>
-              <uap:FileType>.zip</uap:FileType>
-              <uap:FileType>.rar</uap:FileType>
-              <uap:FileType>.7z</uap:FileType>
-              <uap:FileType>.tar</uap:FileType>
-              <uap:FileType>.gz</uap:FileType>
-              <uap:FileType>.tgz</uap:FileType>
-              <uap:FileType>.bz2</uap:FileType>
-              <uap:FileType>.xz</uap:FileType>
-            </uap:SupportedFileTypes>
-            <uap2:SupportedVerbs>
-              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
-            </uap2:SupportedVerbs>
-          </uap3:FileTypeAssociation>
-        </uap3:Extension>
+        <desktop4:Extension Category="windows.fileExplorerContextMenus">
+          <desktop4:FileExplorerContextMenus>
+            <desktop5:ItemType Type=".png"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".jpg"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".jpeg"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".webp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".avif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".heic"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".heif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".bmp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".tiff"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".tif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".gif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".ico"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".jfif"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".mp4"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".mkv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".mov"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".avi"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".webm"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".wmv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".flv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".m4v"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".3gp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".ts"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".mp3"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".wav"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".flac"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".ogg"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".opus"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".m4a"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".aac"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".wma"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".aiff"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".docx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".doc"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".odt"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".rtf"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".txt"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".md"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".html"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".htm"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".xlsx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".xls"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".csv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".tsv"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".ods"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".pptx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".ppt"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".odp"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".ppsx"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".pps"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".pdf"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".zip"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".rar"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".7z"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".tar"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".gz"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".tgz"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".bz2"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type=".xz"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+            <desktop5:ItemType Type="Directory"><desktop5:Verb Id="RotivaConvert" Clsid="345C3645-D481-40C5-90AA-B30D798A46E1" /></desktop5:ItemType>
+          </desktop4:FileExplorerContextMenus>
+        </desktop4:Extension>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:SurrogateServer DisplayName="Rotiva context menu">
+              <com:Class Id="345C3645-D481-40C5-90AA-B30D798A46E1" Path="RotivaShell.dll" ThreadingModel="STA" />
+            </com:SurrogateServer>
+          </com:ComServer>
+        </com:Extension>
       </Extensions>
     </Application>
   </Applications>

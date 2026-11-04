@@ -13,10 +13,10 @@ on:
         required: true
       identity_name:
         description: MSIX Package/Identity/Name (Partner Center → Product identity)
-        default: Rotiva.Test
+        default: DenishChairany.Rotivapro
       publisher:
         description: MSIX Package/Identity/Publisher
-        default: CN=Rotiva Test
+        default: CN=EC6B737C-0A8F-438A-B152-CD4F58E170BA
       publisher_display_name:
         description: MSIX Package/Properties/PublisherDisplayName
         default: Denish Chairany

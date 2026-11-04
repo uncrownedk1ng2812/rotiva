@@ -6,8 +6,8 @@ namespace Rotiva.Core.Tests;
 /// <summary>Menu "Convert with Rotiva" versi Microsoft Store harus muncul untuk semua format yang ada di roda.</summary>
 public class MsixManifestTests
 {
-    static readonly XNamespace Uap = "http://schemas.microsoft.com/appx/manifest/uap/windows10";
-    static readonly XNamespace Uap3 = "http://schemas.microsoft.com/appx/manifest/uap/windows10/3";
+    static readonly XNamespace Desktop5 = "http://schemas.microsoft.com/appx/manifest/desktop/windows10/5";
+    static readonly XNamespace Com = "http://schemas.microsoft.com/appx/manifest/com/windows10";
 
     static XDocument Manifest()
     {
@@ -18,28 +18,31 @@ public class MsixManifestTests
         return XDocument.Load(Path.Combine(root, "installer", "msix", "AppxManifest.xml"));
     }
 
-    [Fact]
-    public void EveryCategoryHasItsExtensions()
-    {
-        var associations = Manifest().Descendants(Uap3 + "FileTypeAssociation")
-            .ToDictionary(a => (string)a.Attribute("Name")!, a => a.Descendants(Uap + "FileType").Select(t => t.Value).ToList());
+    static List<string> MenuTypes() =>
+        Manifest().Descendants(Desktop5 + "ItemType").Select(t => (string)t.Attribute("Type")!).ToList();
 
-        foreach (var category in FormatCatalog.Categories)
-        {
-            Assert.True(associations.TryGetValue(category.Name.ToLowerInvariant(), out var types), category.Name);
-            // Semua ekstensi yang dikenali roda, termasuk alias (.jpeg → .jpg), dan tidak lebih.
-            var expected = category.Extensions.ToHashSet();
-            Assert.All(types, t => Assert.Contains(FormatCatalog.Normalize(t), expected));
-            Assert.All(expected, e => Assert.Contains(e, types));
-            Assert.Equal(types.Count, types.Distinct().Count());
-        }
-        Assert.Equal(FormatCatalog.Categories.Count, associations.Count);
+    [Fact]
+    public void MenuCoversEveryFormatAndFolders()
+    {
+        var types = MenuTypes();
+        // Semua ekstensi yang dikenali roda, termasuk alias (.jpeg → .jpg), dan tidak lebih.
+        var expected = FormatCatalog.Categories.SelectMany(c => c.Extensions).ToHashSet();
+        var extensions = types.Where(t => t != "Directory").ToList();
+
+        Assert.All(extensions, t => Assert.Contains(FormatCatalog.Normalize(t), expected));
+        Assert.All(expected, e => Assert.Contains(e, extensions));
+        Assert.All(new[] { ".jpeg", ".tif", ".htm" }, alias => Assert.Contains(alias, extensions));
+        Assert.Contains("Directory", types);
+        Assert.Equal(types.Count, types.Distinct().Count());
     }
 
     [Fact]
-    public void EveryAliasIsListed()
+    public void MenuUsesTheShellExtensionClass()
     {
-        var types = Manifest().Descendants(Uap + "FileType").Select(t => t.Value).ToHashSet();
-        Assert.All(new[] { ".jpeg", ".tif", ".htm" }, alias => Assert.Contains(alias, types));
+        var manifest = Manifest();
+        string clsid = (string)manifest.Descendants(Com + "Class").Single().Attribute("Id")!;
+        Assert.All(manifest.Descendants(Desktop5 + "Verb"), verb => Assert.Equal(clsid, (string)verb.Attribute("Clsid")!));
+        // Sama dengan CLSID_ConvertCommand di src/Rotiva.ShellExtension/ConvertCommand.cpp.
+        Assert.Equal("345C3645-D481-40C5-90AA-B30D798A46E1", clsid);
     }
 }

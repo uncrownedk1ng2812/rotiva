@@ -41,10 +41,15 @@ $item = $shell.Namespace($work).ParseName("tone.wav")
 $verbs = @($item.Verbs())
 "verbs: " + (($verbs | ForEach-Object { $_.Name }) -join " | ") | Tee-Object -FilePath (Join-Path $Out "notes.txt") -Append
 $verb = $verbs | Where-Object { $_.Name -replace "&", "" -like "*Rotiva*" } | Select-Object -First 1
-if (-not $verb) { throw "'Convert with Rotiva' is not in the right-click menu of tone.wav" }
 
 [Input]::SetCursorPos($cx, $cy) | Out-Null
-$verb.DoIt()
+if ($verb) {
+    $verb.DoIt()
+} else {
+    # Tetap uji roda lewat execution alias, supaya satu run memberi info sebanyak mungkin; gagal di akhir.
+    "MENU MISSING: falling back to the Rotiva.exe alias" | Tee-Object -FilePath (Join-Path $Out "notes.txt") -Append
+    Start-Process "$env:LOCALAPPDATA\Microsoft\WindowsApps\Rotiva.exe" -ArgumentList "--wheel", "`"$(Join-Path $work 'tone.wav')`""
+}
 Start-Sleep -Seconds 4
 Get-Process Rotiva -ErrorAction SilentlyContinue | Format-Table Id, Path -AutoSize | Out-String | Tee-Object -FilePath (Join-Path $Out "notes.txt") -Append
 Shot "1-wheel"
@@ -67,4 +72,5 @@ if (-not (Test-Path $result)) { throw "tone.mp3 was not created" }
 Get-AppxPackage | Where-Object { $_.InstallLocation -and (Test-Path (Join-Path $_.InstallLocation "Rotiva.exe")) } |
     Format-List Name, PackageFullName, InstallLocation | Out-String | Tee-Object -FilePath (Join-Path $Out "notes.txt") -Append
 Get-Process Rotiva -ErrorAction SilentlyContinue | Stop-Process -Force
+if (-not $verb) { throw "'Convert with Rotiva' is not in the right-click menu of tone.wav (the wheel itself worked)" }
 Write-Host "MSIX test passed"

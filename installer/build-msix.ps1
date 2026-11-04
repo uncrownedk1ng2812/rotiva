@@ -1,7 +1,8 @@
 # Membuat paket MSIX untuk Microsoft Store: dist\Rotiva-<versi>.msix
 #
 # Jalankan installer\build.ps1 dulu (isi dist\stage: aplikasi + semua engine). Butuh Windows SDK
-# (makeappx.exe, makepri.exe; sudah ada di runner GitHub windows-2025). Nilai identitas diambil dari
+# (makeappx.exe, makepri.exe) dan Visual Studio Build Tools dengan C++ untuk menu klik kanan
+# (src\Rotiva.ShellExtension); keduanya sudah ada di runner GitHub windows-2025. Nilai identitas diambil dari
 # Partner Center → Product management → Product identity. Paket untuk Store tidak perlu ditandatangani
 # (Store menandatanganinya sendiri); -CertificatePath hanya untuk menguji pemasangan di PC/CI.
 #
@@ -50,6 +51,19 @@ Copy-Item (Join-Path $root "NOTICE") (Join-Path $layout "NOTICE.txt")
 Copy-Item (Join-Path $root "TRADEMARKS.md") (Join-Path $layout "TRADEMARKS.txt")
 Copy-Item (Join-Path $root "THIRD-PARTY-NOTICES.md") (Join-Path $layout "THIRD-PARTY-NOTICES.txt")
 Copy-Item (Join-Path $PSScriptRoot "msix\Assets") (Join-Path $layout "Assets") -Recurse
+
+Write-Host "==> Compile menu klik kanan (RotivaShell.dll)"
+$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+$vs = if (Test-Path $vswhere) { & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath }
+if (-not $vs) { throw "Visual Studio Build Tools (C++) tidak ditemukan." }
+$extension = Join-Path $root "src\Rotiva.ShellExtension"
+$objDir = Join-Path $root "dist\shellext-obj"
+New-Item -ItemType Directory -Force $objDir | Out-Null
+$cl = "cl /nologo /O2 /W4 /WX /EHsc /MT /LD /std:c++17 /DUNICODE /D_UNICODE /Fo`"$objDir\`" `"$extension\ConvertCommand.cpp`" " +
+      "/link /DEF:`"$extension\RotivaShell.def`" /OUT:`"$layout\RotivaShell.dll`" ole32.lib shell32.lib shlwapi.lib"
+cmd /c "`"$vs\VC\Auxiliary\Build\vcvars64.bat`" >nul && $cl"
+if ($LASTEXITCODE -ne 0) { throw "Compile RotivaShell.dll gagal" }
+Remove-Item (Join-Path $layout "RotivaShell.lib"), (Join-Path $layout "RotivaShell.exp") -ErrorAction SilentlyContinue
 
 function Escape-Xml([string]$text) { [System.Security.SecurityElement]::Escape($text) }
 $manifest = (Get-Content (Join-Path $PSScriptRoot "msix\AppxManifest.xml") -Raw -Encoding UTF8).
