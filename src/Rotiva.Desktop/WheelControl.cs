@@ -93,6 +93,9 @@ sealed class WheelControl : Control, ICustomHitTest
 
     public ConvertTarget? Selected => _selected >= 0 ? _targets[_selected] : null;
 
+    /// <summary>Drag mode: pilihan dibuat dengan melepas file, bukan dengan klik.</summary>
+    public bool ChooseOnRelease { get; set; }
+
     double Center => DesignSize / 2;
 
     int SlotCount => _wedges.Length;
@@ -316,7 +319,7 @@ sealed class WheelControl : Control, ICustomHitTest
         if (Selected is { } target)
             (title, description) = (target.Label, target.Description);
         else if (_inCenter)
-            (title, description) = ("CANCEL", "Release here to cancel");
+            (title, description) = ("CANCEL", ChooseOnRelease ? "Release here to cancel" : "Click here to cancel");
         else
             (title, description) = ("PICK", "Point at a format");
 

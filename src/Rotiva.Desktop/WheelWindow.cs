@@ -146,6 +146,7 @@ sealed class WheelWindow : Window
         var targets = _category.Targets
             .Where(t => t.Action != TargetAction.ExtractText || Converter.TextRecognizer is not null)
             .ToList();
+        _wheel.ChooseOnRelease = _dragMode;
         _wheel.Load(_category, targets, scale);
         _hintBar.IsVisible = true;
     }
