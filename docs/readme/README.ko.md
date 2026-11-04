@@ -144,13 +144,9 @@ Rotiva는 **GPL-3.0** 오픈 소스입니다. 앱은 [`src/Rotiva`](../../src/Ro
 [CONTRIBUTING.md](../../CONTRIBUTING.md)와 [행동 강령](../../CODE_OF_CONDUCT.md)도 확인해 주세요. 보안 문제는
 [SECURITY.md](../../SECURITY.md)에 설명된 대로 비공개로 신고해 주세요.
 
-## 코드 서명 정책
+## 코드 서명
 
-Windows 설치 프로그램은 이 저장소에서
-[Windows 설치 프로그램 워크플로](../../.github/workflows/windows-installer.yml)로 빌드되고 그곳에서 서명됩니다.
-다른 곳에서 빌드된 것은 서명되지 않습니다. 무료 코드 서명은 [SignPath.io](https://about.signpath.io)가,
-인증서는 [SignPath Foundation](https://signpath.org)이 제공합니다. 자세한 내용은
-[영어 README](../../README.md#code-signing-policy)를 참고하세요.
+Windows 설치 프로그램은 아직 코드 서명되지 않았으므로 처음 실행할 때 Windows SmartScreen 경고가 표시될 수 있습니다. 각 릴리스에는 다운로드를 확인할 수 있도록 `SHA256SUMS.txt`에 SHA-256 체크섬이 포함되어 있습니다. Microsoft가 서명하는 Microsoft Store 버전을 준비 중입니다.
 
 **개인정보:** Rotiva는 네트워크의 다른 시스템으로 어떤 정보도 보내지 않습니다. 변환은 사용자의 컴퓨터에서
 이루어지며, 메뉴의 링크(웹사이트, GitHub, 후원)는 클릭할 때만 브라우저를 엽니다.

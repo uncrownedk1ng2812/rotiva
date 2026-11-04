@@ -140,12 +140,9 @@ Rotiva 以 **GPL-3.0** 协议开源。应用代码在 [`src/Rotiva`](../../src/R
 请参阅 [CONTRIBUTING.md](../../CONTRIBUTING.md) 和[行为准则](../../CODE_OF_CONDUCT.md)。安全问题请按照
 [SECURITY.md](../../SECURITY.md) 中的说明私下报告。
 
-## 代码签名政策
+## 代码签名
 
-Windows 安装程序由本仓库通过
-[Windows 安装程序工作流](../../.github/workflows/windows-installer.yml) 构建并在其中签名；在其他地方构建的内容
-不会被签名。免费代码签名由 [SignPath.io](https://about.signpath.io) 提供，证书由
-[SignPath Foundation](https://signpath.org) 提供。完整说明见[英文 README](../../README.md#code-signing-policy)。
+Windows 安装程序目前还没有代码签名，因此首次运行时 Windows SmartScreen 可能会显示警告。每个版本都在 `SHA256SUMS.txt` 中提供 SHA-256 校验和，方便你核对下载的文件。由 Microsoft 签名的 Microsoft Store 版本正在准备中。
 
 **隐私：** Rotiva 不会向网络中的其他系统发送任何信息。转换在你的电脑上完成；菜单中的链接（网站、GitHub、支持）
 只有在你点击时才会打开浏览器。

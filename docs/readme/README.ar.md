@@ -146,12 +146,9 @@ Rotiva مفتوح المصدر بموجب **GPL-3.0**. يوجد التطبيق �
 راجع [CONTRIBUTING.md](../../CONTRIBUTING.md) و[مدونة السلوك](../../CODE_OF_CONDUCT.md). أبلِغ عن مشكلات الأمان
 بشكل خاص كما هو موضّح في [SECURITY.md](../../SECURITY.md).
 
-## سياسة توقيع الشيفرة
+## توقيع الشيفرة
 
-تُبنى مثبّتات Windows من هذا المستودع عبر
-[سير عمل مثبّت Windows](../../.github/workflows/windows-installer.yml) وتُوقَّع هناك؛ ولا يُوقَّع أي شيء بُني في
-مكان آخر. توقيع الشيفرة مجاني بتقديم [SignPath.io](https://about.signpath.io)، والشهادة من
-[SignPath Foundation](https://signpath.org). التفاصيل الكاملة في [README الإنجليزي](../../README.md#code-signing-policy).
+مُثبِّتات Windows غير موقَّعة رقميًا بعد، لذلك قد يعرض Windows SmartScreen تحذيرًا عند تشغيلها أول مرة. يتضمن كل إصدار مجاميع SHA-256 في `SHA256SUMS.txt` لتتحقق من الملف الذي نزّلته. يجري تحضير نسخة لمتجر Microsoft Store موقَّعة من Microsoft.
 
 **الخصوصية:** لا يرسل Rotiva أي معلومات إلى أنظمة أخرى على الشبكة. تجري التحويلات على حاسوبك، وروابط القائمة
 (الموقع وGitHub والدعم) لا تفتح المتصفح إلا عند النقر عليها.

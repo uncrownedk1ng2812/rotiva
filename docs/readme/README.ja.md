@@ -144,13 +144,9 @@ Rotiva は **GPL-3.0** のオープンソースです。アプリは [`src/Rotiv
 [CONTRIBUTING.md](../../CONTRIBUTING.md) と[行動規範](../../CODE_OF_CONDUCT.md)もご覧ください。セキュリティの問題は
 [SECURITY.md](../../SECURITY.md) の手順で非公開で報告してください。
 
-## コード署名ポリシー
+## コード署名
 
-Windows 用インストーラーは、このリポジトリから
-[Windows インストーラーのワークフロー](../../.github/workflows/windows-installer.yml)でビルドされ、そこで署名されます。
-ほかの場所でビルドされたものは署名されません。無料のコード署名は [SignPath.io](https://about.signpath.io)、
-証明書は [SignPath Foundation](https://signpath.org) が提供しています。詳細は
-[英語版 README](../../README.md#code-signing-policy) をご覧ください。
+Windows インストーラーはまだコード署名されていないため、初めて実行するときに Windows SmartScreen が警告を表示することがあります。各リリースには SHA-256 チェックサム（`SHA256SUMS.txt`）が含まれており、ダウンロードを確認できます。Microsoft が署名する Microsoft Store 版を準備中です。
 
 **プライバシー:** Rotiva はネットワーク上のほかのシステムに一切の情報を送信しません。変換はお使いのコンピューターで
 行われます。メニューのリンク（ウェブサイト、GitHub、支援）は、クリックしたときにブラウザーを開くだけです。

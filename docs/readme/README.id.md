@@ -144,13 +144,9 @@ Laporan bug, ide, dan pull request sangat diterima di [Issues](https://github.co
 [CONTRIBUTING.md](../../CONTRIBUTING.md) dan [Code of Conduct](../../CODE_OF_CONDUCT.md). Masalah keamanan: laporkan secara
 privat seperti dijelaskan di [SECURITY.md](../../SECURITY.md).
 
-## Kebijakan code signing
+## Code signing
 
-Installer Windows dibuat dari repository ini oleh
-[workflow Windows installer](../../.github/workflows/windows-installer.yml) dan ditandatangani di sana; tidak ada
-build dari tempat lain yang ditandatangani. Code signing gratis disediakan oleh [SignPath.io](https://about.signpath.io),
-sertifikat oleh [SignPath Foundation](https://signpath.org). Detail lengkapnya ada di
-[README bahasa Inggris](../../README.md#code-signing-policy).
+Installer Windows belum ditandatangani (code signing), jadi Windows SmartScreen bisa menampilkan peringatan saat pertama kali dijalankan. Setiap rilis menyertakan checksum SHA-256 di `SHA256SUMS.txt` supaya kamu bisa memeriksa file yang diunduh. Versi Microsoft Store, yang ditandatangani oleh Microsoft, sedang disiapkan.
 
 **Privasi:** Rotiva tidak mengirim informasi apa pun ke sistem lain di jaringan. Konversi berjalan di
 komputer kamu; link di menu (website, GitHub, dukungan) hanya membuka browser saat kamu mengkliknya.

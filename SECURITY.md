@@ -34,7 +34,7 @@ so the next installer bundles a fixed one.
 
 ## How releases are built
 
-From the next release on, Windows installers are built by the public
-[Windows installer workflow](.github/workflows/windows-installer.yml) from this repository, with
-engine downloads pinned and checked against their SHA-256. Each release lists SHA-256 checksums in
-`SHA256SUMS.txt`. See the code signing policy in the [README](README.md#code-signing-policy).
+Windows installers are built from this repository with `installer/build.ps1`. The public
+[Windows installer workflow](.github/workflows/windows-installer.yml) builds the same installer on GitHub
+Actions, with engine downloads pinned and checked against their SHA-256. Each release lists SHA-256
+checksums in `SHA256SUMS.txt`. Installers are not code-signed yet; see [Code signing](README.md#code-signing).

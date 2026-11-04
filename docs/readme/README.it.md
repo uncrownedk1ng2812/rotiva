@@ -144,13 +144,9 @@ Segnalazioni di bug, idee e pull request sono benvenute nelle [Issues](https://g
 vedi [CONTRIBUTING.md](../../CONTRIBUTING.md) e il [Codice di condotta](../../CODE_OF_CONDUCT.md). Problemi di sicurezza:
 segnalali in privato come spiegato in [SECURITY.md](../../SECURITY.md).
 
-## Politica di firma del codice
+## Firma del codice
 
-I programmi di installazione per Windows vengono creati da questo repository dal
-[workflow del programma di installazione Windows](../../.github/workflows/windows-installer.yml) e firmati lì; nulla di
-creato altrove viene firmato. Firma del codice gratuita offerta da [SignPath.io](https://about.signpath.io),
-certificato della [SignPath Foundation](https://signpath.org). Tutti i dettagli nel
-[README in inglese](../../README.md#code-signing-policy).
+Gli installer per Windows non sono ancora firmati, quindi Windows SmartScreen può mostrare un avviso la prima volta che ne avvii uno. Ogni versione include i checksum SHA-256 in `SHA256SUMS.txt` per verificare il download. È in preparazione una versione per il Microsoft Store, firmata da Microsoft.
 
 **Privacy:** Rotiva non invia alcuna informazione ad altri sistemi in rete. Le conversioni avvengono sul tuo
 computer; i link del menu (sito, GitHub, supporto) aprono il browser solo quando ci fai clic.

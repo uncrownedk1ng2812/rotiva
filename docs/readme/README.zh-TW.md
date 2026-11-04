@@ -140,12 +140,9 @@ Rotiva 以 **GPL-3.0** 授權開源。應用程式在 [`src/Rotiva`](../../src/R
 請參考 [CONTRIBUTING.md](../../CONTRIBUTING.md) 與[行為準則](../../CODE_OF_CONDUCT.md)。安全性問題請依照
 [SECURITY.md](../../SECURITY.md) 的說明私下回報。
 
-## 程式碼簽章政策
+## 程式碼簽章
 
-Windows 安裝程式由本儲存庫透過
-[Windows 安裝程式工作流程](../../.github/workflows/windows-installer.yml) 建置並在其中簽署；在其他地方建置的內容
-不會被簽署。免費的程式碼簽章由 [SignPath.io](https://about.signpath.io) 提供，憑證由
-[SignPath Foundation](https://signpath.org) 提供。完整說明請見[英文 README](../../README.md#code-signing-policy)。
+Windows 安裝程式目前尚未進行程式碼簽章，因此第一次執行時 Windows SmartScreen 可能會顯示警告。每個版本都在 `SHA256SUMS.txt` 中提供 SHA-256 檢查碼，方便你核對下載的檔案。由 Microsoft 簽署的 Microsoft Store 版本正在準備中。
 
 **隱私：** Rotiva 不會傳送任何資訊到網路上的其他系統。轉換在你的電腦上完成；選單中的連結（網站、GitHub、支持）
 只有在你點擊時才會開啟瀏覽器。

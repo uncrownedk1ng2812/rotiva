@@ -147,19 +147,9 @@ Bug reports, ideas and pull requests are welcome in [Issues](https://github.com/
 and the [Code of Conduct](CODE_OF_CONDUCT.md). Security problems: please report them privately as described in
 [SECURITY.md](SECURITY.md).
 
-## Code signing policy
+## Code signing
 
-Windows installers are built from this repository by the
-[Windows installer workflow](.github/workflows/windows-installer.yml) and signed there; nothing built
-elsewhere is signed. Free code signing provided by [SignPath.io](https://about.signpath.io),
-certificate by [SignPath Foundation](https://signpath.org).
-
-- Committers and reviewers: [Denish Chairany](https://github.com/uncrownedk1ng2812)
-- Approvers: [Denish Chairany](https://github.com/uncrownedk1ng2812)
-
-Every release is approved by hand before it is signed.
-
-Signing is being set up: installers up to 1.10.1 were built locally and are not signed.
+Windows installers are not code-signed yet, so Windows SmartScreen may show a warning the first time you run one. Every release lists SHA-256 checksums in `SHA256SUMS.txt` so you can check your download. A Microsoft Store version, signed by Microsoft, is in preparation.
 
 **Privacy:** Rotiva does not send any information to other networked systems. Conversions run on your
 computer; links in the menu (website, GitHub, support) only open your browser when you click them.

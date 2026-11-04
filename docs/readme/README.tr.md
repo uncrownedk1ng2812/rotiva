@@ -144,13 +144,9 @@ Hata bildirimleri, fikirler ve pull request'ler [Issues](https://github.com/uncr
 memnuniyetle beklenir; bkz. [CONTRIBUTING.md](../../CONTRIBUTING.md) ve [Davranış Kuralları](../../CODE_OF_CONDUCT.md).
 Güvenlik sorunlarını [SECURITY.md](../../SECURITY.md) dosyasında anlatıldığı gibi gizli olarak bildirin.
 
-## Kod imzalama politikası
+## Kod imzalama
 
-Windows yükleyicileri bu depodan
-[Windows yükleyici iş akışı](../../.github/workflows/windows-installer.yml) ile oluşturulur ve orada imzalanır; başka
-bir yerde oluşturulan hiçbir şey imzalanmaz. Ücretsiz kod imzalama [SignPath.io](https://about.signpath.io) tarafından,
-sertifika [SignPath Foundation](https://signpath.org) tarafından sağlanır. Tüm ayrıntılar
-[İngilizce README](../../README.md#code-signing-policy)'de.
+Windows yükleyicileri henüz kod imzalı değildir, bu yüzden ilk çalıştırmada Windows SmartScreen bir uyarı gösterebilir. Her sürüm, indirdiğiniz dosyayı kontrol edebilmeniz için `SHA256SUMS.txt` içinde SHA-256 sağlama toplamlarını içerir. Microsoft tarafından imzalanan bir Microsoft Store sürümü hazırlanıyor.
 
 **Gizlilik:** Rotiva ağdaki başka sistemlere hiçbir bilgi göndermez. Dönüştürmeler bilgisayarınızda yapılır;
 menüdeki bağlantılar (web sitesi, GitHub, destek) yalnızca tıkladığınızda tarayıcıyı açar.
