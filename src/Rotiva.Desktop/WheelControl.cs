@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Rendering;
 using Avalonia.Threading;
+using Rotiva.Localization;
 using Rotiva.Models;
 
 namespace Rotiva.Desktop;
@@ -291,7 +292,7 @@ sealed class WheelControl : Control, ICustomHitTest
         if (empty)
             return;
 
-        var label = Text(_targets[i].Label, Bold, 22 * (1 + 0.1 * lit), new SolidColorBrush(Lerp(LabelColor, LabelHoverColor, lit)));
+        var label = Text(L.T(_targets[i].Label), Bold, 22 * (1 + 0.1 * lit), new SolidColorBrush(Lerp(LabelColor, LabelHoverColor, lit)));
         var at = Polar(mid, (InnerRadius + OuterRadius) / 2);
         context.DrawText(label, new Point(at.X - label.Width / 2, at.Y - label.Height / 2));
     }
@@ -317,13 +318,13 @@ sealed class WheelControl : Control, ICustomHitTest
 
         string title, description;
         if (Selected is { } target)
-            (title, description) = (target.Label, target.Description);
+            (title, description) = (L.T(target.Label), L.T(target.Description));
         else if (_inCenter)
-            (title, description) = ("CANCEL", ChooseOnRelease ? "Release here to cancel" : "Click here to cancel");
+            (title, description) = (L.T("CANCEL"), L.T(ChooseOnRelease ? "Release here to cancel" : "Click here to cancel"));
         else
-            (title, description) = ("PICK", "Point at a format");
+            (title, description) = (L.T("PICK"), L.T("Point at a format"));
 
-        var category = Text(_category!.Name.ToUpperInvariant(), Bold, 12, AccentBrush);
+        var category = Text(L.T(_category!.Name).ToUpperInvariant(), Bold, 12, AccentBrush);
         var big = Text(title, Bold, title.Length > 7 ? 32 : 42, Brushes.White);
         var small = Text(description, Regular, 13, MutedBrush);
         double top = -(category.Height + big.Height + small.Height) / 2;

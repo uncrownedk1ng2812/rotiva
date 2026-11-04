@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
+using Rotiva.Localization;
 using Rotiva.Models;
 
 namespace Rotiva.Conversion;
@@ -20,7 +21,7 @@ public static partial class Converter
     public static ITextRecognizer? TextRecognizer { get; set; }
 
     static ITextRecognizer Ocr => TextRecognizer
-        ?? throw new ConversionException("Text recognition isn't available on this system.");
+        ?? throw new ConversionException(L.T("Text recognition isn't available on this system."));
 
     // Batas waktu untuk gambar & dokumen. FFmpeg tidak dibatasi karena video panjang memang lama.
     static readonly TimeSpan ToolTimeout = TimeSpan.FromMinutes(3);
@@ -32,7 +33,7 @@ public static partial class Converter
     {
         var category = FormatCatalog.ForFile(source);
         if (!FormatCatalog.IsSupported(category))
-            throw new ConversionException("This file type is not supported.");
+            throw new ConversionException(L.T("This file type is not supported."));
         if (target.Action == TargetAction.Extract)
             return await ExtractArchiveAsync(source);
         if (target.Action == TargetAction.Compress)
@@ -94,7 +95,7 @@ public static partial class Converter
         {
             await work();
             if (!File.Exists(output))
-                throw new ConversionException("The converter did not produce a file.");
+                throw new ConversionException(L.T("The converter did not produce a file."));
         }
         catch
         {
@@ -132,7 +133,7 @@ public static partial class Converter
                     break;
             }
             if (new FileInfo(output).Length >= new FileInfo(source).Length)
-                throw new ConversionException("The file is already small and can't be compressed further.");
+                throw new ConversionException(L.T("The file is already small and can't be compressed further."));
         });
         return output;
     }
@@ -150,7 +151,7 @@ public static partial class Converter
                 ? await OcrImageAsync(source, tempDir)
                 : await ExtractPdfTextAsync(source, tempDir, progress);
             if (string.IsNullOrWhiteSpace(text))
-                throw new ConversionException("No readable text was found.");
+                throw new ConversionException(L.T("No readable text was found."));
             await File.WriteAllTextAsync(output, text.Trim() + Environment.NewLine);
         }));
         return output;
@@ -210,12 +211,12 @@ public static partial class Converter
                 Path.Combine(folder.Replace("%", "%%"), "page-%05d" + extension), escapeOutput: false);
             var pages = Directory.GetFiles(folder).Order(StringComparer.Ordinal).ToList();
             if (pages.Count == 0)
-                throw new ConversionException("Ghostscript did not produce a file.");
+                throw new ConversionException(L.T("Ghostscript did not produce a file."));
 
             if (pages.Count == 1)
             {
                 if (extension == ".pdf")
-                    throw new ConversionException("This PDF has only 1 page; nothing to split.");
+                    throw new ConversionException(L.T("This PDF has only 1 page; nothing to split."));
                 string single = UniqueOutputPath(source, extension);
                 File.Move(pages[0], single);
                 Directory.Delete(folder);
@@ -301,7 +302,7 @@ public static partial class Converter
     {
         string first = sources[0].TrimEnd('\\', '/');
         string directory = Path.GetDirectoryName(first)
-            ?? throw new ConversionException("A whole drive can't be zipped; pick a folder inside it.");
+            ?? throw new ConversionException(L.T("A whole drive can't be zipped; pick a folder inside it."));
         string name = sources.Count > 1 ? "Archive"
             : Directory.Exists(first) ? Path.GetFileName(first)
             : Path.GetFileNameWithoutExtension(first);
@@ -354,7 +355,7 @@ public static partial class Converter
     static async Task<string> ExtractArchiveAsync(string source)
     {
         string sevenZip = ToolLocator.SevenZip
-            ?? throw new ConversionException("7-Zip is not installed (winget install 7zip.7zip).");
+            ?? throw new ConversionException(L.T("7-Zip is not installed (winget install 7zip.7zip)."));
         string name = Path.GetFileNameWithoutExtension(source);
         if (name.EndsWith(".tar", StringComparison.OrdinalIgnoreCase))
             name = name[..^4];
@@ -375,7 +376,7 @@ public static partial class Converter
                 File.Delete(inner);
             }
             if (Directory.GetFileSystemEntries(folder).Length == 0)
-                throw new ConversionException("The archive is empty.");
+                throw new ConversionException(L.T("The archive is empty."));
             return folder;
         }
         catch
@@ -400,7 +401,7 @@ public static partial class Converter
         }
         catch (ConversionException ex) when (ex.Message.Contains("password", StringComparison.OrdinalIgnoreCase))
         {
-            throw new ConversionException("The archive is password-protected. Open it with 7-Zip or WinRAR.");
+            throw new ConversionException(L.T("The archive is password-protected. Open it with 7-Zip or WinRAR."));
         }
     }
 
@@ -416,7 +417,7 @@ public static partial class Converter
     }
 
     static string Magick => ToolLocator.ImageMagick
-        ?? throw new ConversionException("ImageMagick is not installed (winget install ImageMagick.ImageMagick).");
+        ?? throw new ConversionException(L.T("ImageMagick is not installed (winget install ImageMagick.ImageMagick)."));
 
     // MAGICK_HOME supaya ImageMagick yang dibundel memakai config di foldernya sendiri.
     static Task RunMagickAsync(string magick, List<string> args) =>
@@ -500,7 +501,7 @@ public static partial class Converter
         bool escapeOutput = true)
     {
         string gs = ToolLocator.Ghostscript
-            ?? throw new ConversionException("Ghostscript is not installed (needed for PDF compress, merge and text).");
+            ?? throw new ConversionException(L.T("Ghostscript is not installed (needed for PDF compress, merge and text)."));
         string[] pdfOptions = device == "pdfwrite" ? ["-dCompatibilityLevel=1.5"] : [];
         return RunAsync(gs,
         [
@@ -513,7 +514,7 @@ public static partial class Converter
         bool compress = false)
     {
         string ffmpeg = ToolLocator.FFmpeg
-            ?? throw new ConversionException("FFmpeg is not installed (winget install Gyan.FFmpeg).");
+            ?? throw new ConversionException(L.T("FFmpeg is not installed (winget install Gyan.FFmpeg)."));
 
         string[] codecArgs = compress
             // Sisi terpendek maks. 1080 px (portrait maupun landscape), CRF 28 ≈ kualitas video medsos.
@@ -535,7 +536,7 @@ public static partial class Converter
             ".ogg" => ["-vn", "-c:a", "libvorbis", "-q:a", "6"],
             ".opus" => ["-vn", "-c:a", "libopus", "-b:a", "160k"],
             ".m4a" => ["-vn", "-c:a", "aac", "-b:a", "256k"],
-            _ => throw new ConversionException($"The {extension} format is not supported yet."),
+            _ => throw new ConversionException(L.F("The {0} format is not supported yet.", extension)),
         };
 
         // Progres dihitung dari durasi total (stderr) dan posisi saat ini (-progress ke stdout).
@@ -601,7 +602,7 @@ public static partial class Converter
     static Task RunPandocAsync(string source, string extension, string output)
     {
         string pandoc = ToolLocator.Pandoc
-            ?? throw new ConversionException("Pandoc is not installed (winget install JohnMacFarlane.Pandoc).");
+            ?? throw new ConversionException(L.T("Pandoc is not installed (winget install JohnMacFarlane.Pandoc)."));
 
         // Pandoc menebak format dari ekstensi; .txt (dibaca sebagai Markdown) dan .md perlu disebutkan.
         string[] reader = FormatCatalog.Normalize(Path.GetExtension(source)) is ".txt" or ".md" ? ["-f", "markdown"] : [];
@@ -630,7 +631,7 @@ public static partial class Converter
     static async Task RunLibreOfficeAsync(string source, string filter, string output)
     {
         string soffice = ToolLocator.LibreOffice
-            ?? throw new ConversionException("LibreOffice is not installed (winget install TheDocumentFoundation.LibreOffice).");
+            ?? throw new ConversionException(L.T("LibreOffice is not installed (winget install TheDocumentFoundation.LibreOffice)."));
 
         // LibreOffice selalu menamai hasil "<nama asli>.<ext>" di --outdir, jadi pakai folder
         // sementara lalu pindahkan. Profil terpisah supaya tidak bentrok dengan LibreOffice yang sedang dibuka.
@@ -657,7 +658,7 @@ public static partial class Converter
                 "--headless", "--norestore", .. importFilter, "--convert-to", filter, "--outdir", tempDir, source,
             ], timeout: ToolTimeout);
             string produced = Directory.EnumerateFiles(tempDir).FirstOrDefault()
-                ?? throw new ConversionException("LibreOffice did not produce a file.");
+                ?? throw new ConversionException(L.T("LibreOffice did not produce a file."));
             File.Move(produced, output);
         }
         finally
@@ -772,7 +773,7 @@ public static partial class Converter
             catch (OperationCanceledException)
             {
                 process.Kill(entireProcessTree: true);
-                throw new ConversionException($"{Path.GetFileNameWithoutExtension(exe)} stopped responding (over {timeout!.Value.TotalMinutes:0} minutes).");
+                throw new ConversionException(L.F("{0} stopped responding (over {1:0} minutes).", Path.GetFileNameWithoutExtension(exe), timeout!.Value.TotalMinutes));
             }
         }
 

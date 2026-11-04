@@ -21,6 +21,9 @@ sealed class DesktopSettings
     /// <summary>macOS/Linux: drag file lalu tekan Shift untuk membuka roda (default menyala).</summary>
     public bool DragShiftGesture { get; set; } = true;
 
+    /// <summary>Kode bahasa UI ("en", "id", ...); kosong = ikuti bahasa sistem.</summary>
+    public string Language { get; set; } = "";
+
     /// <summary>Skala roda terhadap ukuran desainnya (sama dengan versi Windows).</summary>
     public double WheelScale => WheelSize switch
     {

@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Rotiva.Conversion;
+using Rotiva.Localization;
 using Rotiva.Models;
 
 namespace Rotiva.Desktop;
@@ -89,7 +90,7 @@ sealed class WheelWindow : Window
         _scale = scale;
         Background = Brushes.Transparent;
         Load(files, scale);
-        _hint.Text = $"{Describe(files)}  ·  click a format  ·  Esc to cancel";
+        _hint.Text = $"{Describe(files)}  ·  {L.T("click a format")}  ·  {L.T("Esc to cancel")}";
 
         _wasActivated = false;
         ShowActivated = true;
@@ -152,7 +153,7 @@ sealed class WheelWindow : Window
     }
 
     static string Describe(IReadOnlyList<string> files) =>
-        files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('/', '\\')) : $"{files.Count} items";
+        files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('/', '\\')) : L.F("{0} items", files.Count);
 
     void ShowAt(PixelPoint? position)
     {
@@ -188,7 +189,7 @@ sealed class WheelWindow : Window
                 return;
             }
             Load(files, _scale);
-            _hint.Text = $"{Describe(files)}  ·  point at a format and let go";
+            _hint.Text = $"{Describe(files)}  ·  {L.T("point at a format and let go")}";
         }
         OnDragOver(sender, e);
     }

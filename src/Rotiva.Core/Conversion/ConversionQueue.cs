@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Rotiva.Localization;
 using Rotiva.Models;
 
 namespace Rotiva.Conversion;
@@ -34,13 +35,13 @@ public sealed class ConversionQueue
                 string name = Path.GetFileName(file);
                 string verb = target.Action switch
                 {
-                    TargetAction.Compress => "COMPRESSING",
-                    TargetAction.ExtractText => "READING TEXT",
-                    TargetAction.Extract => "EXTRACTING",
-                    _ => "CONVERTING",
+                    TargetAction.Compress => L.T("COMPRESSING"),
+                    TargetAction.ExtractText => L.T("READING TEXT"),
+                    TargetAction.Extract => L.T("EXTRACTING"),
+                    _ => L.T("CONVERTING"),
                 };
                 string header = files.Count > 1 ? $"{verb} {i + 1}/{files.Count}" : verb;
-                reporter.ShowProgress(header, $"{name}   →   {target.Label}");
+                reporter.ShowProgress(header, $"{name}   →   {L.T(target.Label)}");
 
                 var progress = new Progress<double?>(reporter.SetProgress);
                 try
@@ -58,17 +59,17 @@ public sealed class ConversionQueue
             if (failures.Count == 0)
             {
                 string message = files.Count == 1 && target.Action == TargetAction.ExtractText && TryCopyText(reporter, lastOutput!)
-                    ? $"Text copied to clipboard · {Path.GetFileName(lastOutput)}"
+                    ? L.F("Text copied to clipboard · {0}", Path.GetFileName(lastOutput))
                     : files.Count == 1
-                    ? $"Saved as {Path.GetFileName(lastOutput)}"
+                    ? L.F("Saved as {0}", Path.GetFileName(lastOutput))
                     : target.Action == TargetAction.Compress
-                        ? $"{files.Count} files compressed"
-                        : $"{files.Count} files converted to {target.Label}";
-                reporter.ShowResult(success: true, "DONE", message, revealPath: lastOutput);
+                        ? L.F("{0} files compressed", files.Count)
+                        : L.F("{0} files converted to {1}", files.Count, L.T(target.Label));
+                reporter.ShowResult(success: true, L.T("DONE"), message, revealPath: lastOutput);
             }
             else
             {
-                string header = succeeded == 0 ? "FAILED" : $"{succeeded} SUCCEEDED, {failures.Count} FAILED";
+                string header = succeeded == 0 ? L.T("FAILED") : L.F("{0} SUCCEEDED, {1} FAILED", succeeded, failures.Count);
                 reporter.ShowResult(success: false, header, failures[0]);
             }
         }
@@ -94,8 +95,8 @@ public sealed class ConversionQueue
     static async Task CombineAsync(IReadOnlyList<string> files, ConvertTarget target, IConversionReporter reporter)
     {
         bool zip = target.Action == TargetAction.Zip;
-        string items = files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('\\', '/')) : $"{files.Count} items";
-        reporter.ShowProgress(zip ? "ZIPPING" : "MERGING", $"{items}   →   {target.Label}");
+        string items = files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('\\', '/')) : L.F("{0} items", files.Count);
+        reporter.ShowProgress(zip ? L.T("ZIPPING") : L.T("MERGING"), $"{items}   →   {L.T(target.Label)}");
         var progress = new Progress<double?>(reporter.SetProgress);
         try
         {
@@ -103,14 +104,14 @@ public sealed class ConversionQueue
                 ? Converter.ZipAsync(files, progress)
                 : Converter.MergeToPdfAsync(files, progress));
             string message = zip
-                ? $"Saved as {Path.GetFileName(output)}"
-                : $"{files.Count} files merged into {Path.GetFileName(output)}";
-            reporter.ShowResult(success: true, "DONE", message, revealPath: output);
+                ? L.F("Saved as {0}", Path.GetFileName(output))
+                : L.F("{0} files merged into {1}", files.Count, Path.GetFileName(output));
+            reporter.ShowResult(success: true, L.T("DONE"), message, revealPath: output);
         }
         catch (Exception ex) when (ex is ConversionException or IOException or UnauthorizedAccessException
                                        or System.ComponentModel.Win32Exception)
         {
-            reporter.ShowResult(success: false, "FAILED", ex.Message);
+            reporter.ShowResult(success: false, L.T("FAILED"), ex.Message);
         }
     }
 }

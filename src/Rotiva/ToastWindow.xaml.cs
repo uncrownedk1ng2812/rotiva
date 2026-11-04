@@ -3,6 +3,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Rotiva.Interop;
+using Rotiva.Localization;
 
 namespace Rotiva;
 
@@ -112,6 +113,7 @@ public partial class ToastWindow : Window
     void SetRevealPath(string? path)
     {
         _revealPath = path;
+        HintText.Text = L.T("Click to open folder");
         HintText.Visibility = path is null ? Visibility.Collapsed : Visibility.Visible;
         Cursor = path is null ? null : System.Windows.Input.Cursors.Hand;
         var handle = new WindowInteropHelper(this).Handle;

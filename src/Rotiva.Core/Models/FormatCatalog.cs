@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Rotiva.Localization;
 
 namespace Rotiva.Models;
 
@@ -85,7 +86,7 @@ public static class FormatCatalog
         new("Image", Image, "",
         [
             Compress,
-            new("PNG", "Lossless, transparan", ".png", Image),
+            new("PNG", "Lossless, transparent", ".png", Image),
             new("JPG", "Small size", ".jpg", Image),
             new("WEBP", "Modern, for the web", ".webp", Image),
             new("AVIF", "Best compression", ".avif", Image),
@@ -103,7 +104,7 @@ public static class FormatCatalog
         },
         new("Video", Video, "",
         [
-            Compress with { Description = "MP4 maks. 1080p" },
+            Compress with { Description = "MP4 up to 1080p" },
             new("MP4", "H.264, most compatible", ".mp4", Video),
             new("WEBM", "VP9 for the web", ".webm", Video),
             new("MOV", "QuickTime", ".mov", Video),
@@ -262,16 +263,16 @@ public static class FormatCatalog
     public const string MergeId = "merge";
     public const string ZipId = "zip";
 
-    /// <summary>Teks di menu klik kanan Explorer.</summary>
+    /// <summary>Teks di menu klik kanan Explorer, dalam bahasa yang sedang dipakai.</summary>
     public static string MenuTextOf(ConvertTarget target) => target.Action switch
     {
-        TargetAction.Convert => $"To {target.Label}",
-        TargetAction.Compress => "Compress (shrink size)",
-        TargetAction.MergePdf => "Merge into 1 PDF",
-        TargetAction.ExtractText => "Copy text (OCR)",
-        TargetAction.Zip => "Pack into ZIP",
-        TargetAction.Extract => "Extract here",
-        _ => "Split into pages",
+        TargetAction.Convert => L.F("To {0}", target.Label),
+        TargetAction.Compress => L.T("Compress (shrink size)"),
+        TargetAction.MergePdf => L.T("Merge into 1 PDF"),
+        TargetAction.ExtractText => L.T("Copy text (OCR)"),
+        TargetAction.Zip => L.T("Pack into ZIP"),
+        TargetAction.Extract => L.T("Extract here"),
+        _ => L.T("Split into pages"),
     };
 
     /// <summary>File yang bisa ikut digabung jadi satu PDF (gambar, PDF, dokumen, tabel).</summary>

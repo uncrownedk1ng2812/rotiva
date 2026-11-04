@@ -4,6 +4,7 @@ using Windows.Graphics.Imaging;
 using Windows.Media.Ocr;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Rotiva.Localization;
 
 namespace Rotiva.Conversion;
 
@@ -21,7 +22,7 @@ internal sealed class WindowsTextRecognizer : ITextRecognizer
     {
         var engine = OcrEngine.TryCreateFromUserProfileLanguages()
             ?? OcrEngine.AvailableRecognizerLanguages.Select(OcrEngine.TryCreateFromLanguage).FirstOrDefault(e => e is not null)
-            ?? throw new ConversionException("No Windows OCR language pack is installed (Settings → Time & language).");
+            ?? throw new ConversionException(L.T("No Windows OCR language pack is installed (Settings → Time & language)."));
 
         var file = await StorageFile.GetFileFromPathAsync(Path.GetFullPath(pngPath));
         using IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read);

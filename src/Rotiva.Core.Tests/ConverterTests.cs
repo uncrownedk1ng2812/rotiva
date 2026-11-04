@@ -5,6 +5,7 @@ using Rotiva.Models;
 namespace Rotiva.Core.Tests;
 
 /// <summary>Bagian Converter yang tidak butuh engine eksternal, jadi bisa dites di semua OS.</summary>
+[Collection("Language")]
 public sealed class ConverterTests : IDisposable
 {
     readonly string _dir = Directory.CreateTempSubdirectory("rotiva-test-").FullName;

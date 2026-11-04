@@ -7,6 +7,7 @@ using System.Windows.Media.Animation;
 using Rotiva.Controls;
 using Rotiva.Conversion;
 using Rotiva.Interop;
+using Rotiva.Localization;
 using Rotiva.Models;
 using Rotiva.Sound;
 
@@ -46,6 +47,7 @@ public partial class OverlayWindow : Window
     {
         InitializeComponent();
         BuildInstructions();
+        L.Changed += BuildInstructions;
         Wheel.SelectionChanged += SoundFx.Tick;
         SourceInitialized += (_, _) =>
             NativeMethods.MakeOverlayWindow(new WindowInteropHelper(this).Handle, clickThrough: false);
@@ -322,7 +324,7 @@ public partial class OverlayWindow : Window
                 VerticalAlignment = VerticalAlignment.Center,
                 Child = new TextBlock
                 {
-                    Text = category.Name.ToUpperInvariant(),
+                    Text = L.T(category.Name).ToUpperInvariant(),
                     FontFamily = RadialWheel.LabelFont,
                     FontSize = 16,
                     FontWeight = active ? FontWeights.Bold : FontWeights.SemiBold,
@@ -334,10 +336,11 @@ public partial class OverlayWindow : Window
 
     void BuildInstructions()
     {
+        Instructions.Children.Clear();
         (string Label, string Key)[] items =
         [
-            ("Convert", "Release"),
-            ("Cancel", "Esc"),
+            (L.T("Convert"), L.T("Release")),
+            (L.T("Cancel"), "Esc"),
         ];
         foreach (var (label, key) in items)
         {

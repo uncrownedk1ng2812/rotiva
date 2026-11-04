@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Rotiva.Controls;
 using Rotiva.Interop;
+using Rotiva.Localization;
 
 namespace Rotiva;
 
@@ -51,29 +52,6 @@ internal sealed class TrayMenuWindow : Window
         ShowInTaskbar = false;
         Title = "Rotiva";
 
-        var items = new StackPanel { Width = MenuWidth };
-        items.Children.Add(Header());
-        items.Children.Add(Divider());
-        items.Children.Add(ToggleRow("", "Start with Windows", TrayIcon.IsAutostartEnabled(), TrayIcon.SetAutostart));
-        items.Children.Add(ToggleRow("", "Explorer right-click menu", Shell.ShellMenu.IsEnabled,
-            enabled => Shell.ShellMenu.IsEnabled = enabled));
-        items.Children.Add(WheelSizeRow());
-        items.Children.Add(Divider());
-        items.Children.Add(ActionRow("", "Website", () => Open(WebsiteUrl)));
-        items.Children.Add(ActionRow("", "GitHub", () => Open(GitHubUrl)));
-        items.Children.Add(SupportRow());
-        items.Children.Add(ActionRow("", "License & copyright", TrayIcon.OpenLicense));
-        items.Children.Add(Divider());
-        items.Children.Add(ActionRow("", "Exit Rotiva", _onExit));
-        items.Children.Add(new TextBlock
-        {
-            Text = "© 2026 Denish Chairany · GPL-3.0",
-            FontFamily = TextFont,
-            FontSize = 11,
-            Foreground = MutedBrush,
-            Margin = new Thickness(12, 6, 12, 4),
-        });
-
         var panel = new Border
         {
             Margin = new Thickness(ShadowMargin),
@@ -84,7 +62,7 @@ internal sealed class TrayMenuWindow : Window
             BorderThickness = new Thickness(1),
             // Bayangan statis: hanya digambar sekali saat menu dibuka.
             Effect = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 3, Opacity = 0.45 },
-            Child = items,
+            Child = Items(),
             RenderTransform = new TranslateTransform(),
         };
         Content = panel;
@@ -130,6 +108,57 @@ internal sealed class TrayMenuWindow : Window
         menu.Activate();
         NativeMethods.SetForegroundWindow(new WindowInteropHelper(menu).Handle);
         menu.PlayOpen();
+    }
+
+    StackPanel Items()
+    {
+        var items = new StackPanel { Width = MenuWidth };
+        items.Children.Add(Header());
+        items.Children.Add(Divider());
+        items.Children.Add(ToggleRow("", L.T("Start with Windows"), TrayIcon.IsAutostartEnabled(), TrayIcon.SetAutostart));
+        items.Children.Add(ToggleRow("", L.T("Explorer right-click menu"), Shell.ShellMenu.IsEnabled,
+            enabled => Shell.ShellMenu.IsEnabled = enabled));
+        items.Children.Add(ChoiceRow("", L.T("Wheel size"),
+            [(WheelSize.Small, "S", L.T("Small wheel")), (WheelSize.Medium, "M", L.T("Medium wheel")), (WheelSize.Large, "L", L.T("Large wheel"))],
+            () => AppSettings.WheelSize, size => AppSettings.WheelSize = size));
+        items.Children.Add(ChoiceRow("", L.T("Language"),
+            [("", "AUTO", L.T("Same as Windows")), .. L.Languages.Select(l => (l.Code, l.Code.ToUpperInvariant(), l.Name))],
+            () => AppSettings.Language, ChangeLanguage));
+        items.Children.Add(Divider());
+        items.Children.Add(ActionRow("", L.T("Website"), () => Open(WebsiteUrl)));
+        items.Children.Add(ActionRow("", "GitHub", () => Open(GitHubUrl)));
+        items.Children.Add(SupportRow());
+        items.Children.Add(ActionRow("", L.T("License & copyright"), TrayIcon.OpenLicense));
+        items.Children.Add(Divider());
+        items.Children.Add(ActionRow("", L.T("Exit Rotiva"), _onExit));
+        items.Children.Add(new TextBlock
+        {
+            Text = "© 2026 Denish Chairany · GPL-3.0",
+            FontFamily = TextFont,
+            FontSize = 11,
+            Foreground = MutedBrush,
+            Margin = new Thickness(12, 6, 12, 4),
+        });
+        return items;
+    }
+
+    /// <summary>Ganti bahasa, lalu bangun ulang isi menu di tempat (sudut kanan bawah tetap).</summary>
+    void ChangeLanguage(string code)
+    {
+        AppSettings.Language = code;
+        L.Use(code);
+        // Menu klik kanan Explorer ditulis dalam bahasa yang sedang dipakai.
+        if (Shell.ShellMenu.IsEnabled)
+            Shell.ShellMenu.Register();
+
+        var panel = (Border)Content;
+        double right = Left + Width, bottom = Top + Height;
+        panel.Child = Items();
+        panel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        Width = panel.DesiredSize.Width;
+        Height = panel.DesiredSize.Height;
+        Left = right - Width;
+        Top = bottom - Height;
     }
 
     void PlayOpen()
@@ -185,7 +214,7 @@ internal sealed class TrayMenuWindow : Window
         text.Children.Add(titleLine);
         text.Children.Add(new TextBlock
         {
-            Text = "Drag a file, then press Shift",
+            Text = L.T("Drag a file, then press Shift"),
             FontFamily = TextFont,
             FontSize = 12,
             Foreground = MutedBrush,
@@ -246,56 +275,59 @@ internal sealed class TrayMenuWindow : Window
         return row;
     }
 
-    static UIElement WheelSizeRow()
+    /// <summary>Baris dengan pilihan chip (ukuran roda S/M/L, bahasa AUTO/EN/ID).</summary>
+    static UIElement ChoiceRow<T>(string glyph, string label, IEnumerable<(T Value, string Label, string ToolTip)> options,
+        Func<T> current, Action<T> choose)
     {
         var choices = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
-        var chips = new List<(Border Chip, TextBlock Text, WheelSize Size)>();
+        var chips = new List<(Border Chip, TextBlock Text, T Value)>();
 
         void Refresh()
         {
-            var current = AppSettings.WheelSize;
-            foreach (var (chip, text, size) in chips)
+            var selected = current();
+            foreach (var (chip, text, value) in chips)
             {
-                bool active = size == current;
+                bool active = EqualityComparer<T>.Default.Equals(value, selected);
                 chip.Background = active ? AccentBrush : Brushes.Transparent;
                 text.Foreground = active ? Brushes.Black : TextBrush;
             }
         }
 
-        foreach (var (size, label) in new[] { (WheelSize.Small, "S"), (WheelSize.Medium, "M"), (WheelSize.Large, "L") })
+        foreach (var (value, chipLabel, toolTip) in options)
         {
             var text = new TextBlock
             {
-                Text = label,
+                Text = chipLabel,
                 FontFamily = RadialWheel.LabelFont,
                 FontSize = 12,
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
             };
             var chip = new Border
             {
-                Width = 26,
+                MinWidth = 26,
                 Height = 22,
+                Padding = new Thickness(4, 0, 4, 0),
                 Margin = new Thickness(2, 0, 0, 0),
                 CornerRadius = new CornerRadius(4),
                 Child = text,
                 Cursor = Cursors.Hand,
-                ToolTip = size + " wheel",
+                ToolTip = toolTip,
             };
-            text.VerticalAlignment = VerticalAlignment.Center;
             chip.MouseLeftButtonUp += (_, e) =>
             {
-                AppSettings.WheelSize = size;
-                Refresh();
                 e.Handled = true;
+                choose(value);
+                Refresh();
             };
-            chips.Add((chip, text, size));
+            chips.Add((chip, text, value));
             choices.Children.Add(chip);
         }
         Refresh();
 
         // Baris ini sendiri tidak bisa diklik (hanya chip-nya), jadi tanpa efek hover.
-        var row = Row("", "Wheel size", choices);
+        var row = Row(glyph, label, choices);
         row.Cursor = null;
         return row;
     }
@@ -333,7 +365,7 @@ internal sealed class TrayMenuWindow : Window
             links.Children.Add(chip);
         }
 
-        var row = Row("", "Support Rotiva", links, glyphBrush: AccentBrush);
+        var row = Row("", L.T("Support Rotiva"), links, glyphBrush: AccentBrush);
         // Klik di luar chip membuka Ko-fi (pilihan utama untuk internasional).
         row.MouseLeftButtonUp += (_, _) =>
         {

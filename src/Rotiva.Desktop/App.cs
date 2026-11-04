@@ -8,6 +8,7 @@ using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Rotiva.Conversion;
+using Rotiva.Localization;
 
 namespace Rotiva.Desktop;
 
@@ -28,6 +29,7 @@ sealed class App : Application
     ToastWindow? _toast;
     WheelWindow? _wheel;
     DragShiftGesture? _gesture;
+    TrayIcon? _tray;
 
     public override void Initialize()
     {
@@ -39,6 +41,7 @@ sealed class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         _settings = DesktopSettings.Load();
+        L.Use(_settings.Language);
         // TEXT (OCR) muncul di roda kalau Tesseract terpasang.
         Converter.TextRecognizer = TesseractTextRecognizer.TryCreate();
         _toast = new ToastWindow();
@@ -89,24 +92,37 @@ sealed class App : Application
 
     void CreateTrayIcon()
     {
+        _tray = new TrayIcon
+        {
+            Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://Rotiva/Assets/icon.png"))),
+            ToolTipText = "Rotiva",
+            Menu = TrayMenu(),
+        };
+        TrayIcon.SetIcons(this, [_tray]);
+    }
+
+    /// <summary>Isi menu tray, dalam bahasa yang sedang dipakai (dibuat ulang saat bahasa diganti).</summary>
+    NativeMenu TrayMenu()
+    {
         var menu = new NativeMenu();
-        menu.Items.Add(Item("Convert files…", PickFiles));
+        menu.Items.Add(Item(L.T("Convert files…"), PickFiles));
         menu.Items.Add(new NativeMenuItemSeparator());
         if (_gesture is not null)
         {
-            menu.Items.Add(Toggle("Drag + Shift opens the wheel", _settings.DragShiftGesture, enabled =>
+            menu.Items.Add(Toggle(L.T("Drag + Shift opens the wheel"), _settings.DragShiftGesture, enabled =>
             {
                 _settings.DragShiftGesture = enabled;
                 _gesture.Enabled = enabled;
             }));
         }
-        menu.Items.Add(new NativeMenuItem("Wheel size") { Menu = WheelSizeMenu() });
+        menu.Items.Add(new NativeMenuItem(L.T("Wheel size")) { Menu = WheelSizeMenu() });
+        menu.Items.Add(new NativeMenuItem(L.T("Language")) { Menu = LanguageMenu() });
         if (OperatingSystem.IsLinux())
             menu.Items.Add(FileManagerMenuItem());
         menu.Items.Add(new NativeMenuItemSeparator());
-        menu.Items.Add(Item("Website", () => Shell.OpenUrl(WebsiteUrl)));
+        menu.Items.Add(Item(L.T("Website"), () => Shell.OpenUrl(WebsiteUrl)));
         menu.Items.Add(Item("GitHub", () => Shell.OpenUrl(GitHubUrl)));
-        menu.Items.Add(new NativeMenuItem("Support Rotiva")
+        menu.Items.Add(new NativeMenuItem(L.T("Support Rotiva"))
         {
             Menu = new NativeMenu
             {
@@ -114,23 +130,16 @@ sealed class App : Application
                 Item("SociaBuzz (Indonesia)", () => Shell.OpenUrl(SociaBuzzUrl)),
             },
         });
-        menu.Items.Add(Item("License & copyright", () => Shell.OpenUrl(LicenseUrl)));
+        menu.Items.Add(Item(L.T("License & copyright"), () => Shell.OpenUrl(LicenseUrl)));
         menu.Items.Add(new NativeMenuItemSeparator());
-        menu.Items.Add(Item("Quit Rotiva", Quit));
-
-        var tray = new TrayIcon
-        {
-            Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://Rotiva/Assets/icon.png"))),
-            ToolTipText = "Rotiva",
-            Menu = menu,
-        };
-        TrayIcon.SetIcons(this, [tray]);
+        menu.Items.Add(Item(L.T("Quit Rotiva"), Quit));
+        return menu;
     }
 
     NativeMenu WheelSizeMenu()
     {
         var sizeMenu = new NativeMenu();
-        foreach (var (size, label) in new[] { (WheelSize.Small, "Small"), (WheelSize.Medium, "Medium"), (WheelSize.Large, "Large") })
+        foreach (var (size, label) in new[] { (WheelSize.Small, L.T("Small")), (WheelSize.Medium, L.T("Medium")), (WheelSize.Large, L.T("Large")) })
         {
             var item = new NativeMenuItem(label)
             {
@@ -149,8 +158,32 @@ sealed class App : Application
         return sizeMenu;
     }
 
+    /// <summary>Bahasa: ikuti sistem, atau salah satu bahasa yang tersedia. Menu dibuat ulang dalam bahasa baru.</summary>
+    NativeMenu LanguageMenu()
+    {
+        var languageMenu = new NativeMenu();
+        foreach (var (code, name) in L.Languages.Prepend(("", L.T("Same as system"))))
+        {
+            var item = new NativeMenuItem(name)
+            {
+                ToggleType = NativeMenuItemToggleType.Radio,
+                IsChecked = _settings.Language == code,
+            };
+            item.Click += (_, _) =>
+            {
+                _settings.Language = code;
+                _settings.Save();
+                L.Use(code);
+                // Menu yang sedang terbuka jangan diganti di tengah klik; tunggu giliran berikutnya.
+                Dispatcher.UIThread.Post(() => _tray!.Menu = TrayMenu());
+            };
+            languageMenu.Items.Add(item);
+        }
+        return languageMenu;
+    }
+
     [System.Runtime.Versioning.SupportedOSPlatform("linux")]
-    NativeMenuItem FileManagerMenuItem() => Toggle("File manager menu", _settings.FileManagerMenu, enabled =>
+    NativeMenuItem FileManagerMenuItem() => Toggle(L.T("File manager menu"), _settings.FileManagerMenu, enabled =>
     {
         _settings.FileManagerMenu = enabled;
         if (enabled)
@@ -201,7 +234,7 @@ sealed class App : Application
         {
             var picked = await host.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Title = "Convert with Rotiva",
+                Title = L.T("Convert with Rotiva"),
                 AllowMultiple = true,
             });
             var files = picked.Select(file => file.TryGetLocalPath()).OfType<string>().ToList();

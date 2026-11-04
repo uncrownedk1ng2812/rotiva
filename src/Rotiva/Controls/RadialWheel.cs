@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using Rotiva.Localization;
 using Rotiva.Models;
 
 namespace Rotiva.Controls;
@@ -417,27 +418,27 @@ public sealed class RadialWheel : Canvas
             return;
 
         _centerGlyph.Text = _category.Glyph;
-        _centerCategory.Text = _category.Name.ToUpperInvariant();
+        _centerCategory.Text = L.T(_category.Name).ToUpperInvariant();
         // Folder dan file tanpa ekstensi: tampilkan "FOLDER"/"FILE".
         string extension = System.IO.Path.GetExtension(_category.FileName).TrimStart('.');
-        _sourceBadge.Text = (extension.Length > 0 ? extension : _category.Name).ToUpperInvariant();
+        _sourceBadge.Text = (extension.Length > 0 ? extension : L.T(_category.Name)).ToUpperInvariant();
 
         if (SelectedTarget is { } target)
         {
-            _centerTitle.Text = target.Label;
-            _centerDescription.Text = target.Description;
-            _targetBadge.Text = target.Label;
+            _centerTitle.Text = L.T(target.Label);
+            _centerDescription.Text = L.T(target.Description);
+            _targetBadge.Text = L.T(target.Label);
         }
         else if (_inCenter)
         {
-            _centerTitle.Text = "CANCEL";
-            _centerDescription.Text = "Release here to cancel";
+            _centerTitle.Text = L.T("CANCEL");
+            _centerDescription.Text = L.T("Release here to cancel");
             _targetBadge.Text = "✕";
         }
         else
         {
-            _centerTitle.Text = "PICK";
-            _centerDescription.Text = "Point at a format";
+            _centerTitle.Text = L.T("PICK");
+            _centerDescription.Text = L.T("Point at a format");
             _targetBadge.Text = "?";
         }
 
@@ -618,7 +619,7 @@ public sealed class RadialWheel : Canvas
             });
             content.Children.Add(new TextBlock
             {
-                Text = target.Label,
+                Text = L.T(target.Label),
                 FontFamily = LabelFont,
                 FontSize = 22,
                 FontWeight = FontWeights.Bold,

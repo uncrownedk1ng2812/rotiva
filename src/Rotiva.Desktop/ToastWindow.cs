@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Rotiva.Conversion;
+using Rotiva.Localization;
 
 namespace Rotiva.Desktop;
 
@@ -38,7 +39,6 @@ sealed class ToastWindow : Window, IConversionReporter
 
         _message.MaxWidth = 560;
         _message.TextTrimming = TextTrimming.CharacterEllipsis;
-        _revealHint.Text = OperatingSystem.IsMacOS() ? "Click to show in Finder" : "Click to open folder";
         _revealHint.Foreground = new SolidColorBrush(Color.FromArgb(0x99, 0xFF, 0xFF, 0xFF));
         _panel = new Border
         {
@@ -101,6 +101,7 @@ sealed class ToastWindow : Window, IConversionReporter
         _header.Text = header;
         _message.Text = message;
         _revealPath = revealPath;
+        _revealHint.Text = L.T(OperatingSystem.IsMacOS() ? "Click to show in Finder" : "Click to open folder");
         _revealHint.IsVisible = revealPath is not null;
         Cursor = revealPath is null ? Cursor.Default : new Cursor(StandardCursorType.Hand);
     }

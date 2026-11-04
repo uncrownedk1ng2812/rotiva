@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Rotiva.Core.Tests" />
+    <!-- Terjemahan UI, satu file per bahasa (lihat Localization/L.cs). -->
+    <EmbeddedResource Include="Localization\*.json" LogicalName="Rotiva.Localization.%(Filename).json" />
   </ItemGroup>
 
 </Project>

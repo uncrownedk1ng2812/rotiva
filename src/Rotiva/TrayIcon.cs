@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using Rotiva.Localization;
 using Drawing = System.Drawing;
 using Forms = System.Windows.Forms;
 
@@ -28,8 +29,8 @@ internal static class TrayIcon
         };
         if (showWelcome)
         {
-            icon.ShowBalloonTip(3000, "Rotiva is running",
-                "Drag a file, then press Shift to open the conversion wheel.", Forms.ToolTipIcon.None);
+            icon.ShowBalloonTip(3000, L.T("Rotiva is running"),
+                L.T("Drag a file, then press Shift to open the conversion wheel."), Forms.ToolTipIcon.None);
         }
         return icon;
     }

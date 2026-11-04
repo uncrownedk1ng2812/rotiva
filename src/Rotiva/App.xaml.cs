@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Rotiva.Conversion;
 using Rotiva.Input;
+using Rotiva.Localization;
 using Rotiva.Shell;
 
 namespace Rotiva;
@@ -14,6 +15,7 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        L.Use(AppSettings.Language);
 
         // Dipanggil installer/uninstaller: cukup tulis/hapus menu klik kanan lalu keluar.
         if (e.Args is ["--register"] or ["--unregister"])
@@ -36,7 +38,7 @@ public partial class App : Application
             // Perintah dari menu diteruskan ke instance yang sudah berjalan.
             if (command is { } c && !CommandChannel.TrySend(c.Target, c.File))
             {
-                MessageBox.Show("Rotiva is running but not responding. Close it from the tray icon and try again.",
+                MessageBox.Show(L.T("Rotiva is running but not responding. Close it from the tray icon and try again."),
                     "Rotiva", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             Shutdown();
