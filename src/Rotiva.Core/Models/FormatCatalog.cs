@@ -39,6 +39,7 @@ public static class FormatCatalog
     const string Document = "";
     const string Pdf = "";
     const string Sheet = "\uF0E2";
+    const string Slides = "\uE786";
     const string Shrink = "\uE73F";
     const string Stack = "\uE8C8";
     const string Text = "\uE8D2";
@@ -162,6 +163,21 @@ public static class FormatCatalog
         {
             Engine = ConversionEngine.Office,
             Extensions = [".xlsx", ".xls", ".csv", ".tsv", ".ods"],
+        },
+        // Dikonversi oleh LibreOffice Impress. PNG/JPG = semua slide (lewat PDF, lalu Ghostscript per halaman).
+        new("Slides", Slides, "",
+        [
+            new("PDF", "Ready to print & share", ".pdf", Pdf),
+            new("PPTX", "Microsoft PowerPoint", ".pptx", Slides),
+            new("ODP", "LibreOffice Impress", ".odp", Slides),
+            new("PNG", "Every slide", ".png", Image),
+            new("JPG", "Every slide", ".jpg", Image),
+            MergePdf,
+            Zip,
+        ])
+        {
+            Engine = ConversionEngine.Office,
+            Extensions = [".pptx", ".ppt", ".odp", ".ppsx", ".pps"],
         },
         // DOCX/ODT oleh LibreOffice; sisanya oleh Ghostscript. PNG/JPG = semua halaman
         // (lebih dari satu halaman → satu folder berisi gambar per halaman).

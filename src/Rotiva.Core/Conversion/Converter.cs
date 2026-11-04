@@ -41,23 +41,42 @@ public static partial class Converter
             return await ExtractTextAsync(source, category.Engine, progress);
 
         // PDF → gambar / PDF per halaman: semua halaman, lewat Ghostscript (LibreOffice hanya halaman pertama).
-        if (FormatCatalog.Normalize(Path.GetExtension(source)) == ".pdf")
+        if (FormatCatalog.Normalize(Path.GetExtension(source)) == ".pdf"
+            && await PdfPagesAsync(source, source, target) is { } pages)
+            return pages;
+
+        // Presentasi → gambar: sama, tapi slide-nya diubah ke PDF dulu oleh LibreOffice.
+        if (category.Name == "Slides" && target.Extension is ".png" or ".jpg")
         {
-            string[] render = ["-r150", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4"];
-            switch (target)
+            string? slides = null;
+            await WithTempDirectoryAsync(async tempDir =>
             {
-                case { Action: TargetAction.SplitPdf }:
-                    return await SplitPdfPagesAsync(source, ".pdf", "pdfwrite", [], " (pages)");
-                case { Extension: ".png" }:
-                    return await SplitPdfPagesAsync(source, ".png", "png16m", render, " (images)");
-                case { Extension: ".jpg" }:
-                    return await SplitPdfPagesAsync(source, ".jpg", "jpeg", [.. render, "-dJPEGQ=90"], " (images)");
-            }
+                string pdf = Path.Combine(tempDir, "slides.pdf");
+                await ProduceAsync(pdf, () => RunLibreOfficeAsync(source, "pdf", pdf));
+                slides = await PdfPagesAsync(source, pdf, target);
+            });
+            return slides!;
         }
 
         string output = UniqueOutputPath(source, target.Extension);
         await ProduceAsync(output, () => ConvertToAsync(source, category.Engine, target.Extension, output, progress));
         return output;
+    }
+
+    /// <summary>
+    /// Halaman <paramref name="pdf"/> sebagai gambar / PDF terpisah, dinamai menurut <paramref name="source"/>.
+    /// Null kalau <paramref name="target"/> bukan tujuan per halaman.
+    /// </summary>
+    static async Task<string?> PdfPagesAsync(string source, string pdf, ConvertTarget target)
+    {
+        string[] render = ["-r150", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4"];
+        return target switch
+        {
+            { Action: TargetAction.SplitPdf } => await SplitPdfPagesAsync(source, pdf, ".pdf", "pdfwrite", [], " (pages)"),
+            { Extension: ".png" } => await SplitPdfPagesAsync(source, pdf, ".png", "png16m", render, " (images)"),
+            { Extension: ".jpg" } => await SplitPdfPagesAsync(source, pdf, ".jpg", "jpeg", [.. render, "-dJPEGQ=90"], " (images)"),
+            _ => null,
+        };
     }
 
     static Task ConvertToAsync(string source, ConversionEngine engine, string extension, string output,
@@ -180,14 +199,14 @@ public static partial class Converter
     /// "nama-01.jpg", "nama-02.jpg", dst. PDF satu halaman → gambar langsung di samping file asli.
     /// Mengembalikan path folder (atau file, untuk PDF satu halaman).
     /// </summary>
-    static async Task<string> SplitPdfPagesAsync(string source, string extension, string device, string[] options,
+    static async Task<string> SplitPdfPagesAsync(string source, string pdf, string extension, string device, string[] options,
         string folderSuffix)
     {
         string folder = UniqueOutputPath(source, "", folderSuffix);
         Directory.CreateDirectory(folder);
         try
         {
-            await RunGhostscriptAsync(device, options, [source],
+            await RunGhostscriptAsync(device, options, [pdf],
                 Path.Combine(folder.Replace("%", "%%"), "page-%05d" + extension), escapeOutput: false);
             var pages = Directory.GetFiles(folder).Order(StringComparer.Ordinal).ToList();
             if (pages.Count == 0)

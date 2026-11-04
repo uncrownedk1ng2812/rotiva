@@ -56,7 +56,7 @@ Name: "custom"; Description: "Custom"; Flags: iscustom
 
 [Components]
 Name: "main"; Description: "Rotiva + image, video & audio conversion, PDF compress & merge, ZIP & archive extraction"; Types: full compact custom; Flags: fixed
-Name: "documents"; Description: "Document & Excel/CSV spreadsheet conversion (LibreOffice + Pandoc)"; Types: full
+Name: "documents"; Description: "Document, Excel/CSV spreadsheet & PowerPoint conversion (LibreOffice + Pandoc)"; Types: full
 
 [Tasks]
 Name: "autostart"; Description: "Start Rotiva automatically with Windows"; GroupDescription: "Additional options:"
