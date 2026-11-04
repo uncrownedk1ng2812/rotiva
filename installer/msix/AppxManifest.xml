@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Manifest paket MSIX untuk Microsoft Store. installer\build-msix.ps1 mengganti $(...) dengan nilai
+  dari Partner Center (Product identity) dan versi rilis.
+  Daftar ekstensi harus sama dengan FormatCatalog (dicek oleh MsixManifestTests).
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap2="http://schemas.microsoft.com/appx/manifest/uap/windows10/2"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap2 uap3 desktop rescap">
+
+  <Identity Name="$(IdentityName)" Publisher="$(Publisher)" Version="$(Version)" ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Rotiva</DisplayName>
+    <PublisherDisplayName>$(PublisherDisplayName)</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <Application Id="Rotiva" Executable="Rotiva.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Rotiva"
+        Description="Convert files from a wheel: drag a file, then press Shift."
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <!-- "Start with Windows" (TrayIcon.SetAutostart pakai TaskId ini). -->
+        <desktop:Extension Category="windows.startupTask" Executable="Rotiva.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="RotivaStartup" Enabled="true" DisplayName="Rotiva" />
+        </desktop:Extension>
+
+        <!--
+          Menu klik kanan "Convert with Rotiva" (membuka roda di kursor). Registry HKCU di paket MSIX
+          divirtualisasi, jadi submenu per format versi installer (ShellMenu) tidak bisa dipakai di sini.
+        -->
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="image">
+            <uap:DisplayName>Image</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.png</uap:FileType>
+              <uap:FileType>.jpg</uap:FileType>
+              <uap:FileType>.jpeg</uap:FileType>
+              <uap:FileType>.webp</uap:FileType>
+              <uap:FileType>.avif</uap:FileType>
+              <uap:FileType>.heic</uap:FileType>
+              <uap:FileType>.heif</uap:FileType>
+              <uap:FileType>.bmp</uap:FileType>
+              <uap:FileType>.tiff</uap:FileType>
+              <uap:FileType>.tif</uap:FileType>
+              <uap:FileType>.gif</uap:FileType>
+              <uap:FileType>.ico</uap:FileType>
+              <uap:FileType>.jfif</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="video">
+            <uap:DisplayName>Video</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.mp4</uap:FileType>
+              <uap:FileType>.mkv</uap:FileType>
+              <uap:FileType>.mov</uap:FileType>
+              <uap:FileType>.avi</uap:FileType>
+              <uap:FileType>.webm</uap:FileType>
+              <uap:FileType>.wmv</uap:FileType>
+              <uap:FileType>.flv</uap:FileType>
+              <uap:FileType>.m4v</uap:FileType>
+              <uap:FileType>.3gp</uap:FileType>
+              <uap:FileType>.ts</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="audio">
+            <uap:DisplayName>Audio</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.mp3</uap:FileType>
+              <uap:FileType>.wav</uap:FileType>
+              <uap:FileType>.flac</uap:FileType>
+              <uap:FileType>.ogg</uap:FileType>
+              <uap:FileType>.opus</uap:FileType>
+              <uap:FileType>.m4a</uap:FileType>
+              <uap:FileType>.aac</uap:FileType>
+              <uap:FileType>.wma</uap:FileType>
+              <uap:FileType>.aiff</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="document">
+            <uap:DisplayName>Document</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.docx</uap:FileType>
+              <uap:FileType>.doc</uap:FileType>
+              <uap:FileType>.odt</uap:FileType>
+              <uap:FileType>.rtf</uap:FileType>
+              <uap:FileType>.txt</uap:FileType>
+              <uap:FileType>.md</uap:FileType>
+              <uap:FileType>.html</uap:FileType>
+              <uap:FileType>.htm</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="spreadsheet">
+            <uap:DisplayName>Spreadsheet</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.xlsx</uap:FileType>
+              <uap:FileType>.xls</uap:FileType>
+              <uap:FileType>.csv</uap:FileType>
+              <uap:FileType>.tsv</uap:FileType>
+              <uap:FileType>.ods</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="slides">
+            <uap:DisplayName>Slides</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.pptx</uap:FileType>
+              <uap:FileType>.ppt</uap:FileType>
+              <uap:FileType>.odp</uap:FileType>
+              <uap:FileType>.ppsx</uap:FileType>
+              <uap:FileType>.pps</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="pdf">
+            <uap:DisplayName>PDF</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.pdf</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="archive">
+            <uap:DisplayName>Archive</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.zip</uap:FileType>
+              <uap:FileType>.rar</uap:FileType>
+              <uap:FileType>.7z</uap:FileType>
+              <uap:FileType>.tar</uap:FileType>
+              <uap:FileType>.gz</uap:FileType>
+              <uap:FileType>.tgz</uap:FileType>
+              <uap:FileType>.bz2</uap:FileType>
+              <uap:FileType>.xz</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap2:SupportedVerbs>
+              <uap3:Verb Id="convert" Parameters="--wheel &quot;%1&quot;">Convert with Rotiva</uap3:Verb>
+            </uap2:SupportedVerbs>
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- Aplikasi desktop biasa (WPF, hook mouse/keyboard global, menjalankan engine konversi). -->
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>

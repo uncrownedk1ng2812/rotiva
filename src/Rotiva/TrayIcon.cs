@@ -1,5 +1,7 @@
 using Microsoft.Win32;
+using Rotiva.Interop;
 using Rotiva.Localization;
+using Windows.ApplicationModel;
 using Drawing = System.Drawing;
 using Forms = System.Windows.Forms;
 
@@ -43,19 +45,35 @@ internal static class TrayIcon
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(target) { UseShellExecute = true });
     }
 
-    // Nilai yang sama juga ditulis oleh installer (opsi "jalankan otomatis").
+    // Versi installer: nilai yang sama juga ditulis oleh installer (opsi "jalankan otomatis").
+    // Versi MSIX (Store): registry-nya divirtualisasi, jadi pakai StartupTask dari manifest paket.
     public static bool IsAutostartEnabled()
     {
+        if (NativeMethods.IsPackaged)
+            return StartupTask().State is StartupTaskState.Enabled or StartupTaskState.EnabledByPolicy;
         using var key = Registry.CurrentUser.OpenSubKey(RunKey);
         return key?.GetValue(RunValue) is not null;
     }
 
     public static void SetAutostart(bool enabled)
     {
+        if (NativeMethods.IsPackaged)
+        {
+            var task = StartupTask();
+            if (enabled)
+                task.RequestEnableAsync().AsTask().GetAwaiter().GetResult();
+            else
+                task.Disable();
+            return;
+        }
         using var key = Registry.CurrentUser.CreateSubKey(RunKey);
         if (enabled)
             key.SetValue(RunValue, $"\"{Environment.ProcessPath}\"");
         else
             key.DeleteValue(RunValue, throwOnMissingValue: false);
     }
+
+    // TaskId sama dengan <desktop:StartupTask> di installer/msix/AppxManifest.xml.
+    static StartupTask StartupTask() =>
+        Windows.ApplicationModel.StartupTask.GetAsync("RotivaStartup").AsTask().GetAwaiter().GetResult();
 }

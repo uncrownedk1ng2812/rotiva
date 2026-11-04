@@ -15,6 +15,9 @@ internal static class CommandChannel
     static readonly string PipeName = $"Rotiva.Commands.{Environment.UserName}";
     static readonly TimeSpan BatchWindow = TimeSpan.FromMilliseconds(600);
 
+    /// <summary>Bukan format tujuan: buka roda di kursor untuk file-file ini ("--wheel").</summary>
+    public const string WheelId = "wheel";
+
     /// <summary>Kirim ke instance yang sedang berjalan. False kalau tidak tersambung.</summary>
     public static bool TrySend(string targetId, string file)
     {

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using Rotiva.Controls;
 using Rotiva.Conversion;
 using Rotiva.Interop;
@@ -17,6 +18,7 @@ namespace Rotiva;
 /// Jendela roda yang muncul di posisi kursor saat Shift ditekan sambil men-drag file.
 /// Alurnya: Shift ditekan → <see cref="BeginProbe"/> (jendela tak terlihat menunggu DragEnter)
 /// → kalau yang di-drag file yang didukung, roda dibuka → file di-drop ke segmen.
+/// Dari menu "Convert with Rotiva" (<see cref="ShowWheel"/>) roda dibuka tanpa drag dan format dipilih dengan klik.
 /// </summary>
 public partial class OverlayWindow : Window
 {
@@ -42,10 +44,17 @@ public partial class OverlayWindow : Window
     Point _wheelCenter;
     double _scale = 1;
     int _dragVersion;
+    // Mode klik: jendela tidak pernah mendapat fokus (WS_EX_NOACTIVATE), jadi kursor, klik, dan Esc dibaca
+    // dengan polling, seperti versi macOS/Linux.
+    readonly DispatcherTimer _clickTimer = new(DispatcherPriority.Input) { Interval = TimeSpan.FromMilliseconds(15) };
+    bool _clickMode;
+    bool _clickArmed;
+    bool _clickPressed;
 
     public OverlayWindow()
     {
         InitializeComponent();
+        _clickTimer.Tick += PollClick;
         BuildInstructions();
         L.Changed += BuildInstructions;
         Wheel.SelectionChanged += SoundFx.Tick;
@@ -62,6 +71,7 @@ public partial class OverlayWindow : Window
             return;
 
         _category = null;
+        SetClickMode(false);
         PlaceAtCursor();
         _state = OverlayState.Probing;
         Show();
@@ -111,9 +121,77 @@ public partial class OverlayWindow : Window
         Top = Math.Clamp(cursor.Y / dpi - _wheelCenter.Y, top, Math.Max(top, bottom - Height));
     }
 
+    /// <summary>
+    /// Dari menu klik kanan "Convert with Rotiva" (versi MSIX): buka roda di kursor untuk file yang
+    /// dipilih. Format dipilih dengan klik; klik di tengah atau di luar roda, klik kanan, atau Esc membatalkan.
+    /// </summary>
+    public void ShowWheel(IReadOnlyList<string> files)
+    {
+        if (_state != OverlayState.Hidden)
+            return;
+        var items = files.Where(path => File.Exists(path) || Directory.Exists(path)).ToArray();
+        if (items.Length == 0 || FormatCatalog.ForFile(items[0], multipleFiles: items.Length > 1) is not { } category)
+            return;
+
+        _files = items;
+        _category = category;
+        SetClickMode(true);
+        PlaceAtCursor();
+        Show();
+        Open();
+        // Klik yang memilih menu mungkin belum dilepas: tunggu tombolnya lepas dulu.
+        _clickArmed = false;
+        _clickPressed = false;
+        _clickTimer.Start();
+    }
+
+    void SetClickMode(bool clickMode)
+    {
+        if (_clickMode == clickMode)
+            return;
+        _clickMode = clickMode;
+        Wheel.ChooseOnRelease = !clickMode;
+        BuildInstructions();
+    }
+
+    void PollClick(object? sender, EventArgs e)
+    {
+        if (_state != OverlayState.Open || !_clickMode)
+        {
+            _clickTimer.Stop();
+            return;
+        }
+
+        NativeMethods.GetCursorPos(out var cursor);
+        double dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+        var fromCenter = (new Point(cursor.X / dpi - Left, cursor.Y / dpi - Top) - _wheelCenter) / _scale;
+        Wheel.UpdatePointer(fromCenter);
+
+        if (NativeMethods.IsKeyDown(NativeMethods.VK_ESCAPE) || NativeMethods.IsKeyDown(NativeMethods.VK_RBUTTON))
+        {
+            CloseWheel();
+            return;
+        }
+        bool down = NativeMethods.IsKeyDown(NativeMethods.VK_LBUTTON);
+        if (!_clickArmed)
+            _clickArmed = !down;
+        else if (down)
+            _clickPressed = true;
+        else if (_clickPressed)
+        {
+            _clickPressed = false;
+            if (fromCenter.Length <= RadialWheel.Size / 2 && Wheel.SelectedTarget is { } target)
+                Choose(target);
+            else
+                CloseWheel();
+        }
+    }
+
     /// <summary>Tombol mouse dilepas di mana pun.</summary>
     public async void OnGlobalDragEnded()
     {
+        if (_clickMode)
+            return;
         if (_state == OverlayState.Probing)
         {
             HideOverlay();
@@ -170,7 +248,7 @@ public partial class OverlayWindow : Window
             CloseWheel();
     }
 
-    async void OnDrop(object sender, DragEventArgs e)
+    void OnDrop(object sender, DragEventArgs e)
     {
         _dragVersion++;
         e.Handled = true;
@@ -183,11 +261,17 @@ public partial class OverlayWindow : Window
 
         // Selalu Copy: jangan sampai Explorer menganggapnya "Move" lalu menghapus file asli.
         e.Effects = DragDropEffects.Copy;
+        Choose(target);
+    }
+
+    /// <summary>Format dipilih (drop atau klik): animasi konfirmasi, tutup roda, lalu antrekan konversi.</summary>
+    async void Choose(ConvertTarget target)
+    {
         _state = OverlayState.Closing;
         Wheel.FlashSelected();
         SoundFx.Confirm();
 
-        var files = FormatCatalog.FilesFor(target, _category, _files, ExplorerOrder);
+        var files = FormatCatalog.FilesFor(target, _category!, _files, ExplorerOrder);
         var area = CurrentMonitorArea();
         await Task.Delay(200);
         CloseWheel();
@@ -339,7 +423,7 @@ public partial class OverlayWindow : Window
         Instructions.Children.Clear();
         (string Label, string Key)[] items =
         [
-            (L.T("Convert"), L.T("Release")),
+            (L.T("Convert"), _clickMode ? L.T("Click") : L.T("Release")),
             (L.T("Cancel"), "Esc"),
         ];
         foreach (var (label, key) in items)

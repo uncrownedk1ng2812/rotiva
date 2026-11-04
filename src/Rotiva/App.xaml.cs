@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Rotiva.Conversion;
 using Rotiva.Input;
+using Rotiva.Interop;
 using Rotiva.Localization;
 using Rotiva.Shell;
 
@@ -28,15 +29,22 @@ public partial class App : Application
             return;
         }
 
-        // Dari menu klik kanan: "--target <kode> <file>".
-        (string Target, string File)? command = e.Args is ["--target", var target, var file] ? (target, file) : null;
+        // Dari menu klik kanan: "--target <kode> <file>", atau "--wheel <file>..." (menu "Convert with
+        // Rotiva" versi MSIX) dan "Open with → Rotiva" (hanya path file) untuk membuka roda di kursor.
+        (string Target, string File)[] commands = e.Args switch
+        {
+            ["--target", var target, var file] => [(target, file)],
+            ["--wheel", .. var files] => files.Select(file => (CommandChannel.WheelId, file)).ToArray(),
+            [var first, ..] when !first.StartsWith("--") => e.Args.Select(file => (CommandChannel.WheelId, file)).ToArray(),
+            _ => [],
+        };
 
         // Hanya boleh satu instance: dua hook global akan memunculkan roda dua kali.
         _instanceMutex = new Mutex(true, "Rotiva.SingleInstance", out bool isFirstInstance);
         if (!isFirstInstance)
         {
             // Perintah dari menu diteruskan ke instance yang sudah berjalan.
-            if (command is { } c && !CommandChannel.TrySend(c.Target, c.File))
+            if (commands.Length > 0 && !commands.All(c => CommandChannel.TrySend(c.Target, c.File)))
             {
                 MessageBox.Show(L.T("Rotiva is running but not responding. Close it from the tray icon and try again."),
                     "Rotiva", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -50,12 +58,19 @@ public partial class App : Application
         _detector = new DragShiftDetector();
         _detector.ShiftPressedDuringDrag += overlay.BeginProbe;
         _detector.DragEnded += overlay.OnGlobalDragEnded;
-        _trayIcon = TrayIcon.Create(Shutdown, showWelcome: command is null);
+        _trayIcon = TrayIcon.Create(Shutdown, showWelcome: commands.Length == 0);
 
-        CommandChannel.Listen(overlay.ConvertFromShell);
-        if (command is { } own)
-            CommandChannel.Received(own.Target, own.File);
-        if (ShellMenu.IsEnabled)
+        CommandChannel.Listen((targetId, files) =>
+        {
+            if (targetId == CommandChannel.WheelId)
+                overlay.ShowWheel(files);
+            else
+                overlay.ConvertFromShell(targetId, files);
+        });
+        foreach (var (target, file) in commands)
+            CommandChannel.Received(target, file);
+        // Versi MSIX: menu klik kanan didaftarkan oleh manifest paket ("Convert with Rotiva").
+        if (ShellMenu.IsEnabled && !NativeMethods.IsPackaged)
             ShellMenu.Register();
     }
 

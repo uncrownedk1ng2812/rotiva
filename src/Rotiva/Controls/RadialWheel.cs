@@ -254,6 +254,9 @@ public sealed class RadialWheel : Canvas
 
     static double Center => OuterRadius + EdgeMargin;
 
+    /// <summary>Drag mode (default): pilihan dibuat dengan melepas file; false = dengan klik.</summary>
+    public bool ChooseOnRelease { get; set; } = true;
+
     public ConvertTarget? SelectedTarget =>
         _category is null || _selectedIndex < 0 ? null : _category.Targets[_selectedIndex];
 
@@ -432,7 +435,7 @@ public sealed class RadialWheel : Canvas
         else if (_inCenter)
         {
             _centerTitle.Text = L.T("CANCEL");
-            _centerDescription.Text = L.T("Release here to cancel");
+            _centerDescription.Text = L.T(ChooseOnRelease ? "Release here to cancel" : "Click here to cancel");
             _targetBadge.Text = "✕";
         }
         else

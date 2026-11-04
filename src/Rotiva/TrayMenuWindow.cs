@@ -116,8 +116,10 @@ internal sealed class TrayMenuWindow : Window
         items.Children.Add(Header());
         items.Children.Add(Divider());
         items.Children.Add(ToggleRow("", L.T("Start with Windows"), TrayIcon.IsAutostartEnabled(), TrayIcon.SetAutostart));
-        items.Children.Add(ToggleRow("", L.T("Explorer right-click menu"), Shell.ShellMenu.IsEnabled,
-            enabled => Shell.ShellMenu.IsEnabled = enabled));
+        // Versi MSIX: menu klik kanan dari manifest paket, tidak bisa dimatikan dari sini.
+        if (!Interop.NativeMethods.IsPackaged)
+            items.Children.Add(ToggleRow("", L.T("Explorer right-click menu"), Shell.ShellMenu.IsEnabled,
+                enabled => Shell.ShellMenu.IsEnabled = enabled));
         items.Children.Add(ChoiceRow("", L.T("Wheel size"),
             [(WheelSize.Small, "S", L.T("Small wheel")), (WheelSize.Medium, "M", L.T("Medium wheel")), (WheelSize.Large, "L", L.T("Large wheel"))],
             () => AppSettings.WheelSize, size => AppSettings.WheelSize = size));

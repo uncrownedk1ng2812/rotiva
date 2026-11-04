@@ -17,6 +17,9 @@ internal static class NativeMethods
     public const int VK_SHIFT = 0x10;
     public const int VK_LSHIFT = 0xA0;
     public const int VK_RSHIFT = 0xA1;
+    public const int VK_LBUTTON = 0x01;
+    public const int VK_RBUTTON = 0x02;
+    public const int VK_ESCAPE = 0x1B;
 
     const uint MONITOR_DEFAULTTONEAREST = 2;
     const int GWL_EXSTYLE = -20;
@@ -116,6 +119,26 @@ internal static class NativeMethods
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    static extern short GetAsyncKeyState(int key);
+
+    /// <summary>Tombol keyboard/mouse sedang ditekan (di mana pun, tanpa perlu fokus).</summary>
+    public static bool IsKeyDown(int key) => (GetAsyncKeyState(key) & 0x8000) != 0;
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+    static extern int GetCurrentPackageFullName(ref int length, char[]? name);
+
+    const int APPMODEL_ERROR_NO_PACKAGE = 15700;
+
+    /// <summary>True kalau berjalan dari paket MSIX (Microsoft Store), bukan dari installer biasa.</summary>
+    public static bool IsPackaged { get; } = DetectPackage();
+
+    static bool DetectPackage()
+    {
+        int length = 0;
+        return GetCurrentPackageFullName(ref length, null) != APPMODEL_ERROR_NO_PACKAGE;
+    }
 
     /// <summary>Batas monitor tempat kursor berada, dalam piksel layar.</summary>
     public static Int32Rect GetMonitorBoundsAtCursor() => MonitorAtCursor().Monitor.ToInt32Rect();

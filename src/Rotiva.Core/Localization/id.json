@@ -128,6 +128,7 @@
   "Rotiva is running but not responding. Close it from the tray icon and try again.": "Rotiva berjalan tapi tidak merespons. Tutup lewat ikon tray, lalu coba lagi.",
   "Convert": "Konversi",
   "Release": "Lepas",
+  "Click": "Klik",
   "Cancel": "Batal",
 
   // macOS & Linux: menu tray dan roda

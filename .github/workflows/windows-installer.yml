@@ -1,15 +1,25 @@
 name: Windows installer
 
-# Membuat Rotiva-Setup-<versi>.exe di CI dengan installer\build.ps1, dengan engine di versi yang
-# dipatok (SHA-256 dicek). Installer tanpa tanda tangan selalu jadi artifact. Kalau SignPath sudah
-# diatur (variable SIGNPATH_ORGANIZATION_ID + secret SIGNPATH_API_TOKEN), installer dikirim ke
-# SignPath untuk ditandatangani dan hasilnya jadi artifact "rotiva-windows-signed".
+# Membuat Rotiva-Setup-<versi>.exe dan paket Microsoft Store Rotiva-<versi>.msix di CI dengan
+# installeruild.ps1 + installeruild-msix.ps1, dengan engine di versi yang dipatok (SHA-256 dicek).
+# Paket MSIX lalu dipasang di runner (ditandatangani sertifikat uji sementara) dan diuji: menu klik
+# kanan "Convert with Rotiva" → roda → klik MP3 → file hasil harus ada. Paket yang diunggah ke
+# Partner Center adalah yang tanpa tanda tangan (Store menandatanganinya sendiri).
 on:
   workflow_dispatch:
     inputs:
       version:
         description: Version number (e.g. 1.10.1)
         required: true
+      identity_name:
+        description: MSIX Package/Identity/Name (Partner Center → Product identity)
+        default: Rotiva.Test
+      publisher:
+        description: MSIX Package/Identity/Publisher
+        default: CN=Rotiva Test
+      publisher_display_name:
+        description: MSIX Package/Properties/PublisherDisplayName
+        default: Denish Chairany
 
 permissions:
   contents: read
@@ -75,29 +85,43 @@ jobs:
           name: rotiva-windows-unsigned
           path: dist/Rotiva-Setup-*.exe
           if-no-files-found: error
-      - name: Sign with SignPath
-        if: vars.SIGNPATH_ORGANIZATION_ID != ''
-        uses: signpath/github-action-submit-signing-request@v2
-        with:
-          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
-          project-slug: rotiva
-          signing-policy-slug: release-signing
-          artifact-configuration-slug: installer
-          github-artifact-id: ${{ steps.upload.outputs.artifact-id }}
-          wait-for-completion: true
-          wait-for-completion-timeout-in-seconds: 3600
-          output-artifact-directory: dist/signed
-      - name: Check the signature
-        if: vars.SIGNPATH_ORGANIZATION_ID != ''
+      - name: Build MSIX
         shell: pwsh
         run: |
-          $sig = Get-AuthenticodeSignature (Get-Item dist\signed\Rotiva-Setup-*.exe)
-          $sig | Format-List Status, StatusMessage, SignerCertificate
-          if ($sig.Status -ne 'Valid') { throw "Signature is $($sig.Status)" }
-      - if: vars.SIGNPATH_ORGANIZATION_ID != ''
+          powershell -ExecutionPolicy Bypass -File installer\build-msix.ps1 -Version "${{ inputs.version }}" `
+            -IdentityName "${{ inputs.identity_name }}" -Publisher "${{ inputs.publisher }}" `
+            -PublisherDisplayName "${{ inputs.publisher_display_name }}"
+          Get-FileHash dist\Rotiva-*.msix -Algorithm SHA256 | Format-List Path, Hash
+      - uses: actions/upload-artifact@v7
+        with:
+          name: rotiva-msix-store
+          path: dist/Rotiva-*.msix
+          if-no-files-found: error
+          compression-level: 0
+      - name: Install the MSIX with a test certificate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $test = Join-Path $env:RUNNER_TEMP 'msix-test'
+          New-Item -ItemType Directory -Force $test | Out-Null
+          Copy-Item dist\Rotiva-*.msix (Join-Path $test 'Rotiva-test.msix')
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "${{ inputs.publisher }}" `
+            -CertStoreLocation Cert:\CurrentUser\My -TextExtension @('2.5.29.19={text}')
+          $pfx = Join-Path $test 'test.pfx'
+          $password = ConvertTo-SecureString -String 'rotiva-ci' -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath $pfx -Password $password | Out-Null
+          Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\LocalMachine\TrustedPeople -Password $password | Out-Null
+          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Sort-Object FullName -Descending | Select-Object -First 1
+          & $signtool.FullName sign /fd SHA256 /f $pfx /p rotiva-ci (Join-Path $test 'Rotiva-test.msix')
+          if ($LASTEXITCODE -ne 0) { throw 'signtool failed' }
+          Add-AppxPackage (Join-Path $test 'Rotiva-test.msix')
+          Get-AppxPackage "${{ inputs.identity_name }}" | Format-List Name, Version, InstallLocation, Status
+      - name: Test the right-click menu and the wheel
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File installer\msix\test-msix.ps1 -Out (Join-Path $env:RUNNER_TEMP 'msix-shots')
+      - if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: rotiva-windows-signed
-          path: dist/signed/Rotiva-Setup-*.exe
-          if-no-files-found: error
+          name: msix-test
+          path: ${{ runner.temp }}/msix-shots
+          if-no-files-found: ignore
