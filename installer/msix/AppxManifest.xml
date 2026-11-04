@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Manifest paket MSIX untuk Microsoft Store. installer\build-msix.ps1 mengganti $(...) dengan nilai
+  Manifest paket MSIX untuk Microsoft Store (nama produk di Store: "Rotiva Pro"). installer\build-msix.ps1 mengganti $(...) dengan nilai
   dari Partner Center (Product identity) dan versi rilis.
   Daftar ekstensi harus sama dengan FormatCatalog (dicek oleh MsixManifestTests).
 -->
@@ -18,7 +18,7 @@
   <Identity Name="$(IdentityName)" Publisher="$(Publisher)" Version="$(Version)" ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>Rotiva</DisplayName>
+    <DisplayName>Rotiva Pro</DisplayName>
     <PublisherDisplayName>$(PublisherDisplayName)</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -34,7 +34,7 @@
   <Applications>
     <Application Id="Rotiva" Executable="Rotiva.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="Rotiva"
+        DisplayName="Rotiva Pro"
         Description="Convert files from a wheel: drag a file, then press Shift."
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
@@ -45,7 +45,7 @@
       <Extensions>
         <!-- "Start with Windows" (TrayIcon.SetAutostart pakai TaskId ini). -->
         <desktop:Extension Category="windows.startupTask" Executable="Rotiva.exe" EntryPoint="Windows.FullTrustApplication">
-          <desktop:StartupTask TaskId="RotivaStartup" Enabled="true" DisplayName="Rotiva" />
+          <desktop:StartupTask TaskId="RotivaStartup" Enabled="true" DisplayName="Rotiva Pro" />
         </desktop:Extension>
 
         <!-- Dipakai menu klik kanan (RotivaShell.dll) untuk menjalankan Rotiva dengan identitas paket. -->
