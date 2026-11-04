@@ -1,7 +1,7 @@
 name: Windows installer
 
 # Membuat Rotiva-Setup-<versi>.exe dan paket Microsoft Store Rotiva-<versi>.msix di CI dengan
-# installeruild.ps1 + installeruild-msix.ps1, dengan engine di versi yang dipatok (SHA-256 dicek).
+# installer/build.ps1 + installer/build-msix.ps1, dengan engine di versi yang dipatok (SHA-256 dicek).
 # Paket MSIX lalu dipasang di runner (ditandatangani sertifikat uji sementara) dan diuji: menu klik
 # kanan "Convert with Rotiva" → roda → klik MP3 → file hasil harus ada. Paket yang diunggah ke
 # Partner Center adalah yang tanpa tanda tangan (Store menandatanganinya sendiri).
