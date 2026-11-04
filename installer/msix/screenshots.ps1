@@ -14,12 +14,13 @@ public static class Input {
     [DllImport("user32.dll")] public static extern void mouse_event(uint flags, int dx, int dy, uint data, UIntPtr extra);
     [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
     public static void Click() { mouse_event(0x02, 0, 0, 0, UIntPtr.Zero); System.Threading.Thread.Sleep(60); mouse_event(0x04, 0, 0, 0, UIntPtr.Zero); }
-    public static void Escape() { keybd_event(0x1B, 0, 0, UIntPtr.Zero); keybd_event(0x1B, 0, 2, UIntPtr.Zero); }
+    public static void Escape() { keybd_event(0x1B, 0, 0, UIntPtr.Zero); System.Threading.Thread.Sleep(150); keybd_event(0x1B, 0, 2, UIntPtr.Zero); }
 }
 "@
 
-# Dipotong ke jendela Explorer (1680x880): tanpa ikon desktop dan tulisan "Test Mode" runner.
-$script:Crop = New-Object System.Drawing.Rectangle 120, 80, 1680, 880
+# Dipotong ke jendela Explorer (1600x960): tanpa ikon desktop dan tulisan "Test Mode" runner di kanan
+# bawah, tapi notifikasi (tengah bawah layar) tetap masuk.
+$script:Crop = New-Object System.Drawing.Rectangle 100, 60, 1600, 960
 function Shot([string]$name) {
     $bounds = $script:Crop
     $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
