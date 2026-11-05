@@ -42,6 +42,51 @@ internal static class AppSettings
         }
     }
 
+    /// <summary>Cek rilis baru di GitHub secara berkala (default menyala).</summary>
+    public static bool CheckForUpdates
+    {
+        get
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(SettingsKey);
+            return key?.GetValue("CheckForUpdates") is not int value || value != 0;
+        }
+        set
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(SettingsKey);
+            key.SetValue("CheckForUpdates", value ? 1 : 0, RegistryValueKind.DWord);
+        }
+    }
+
+    /// <summary>Versi yang dipilih "Lewati versi ini": tidak lagi dimunculkan otomatis.</summary>
+    public static string SkippedVersion
+    {
+        get
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(SettingsKey);
+            return key?.GetValue("SkippedVersion") as string ?? "";
+        }
+        set
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(SettingsKey);
+            key.SetValue("SkippedVersion", value, RegistryValueKind.String);
+        }
+    }
+
+    /// <summary>Ikon tray sudah pernah dimunculkan di taskbar (Windows 11), jangan dipaksa lagi.</summary>
+    public static bool TrayPinned
+    {
+        get
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(SettingsKey);
+            return key?.GetValue("TrayPinned") is int value && value != 0;
+        }
+        set
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(SettingsKey);
+            key.SetValue("TrayPinned", value ? 1 : 0, RegistryValueKind.DWord);
+        }
+    }
+
     /// <summary>Skala roda terhadap ukuran desainnya (<see cref="Controls.RadialWheel.Size"/>).</summary>
     public static double WheelScale => WheelSize switch
     {

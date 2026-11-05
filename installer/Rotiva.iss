@@ -83,6 +83,8 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 ; Menu klik kanan Explorer (aplikasi juga menulis ulang menu ini setiap kali start).
 Filename: "{app}\Rotiva.exe"; Parameters: "--register"; Flags: runhidden waituntilterminated
 Filename: "{app}\Rotiva.exe"; Description: "Launch Rotiva now"; Flags: nowait postinstall skipifsilent
+; Update dari dalam aplikasi (installer dijalankan dengan /SILENT /relaunch=1): buka Rotiva lagi.
+Filename: "{app}\Rotiva.exe"; Flags: nowait runasoriginaluser; Check: IsUpdateRelaunch
 
 [UninstallRun]
 Filename: "{app}\Rotiva.exe"; Parameters: "--unregister"; Flags: runhidden waituntilterminated; RunOnceId: "UnregisterShellMenu"
@@ -105,6 +107,11 @@ const
 
 var
   OldAutostart: Boolean;
+
+function IsUpdateRelaunch: Boolean;
+begin
+  Result := WizardSilent and (ExpandConstant('{param:relaunch|0}') = '1');
+end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 var

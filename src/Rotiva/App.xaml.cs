@@ -29,6 +29,15 @@ public partial class App : Application
             return;
         }
 
+#if DEBUG
+        // Pratinjau jendela update tanpa instance tunggal / hook (hanya build Debug).
+        if (e.Args is ["--preview-update"])
+        {
+            PreviewUpdate();
+            return;
+        }
+#endif
+
         // Dari menu klik kanan: "--target <kode> <file>", atau "--wheel <file>..." (menu "Convert with
         // Rotiva" versi MSIX) dan "Open with → Rotiva" (hanya path file) untuk membuka roda di kursor.
         (string Target, string File)[] commands = e.Args switch
@@ -72,6 +81,42 @@ public partial class App : Application
         // Versi MSIX: menu klik kanan didaftarkan oleh manifest paket ("Convert with Rotiva").
         if (ShellMenu.IsEnabled && !NativeMethods.IsPackaged)
             ShellMenu.Register();
+        // Versi installer: cek rilis baru di GitHub (versi Store di-update oleh Store).
+        Updater.Start();
+    }
+
+#if DEBUG
+    async void PreviewUpdate()
+    {
+        var release = await Updater.CheckAsync();
+        if (release is null)
+        {
+            Shutdown();
+            return;
+        }
+        UpdateWindow.ShowFor(release, activate: true);
+        foreach (Window window in Windows)
+            window.Closed += (_, _) => Shutdown();
+    }
+#endif
+
+    /// <summary>
+    /// Dipanggil tepat sebelum installer update dijalankan: lepas hook, ikon tray, dan mutex
+    /// (installer menunggu mutex ini) supaya installer tidak meminta Rotiva ditutup.
+    /// </summary>
+    internal void ReleaseForUpdate()
+    {
+        _detector?.Dispose();
+        _detector = null;
+        if (_trayIcon is not null)
+        {
+            _trayIcon.Visible = false;
+            _trayIcon.Dispose();
+            _trayIcon = null;
+        }
+        _instanceMutex?.ReleaseMutex();
+        _instanceMutex?.Dispose();
+        _instanceMutex = null;
     }
 
     protected override void OnExit(ExitEventArgs e)

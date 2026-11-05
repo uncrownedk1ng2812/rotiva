@@ -114,12 +114,17 @@ internal sealed class TrayMenuWindow : Window
     {
         var items = new StackPanel { Width = MenuWidth };
         items.Children.Add(Header());
+        if (Updater.Available is { } update)
+            items.Children.Add(UpdateRow(update));
         items.Children.Add(Divider());
         items.Children.Add(ToggleRow("", L.T("Start with Windows"), TrayIcon.IsAutostartEnabled(), TrayIcon.SetAutostart));
         // Versi MSIX: menu klik kanan dari manifest paket, tidak bisa dimatikan dari sini.
         if (!Interop.NativeMethods.IsPackaged)
             items.Children.Add(ToggleRow("", L.T("Explorer right-click menu"), Shell.ShellMenu.IsEnabled,
                 enabled => Shell.ShellMenu.IsEnabled = enabled));
+        if (Updater.IsSupported)
+            items.Children.Add(ToggleRow("", L.T("Check for updates automatically"), AppSettings.CheckForUpdates,
+                enabled => AppSettings.CheckForUpdates = enabled));
         items.Children.Add(ChoiceRow("", L.T("Wheel size"),
             [(WheelSize.Small, "S", L.T("Small wheel")), (WheelSize.Medium, "M", L.T("Medium wheel")), (WheelSize.Large, "L", L.T("Large wheel"))],
             () => AppSettings.WheelSize, size => AppSettings.WheelSize = size));
@@ -131,6 +136,8 @@ internal sealed class TrayMenuWindow : Window
         items.Children.Add(ActionRow("", "GitHub", () => Open(GitHubUrl)));
         items.Children.Add(SupportRow());
         items.Children.Add(ActionRow("", L.T("License & copyright"), TrayIcon.OpenLicense));
+        if (Updater.IsSupported)
+            items.Children.Add(ActionRow("", L.T("Check for updates"), CheckNow));
         items.Children.Add(Divider());
         items.Children.Add(ActionRow("", L.T("Exit Rotiva"), _onExit));
         items.Children.Add(new TextBlock
@@ -142,6 +149,51 @@ internal sealed class TrayMenuWindow : Window
             Margin = new Thickness(12, 6, 12, 4),
         });
         return items;
+    }
+
+    /// <summary>Baris oranye di atas menu selama ada versi baru; klik = jendela detail update.</summary>
+    UIElement UpdateRow(Updates.ReleaseInfo release)
+    {
+        var badge = new Border
+        {
+            Padding = new Thickness(6, 1, 6, 2),
+            CornerRadius = new CornerRadius(4),
+            Background = AccentBrush,
+            VerticalAlignment = VerticalAlignment.Center,
+            Child = new TextBlock
+            {
+                Text = L.T("NEW"),
+                FontFamily = RadialWheel.LabelFont,
+                FontSize = 11,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.Black,
+            },
+        };
+        var row = Row("", L.F("Update to version {0}", release.Version.ToString(3)), badge, glyphBrush: AccentBrush);
+        row.Background = Frozen(Color.FromArgb(0x1F, 0xFF, 0x8A, 0x1F));
+        row.MouseLeave += (_, _) => row.Background = Frozen(Color.FromArgb(0x1F, 0xFF, 0x8A, 0x1F));
+        row.MouseLeftButtonUp += (_, _) =>
+        {
+            CloseMenu();
+            UpdateWindow.ShowFor(release, activate: true);
+        };
+        return row;
+    }
+
+    /// <summary>"Cek update": jendela update kalau ada versi baru, kalau tidak notifikasi singkat.</summary>
+    static async void CheckNow()
+    {
+        try
+        {
+            if (await Updater.CheckAsync() is { } release)
+                UpdateWindow.ShowFor(release, activate: true);
+            else
+                TrayIcon.Notify(L.T("Rotiva is up to date"), L.F("You have the latest version ({0}).", Updater.Current.ToString(3)));
+        }
+        catch (Exception ex) when (ex is System.Net.Http.HttpRequestException or TaskCanceledException or System.IO.IOException)
+        {
+            TrayIcon.Notify(L.T("Couldn't check for updates"), L.T("Check your internet connection and try again."));
+        }
     }
 
     /// <summary>Ganti bahasa, lalu bangun ulang isi menu di tempat (sudut kanan bawah tetap).</summary>
