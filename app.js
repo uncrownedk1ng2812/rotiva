@@ -1,8 +1,8 @@
 // Point url at the installer (e.g. GitHub Releases) on every new release.
 const RELEASE = {
-  version: '1.10.2',
+  version: '1.11.0',
   size: '±247 MB',
-  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.10.2/Rotiva-Setup-1.10.2.exe',
+  url: 'https://github.com/uncrownedk1ng2812/rotiva/releases/download/v1.11.0/Rotiva-Setup-1.11.0.exe',
 };
 
 // Releases on GitHub, for the total download count (summed over every release asset).
