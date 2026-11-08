@@ -51,7 +51,7 @@ internal static class ShellMenu
             foreach (string extension in category.Extensions.Concat(AliasesOf(category.Extensions)))
             {
                 // multipleFiles: true supaya "Gabung jadi 1 PDF" dan "ZIP" ikut muncul (menu tidak tahu berapa file dipilih).
-                var targets = FormatCatalog.ForFile("x" + extension, multipleFiles: true).Targets;
+                var targets = FormatCatalog.Leaves(FormatCatalog.ForFile("x" + extension, multipleFiles: true)).ToList();
                 WriteMenu($@"{AssociationsKey}\{extension}\shell\{VerbName}", targets, exe);
             }
         }
@@ -111,5 +111,5 @@ internal static class ShellMenu
 
     // Ekstensi lain yang dinormalisasi ke ekstensi katalog (".jpeg" → ".jpg", dst).
     static IEnumerable<string> AliasesOf(IReadOnlyList<string> extensions) =>
-        new[] { ".jpeg", ".tif", ".htm" }.Where(alias => extensions.Contains(FormatCatalog.Normalize(alias)));
+        FormatCatalog.AliasExtensions.Where(alias => extensions.Contains(FormatCatalog.Normalize(alias)));
 }

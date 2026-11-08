@@ -117,6 +117,9 @@ internal sealed class TrayMenuWindow : Window
         if (Updater.Available is { } update)
             items.Children.Add(UpdateRow(update));
         items.Children.Add(Divider());
+        items.Children.Add(ClipboardRow());
+        items.Children.Add(ActionRow("", L.T("Guide"), GuideWindow.ShowGuide));
+        items.Children.Add(Divider());
         items.Children.Add(ToggleRow("", L.T("Start with Windows"), TrayIcon.IsAutostartEnabled(), TrayIcon.SetAutostart));
         // Versi MSIX: menu klik kanan dari manifest paket, tidak bisa dimatikan dari sini.
         if (!Interop.NativeMethods.IsPackaged)
@@ -149,6 +152,25 @@ internal sealed class TrayMenuWindow : Window
             Margin = new Thickness(12, 6, 12, 4),
         });
         return items;
+    }
+
+    UIElement ClipboardRow()
+    {
+        var shortcut = new TextBlock
+        {
+            Text = Input.ClipboardHotkey.Label,
+            FontFamily = TextFont,
+            FontSize = 11,
+            Foreground = MutedBrush,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        var row = Row("", L.T("Convert clipboard"), shortcut);
+        row.MouseLeftButtonUp += (_, _) =>
+        {
+            CloseMenu();
+            ((App)Application.Current).ConvertClipboard();
+        };
+        return row;
     }
 
     /// <summary>Baris oranye di atas menu selama ada versi baru; klik = jendela detail update.</summary>

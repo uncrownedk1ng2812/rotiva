@@ -20,6 +20,7 @@ The installer also includes:
 | Component | License |
 |---|---|
 | [.NET 8 runtime](https://github.com/dotnet/runtime) (self-contained, inside `Rotiva.exe`) | MIT |
+| [YamlDotNet](https://github.com/aaubry/YamlDotNet) 16.3.0 (inside `Rotiva.exe`, for YAML files) | MIT |
 | Microsoft Visual C++ runtime DLLs (next to ImageMagick and LibreOffice) | [Microsoft Visual C++ Redistributable license](https://learn.microsoft.com/cpp/windows/redistributing-visual-cpp-files) |
 
 Text recognition (OCR) uses the `Windows.Media.Ocr` API that is part of Windows. It is not bundled.

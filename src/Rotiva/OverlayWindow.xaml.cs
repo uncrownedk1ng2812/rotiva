@@ -7,6 +7,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Rotiva.Controls;
 using Rotiva.Conversion;
+using Rotiva.Input;
 using Rotiva.Interop;
 using Rotiva.Localization;
 using Rotiva.Models;
@@ -50,6 +51,8 @@ public partial class OverlayWindow : Window
     bool _clickMode;
     bool _clickArmed;
     bool _clickPressed;
+    // Gambar clipboard yang sedang dibuka di roda; dihapus sesudah dikonversi atau dibatalkan.
+    string? _clipboardFile;
 
     public OverlayWindow()
     {
@@ -130,7 +133,7 @@ public partial class OverlayWindow : Window
         if (_state != OverlayState.Hidden)
             return;
         var items = files.Where(path => File.Exists(path) || Directory.Exists(path)).ToArray();
-        if (items.Length == 0 || FormatCatalog.ForFile(items[0], multipleFiles: items.Length > 1) is not { } category)
+        if (items.Length == 0 || FormatCatalog.ForSelection(items) is not { } category)
             return;
 
         _files = items;
@@ -143,6 +146,47 @@ public partial class OverlayWindow : Window
         _clickArmed = false;
         _clickPressed = false;
         _clickTimer.Start();
+    }
+
+    /// <summary>Buka roda untuk isi clipboard: file yang disalin, atau gambar seperti screenshot.</summary>
+    public void ShowClipboard()
+    {
+        if (_state != OverlayState.Hidden)
+            return;
+
+        IReadOnlyList<string> files;
+        string? temporary;
+        try
+        {
+            files = ClipboardSource.Read(out temporary);
+        }
+        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or IOException
+                                       or UnauthorizedAccessException or NotSupportedException)
+        {
+            TrayIcon.Notify("Rotiva", L.T("Couldn't read the clipboard."));
+            return;
+        }
+        if (files.Count == 0)
+        {
+            TrayIcon.Notify(L.T("Nothing to convert"), L.T("Copy an image or some files first."));
+            return;
+        }
+
+        _clipboardFile = temporary;
+        ShowWheel(files);
+    }
+
+    void DeleteClipboardFile(string? path)
+    {
+        if (path is null)
+            return;
+        try
+        {
+            File.Delete(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+        }
     }
 
     void SetClickMode(bool clickMode)
@@ -180,6 +224,8 @@ public partial class OverlayWindow : Window
         else if (_clickPressed)
         {
             _clickPressed = false;
+            if (fromCenter.Length <= RadialWheel.Size / 2 && Wheel.OpenHighlightedGroup())
+                return;
             if (fromCenter.Length <= RadialWheel.Size / 2 && Wheel.SelectedTarget is { } target)
                 Choose(target);
             else
@@ -213,7 +259,7 @@ public partial class OverlayWindow : Window
         if (_state == OverlayState.Probing)
         {
             if (e.Data.GetData(DataFormats.FileDrop) is string[] { Length: > 0 } files
-                && FormatCatalog.ForFile(files[0], multipleFiles: files.Length > 1) is { } category)
+                && FormatCatalog.ForSelection(files) is { } category)
             {
                 _files = files;
                 _category = category;
@@ -271,17 +317,31 @@ public partial class OverlayWindow : Window
         Wheel.FlashSelected();
         SoundFx.Confirm();
 
+        // Diambil dulu supaya HideOverlay tidak menghapusnya sebelum dikonversi.
+        string? clipboardFile = _clipboardFile;
+        _clipboardFile = null;
         var files = FormatCatalog.FilesFor(target, _category!, _files, ExplorerOrder);
         var area = CurrentMonitorArea();
         await Task.Delay(200);
         CloseWheel();
+        if (target.Action == TargetAction.ZipPassword)
+        {
+            if (PasswordWindow.Ask() is not { } password)
+            {
+                DeleteClipboardFile(clipboardFile);
+                return;
+            }
+            target = target with { Password = password };
+        }
         if (files.Count > 0)
-            Convert(files, target, area);
+            Convert(files, target, area, () => DeleteClipboardFile(clipboardFile));
+        else
+            DeleteClipboardFile(clipboardFile);
     }
 
     /// <summary>Antrekan konversi; progres dan hasilnya tampil sebagai toast di <paramref name="area"/>.</summary>
-    void Convert(IReadOnlyList<string> files, ConvertTarget target, Rect area) =>
-        _conversions.Enqueue(files, target, new ToastReporter(_toast, area));
+    void Convert(IReadOnlyList<string> files, ConvertTarget target, Rect area, Action? finished = null) =>
+        _conversions.Enqueue(files, target, new ToastReporter(_toast, area), finished);
 
     // Urutan nama ala Explorer: "foto 2" sebelum "foto 10".
     static readonly IComparer<string?> ExplorerOrder =
@@ -305,10 +365,27 @@ public partial class OverlayWindow : Window
                     .First(t => t.Action == TargetAction.Zip), area);
             return;
         }
+        if (targetId == FormatCatalog.LockId)
+        {
+            var items = files.Where(path => File.Exists(path) || Directory.Exists(path)).ToList();
+            if (items.Count > 0 && PasswordWindow.Ask() is { } password)
+                Convert(items, FormatCatalog.ForFile(items[0]).Targets
+                    .First(t => t.Action == TargetAction.ZipPassword) with { Password = password }, area);
+            return;
+        }
 
         var existing = files.Where(File.Exists).ToList();
         if (existing.Count == 0)
             return;
+
+        if (targetId == FormatCatalog.SheetId)
+        {
+            var category = FormatCatalog.ForFile(existing[0], multipleFiles: true);
+            var sheet = category.Targets.FirstOrDefault(t => t.Action == TargetAction.ContactSheet);
+            if (sheet is not null)
+                Convert(FormatCatalog.FilesFor(sheet, category, existing, ExplorerOrder), sheet, area);
+            return;
+        }
 
         if (targetId == FormatCatalog.MergeId)
         {
@@ -323,9 +400,9 @@ public partial class OverlayWindow : Window
 
         foreach (var group in existing.GroupBy(file => FormatCatalog.ForFile(file).Name))
         {
-            var target = FormatCatalog.ForFile(group.First()).Targets.FirstOrDefault(t => FormatCatalog.IdOf(t) == targetId);
+            var target = FormatCatalog.Leaves(FormatCatalog.ForFile(group.First())).FirstOrDefault(t => FormatCatalog.IdOf(t) == targetId);
             // Format tujuan sama dengan format asli (misal "Ke PNG" untuk file .png): dilewati.
-            var sameTarget = group.Where(file => FormatCatalog.ForFile(file).Targets.Contains(target)).ToList();
+            var sameTarget = group.Where(file => target is not null && FormatCatalog.Leaves(FormatCatalog.ForFile(file)).Contains(target)).ToList();
             if (target is not null && sameTarget.Count > 0)
                 Convert(sameTarget, target, area);
         }
@@ -373,6 +450,8 @@ public partial class OverlayWindow : Window
     {
         Hide();
         _state = OverlayState.Hidden;
+        DeleteClipboardFile(_clipboardFile);
+        _clipboardFile = null;
     }
 
     void Animate(bool open)

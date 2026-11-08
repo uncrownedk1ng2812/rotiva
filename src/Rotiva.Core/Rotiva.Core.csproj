@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Rotiva.Core.Tests" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" />
     <!-- Terjemahan UI, satu file per bahasa (lihat Localization/L.cs). -->
     <EmbeddedResource Include="Localization\*.json" LogicalName="Rotiva.Localization.%(Filename).json" />
   </ItemGroup>

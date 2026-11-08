@@ -67,6 +67,16 @@ public sealed class ConverterTests : IDisposable
         }
     }
 
+    [Theory]
+    [InlineData("Rahasia 123!", true)]
+    [InlineData("a\"b c'd\\e", true)]
+    [InlineData("pässwörd", false)]
+    [InlineData("", false)]
+    public void ZipPasswordsMustBePlainAscii(string password, bool valid)
+    {
+        Assert.Equal(valid, Converter.IsValidZipPassword(password));
+    }
+
     [Fact]
     public void ExecutableNamesFollowTheOperatingSystem()
     {

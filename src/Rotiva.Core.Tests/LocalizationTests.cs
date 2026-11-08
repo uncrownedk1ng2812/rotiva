@@ -15,7 +15,7 @@ public sealed partial class LocalizationTests
     static readonly HashSet<string> SameEverywhere =
     [
         "Video", "Audio", "Spreadsheet", "PDF", "File", "Folder", "ZIP", "GitHub",
-        "QuickTime", "Matroska", "320 kbps", "Vorbis", "Markdown",
+        "QuickTime", "Matroska", "320 kbps", "Vorbis", "Markdown", "E-book", "Data",
         "Microsoft Word", "Microsoft Excel", "Microsoft PowerPoint", "Excel 97-2003",
         "LibreOffice Writer", "LibreOffice Calc", "LibreOffice Impress",
     ];
@@ -51,7 +51,7 @@ public sealed partial class LocalizationTests
         foreach (var category in FormatCatalog.Categories)
         {
             yield return category.Name;
-            foreach (var target in category.Targets)
+            foreach (var target in category.Targets.Concat(category.Targets.SelectMany(t => t.Children ?? [])).Append(FormatCatalog.Back).Append(FormatCatalog.BurnSubtitles))
             {
                 yield return target.Description;
                 // Nama format (PNG, MP4, ...) tidak diterjemahkan; label aksi (COMPRESS, MERGE, ...) diterjemahkan.

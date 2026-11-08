@@ -41,8 +41,10 @@ internal static class TrayIcon
         };
         if (showWelcome)
         {
+            _balloonClick = GuideWindow.ShowGuide;
             icon.ShowBalloonTip(3000, L.T("Rotiva is running"),
-                L.T("Drag a file, then press Shift to open the conversion wheel."), Forms.ToolTipIcon.None);
+                L.T("Drag a file, then press Shift to open the conversion wheel.") + " " + L.T("Click here for the guide."),
+                Forms.ToolTipIcon.None);
         }
         return icon;
     }

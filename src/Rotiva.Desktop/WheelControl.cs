@@ -80,6 +80,12 @@ sealed class WheelControl : Control, ICustomHitTest
     public WheelControl()
     {
         _timer.Tick += (_, _) => Step();
+        _dwell.Tick += (_, _) =>
+        {
+            _dwell.Stop();
+            if (Highlighted is { Action: TargetAction.Group })
+                OpenHighlightedGroup();
+        };
         Focusable = true;
     }
 
@@ -92,7 +98,14 @@ sealed class WheelControl : Control, ICustomHitTest
     /// <summary>Klik di tengah atau di slot kosong.</summary>
     public event Action? Cancelled;
 
-    public ConvertTarget? Selected => _selected >= 0 ? _targets[_selected] : null;
+    /// <summary>Pilihan yang akan dikerjakan; null untuk irisan yang hanya membuka halaman (EDIT, BACK).</summary>
+    public ConvertTarget? Selected => Highlighted is { Action: not TargetAction.Group } target ? target : null;
+
+    ConvertTarget? Highlighted => _selected >= 0 ? _targets[_selected] : null;
+
+    // Kursor berhenti sebentar di irisan EDIT/BACK: halamannya berganti (cara ini jalan juga selama drag).
+    readonly DispatcherTimer _dwell = new() { Interval = TimeSpan.FromMilliseconds(200) };
+    IReadOnlyList<ConvertTarget> _rootTargets = [];
 
     /// <summary>Drag mode: pilihan dibuat dengan melepas file, bukan dengan klik.</summary>
     public bool ChooseOnRelease { get; set; }
@@ -122,9 +135,18 @@ sealed class WheelControl : Control, ICustomHitTest
     public void Load(FileCategory category, IReadOnlyList<ConvertTarget> targets, double scale)
     {
         _category = category;
-        _targets = targets;
+        _rootTargets = targets;
         _scale = scale;
         Width = Height = DesignSize * scale;
+        _inCenter = true;
+        ShowPage(targets);
+        Animate();
+    }
+
+    void ShowPage(IReadOnlyList<ConvertTarget> targets)
+    {
+        _dwell.Stop();
+        _targets = targets;
 
         // Pilihan sedikit: sisanya slot kosong, supaya roda tidak jadi satu cincin besar.
         int slots = Math.Max(targets.Count, MinSlots);
@@ -134,8 +156,27 @@ sealed class WheelControl : Control, ICustomHitTest
         _lit = new double[slots];
         _open = 0;
         _selected = -1;
-        _inCenter = true;
         _selectorOpacity = 0;
+    }
+
+    void OpenHighlightedGroup()
+    {
+        var group = Highlighted!;
+        double pointer = _selected * 360.0 / SlotCount;
+        int selected;
+        if (group.Children is null)
+        {
+            selected = _rootTargets.ToList().FindIndex(t => t.Action == TargetAction.Group);
+            ShowPage(_rootTargets);
+        }
+        else
+        {
+            int count = group.Children.Count + 1;
+            selected = (int)Math.Round(pointer / (360.0 / count)) % count;
+            ShowPage(FormatCatalog.PageOf(group, selected));
+        }
+        // Tanpa memulai jeda lagi: kursor masih diam di sini, jangan sampai halaman bolak-balik sendiri.
+        Select(selected, startDwell: false);
         Animate();
     }
 
@@ -170,19 +211,24 @@ sealed class WheelControl : Control, ICustomHitTest
 
     public void ChooseSelected()
     {
-        if (Selected is { } target)
+        if (Highlighted is { Action: TargetAction.Group })
+            OpenHighlightedGroup();
+        else if (Selected is { } target)
             TargetChosen?.Invoke(target);
         else
             Cancelled?.Invoke();
     }
 
-    void Select(int index)
+    void Select(int index, bool startDwell = true)
     {
         if (index == _selected)
         {
             InvalidateVisual();
             return;
         }
+        _dwell.Stop();
+        if (startDwell && index >= 0 && _targets[index].Action == TargetAction.Group)
+            _dwell.Start();
         if (index >= 0 && _selected < 0)
             _selectorAngle = index * 360.0 / SlotCount;
         _selected = index;

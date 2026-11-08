@@ -51,6 +51,12 @@ static class LinuxIntegration
         [".zip"] = ["application/zip"], [".rar"] = ["application/vnd.rar", "application/x-rar"],
         [".7z"] = ["application/x-7z-compressed"], [".tar"] = ["application/x-tar"], [".gz"] = ["application/gzip"],
         [".tgz"] = ["application/x-compressed-tar"], [".bz2"] = ["application/x-bzip2"], [".xz"] = ["application/x-xz"],
+        [".psd"] = ["image/vnd.adobe.photoshop"], [".svg"] = ["image/svg+xml"], [".jxl"] = ["image/jxl"], [".dng"] = ["image/x-adobe-dng"],
+        [".cr2"] = ["image/x-canon-cr2"], [".nef"] = ["image/x-nikon-nef"], [".arw"] = ["image/x-sony-arw"],
+        [".mpeg"] = ["video/mpeg"], [".mpg"] = ["video/mpeg"], [".ogv"] = ["video/ogg"],
+        [".epub"] = ["application/epub+zip"], [".fb2"] = ["application/x-fictionbook+xml"],
+        [".srt"] = ["application/x-subrip"], [".vtt"] = ["text/vtt"], [".ass"] = ["text/x-ssa"], [".ssa"] = ["text/x-ssa"],
+        [".json"] = ["application/json"], [".yaml"] = ["application/yaml", "application/x-yaml"],
     };
 
     /// <summary>Program yang dijalankan file manager: AppImage-nya sendiri kalau dari AppImage.</summary>

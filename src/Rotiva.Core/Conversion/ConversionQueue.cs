@@ -16,12 +16,15 @@ public sealed class ConversionQueue
     /// Dipanggil di UI thread: <see cref="Progress{T}"/> dibuat di sini, jadi laporan progres dan
     /// hasil kembali ke UI thread lewat SynchronizationContext-nya.
     /// </summary>
-    public async void Enqueue(IReadOnlyList<string> files, ConvertTarget target, IConversionReporter reporter)
+    /// <param name="finished">Dipanggil sesudah konversi selesai, berhasil atau tidak.</param>
+    public async void Enqueue(IReadOnlyList<string> files, ConvertTarget target, IConversionReporter reporter,
+        Action? finished = null)
     {
         await _gate.WaitAsync();
         try
         {
-            if (target.Action is TargetAction.MergePdf or TargetAction.Zip)
+            if (target.Action is TargetAction.MergePdf or TargetAction.Zip or TargetAction.BurnSubtitles
+                or TargetAction.ZipPassword or TargetAction.ContactSheet)
             {
                 await CombineAsync(files, target, reporter);
                 return;
@@ -38,6 +41,7 @@ public sealed class ConversionQueue
                     TargetAction.Compress => L.T("COMPRESSING"),
                     TargetAction.ExtractText => L.T("READING TEXT"),
                     TargetAction.Extract => L.T("EXTRACTING"),
+                    TargetAction.Edit => L.T("EDITING"),
                     _ => L.T("CONVERTING"),
                 };
                 string header = files.Count > 1 ? $"{verb} {i + 1}/{files.Count}" : verb;
@@ -64,6 +68,8 @@ public sealed class ConversionQueue
                     ? L.F("Saved as {0}", Path.GetFileName(lastOutput))
                     : target.Action == TargetAction.Compress
                         ? L.F("{0} files compressed", files.Count)
+                    : target.Action == TargetAction.Edit
+                        ? L.F("{0} files edited", files.Count)
                         : L.F("{0} files converted to {1}", files.Count, L.T(target.Label));
                 reporter.ShowResult(success: true, L.T("DONE"), message, revealPath: lastOutput);
             }
@@ -76,6 +82,7 @@ public sealed class ConversionQueue
         finally
         {
             _gate.Release();
+            finished?.Invoke();
         }
     }
 
@@ -94,16 +101,28 @@ public sealed class ConversionQueue
     /// <summary>Semua file jadi satu hasil: gabung PDF atau ZIP.</summary>
     static async Task CombineAsync(IReadOnlyList<string> files, ConvertTarget target, IConversionReporter reporter)
     {
-        bool zip = target.Action == TargetAction.Zip;
+        bool merge = target.Action == TargetAction.MergePdf;
+        string header = target.Action switch
+        {
+            TargetAction.BurnSubtitles => L.T("ADDING SUBTITLES"),
+            TargetAction.Zip or TargetAction.ZipPassword => L.T("ZIPPING"),
+            TargetAction.ContactSheet => L.T("MAKING SHEET"),
+            _ => L.T("MERGING"),
+        };
         string items = files.Count == 1 ? Path.GetFileName(files[0].TrimEnd('\\', '/')) : L.F("{0} items", files.Count);
-        reporter.ShowProgress(zip ? L.T("ZIPPING") : L.T("MERGING"), $"{items}   →   {L.T(target.Label)}");
+        reporter.ShowProgress(header, $"{items}   →   {L.T(target.Label)}");
         var progress = new Progress<double?>(reporter.SetProgress);
         try
         {
-            string output = await Task.Run(() => zip
-                ? Converter.ZipAsync(files, progress)
-                : Converter.MergeToPdfAsync(files, progress));
-            string message = zip
+            string output = await Task.Run(() => target.Action switch
+            {
+                TargetAction.BurnSubtitles => Converter.BurnSubtitlesAsync(files, progress),
+                TargetAction.Zip => Converter.ZipAsync(files, progress),
+                TargetAction.ZipPassword => Converter.ZipWithPasswordAsync(files, target.Password!),
+                TargetAction.ContactSheet => Converter.ContactSheetAsync(files),
+                _ => Converter.MergeToPdfAsync(files, progress),
+            });
+            string message = !merge
                 ? L.F("Saved as {0}", Path.GetFileName(output))
                 : L.F("{0} files merged into {1}", files.Count, Path.GetFileName(output));
             reporter.ShowResult(success: true, L.T("DONE"), message, revealPath: output);

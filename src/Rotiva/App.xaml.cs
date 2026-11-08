@@ -12,6 +12,11 @@ public partial class App : Application
     Mutex? _instanceMutex;
     DragShiftDetector? _detector;
     System.Windows.Forms.NotifyIcon? _trayIcon;
+    OverlayWindow? _overlay;
+    ClipboardHotkey? _clipboardHotkey;
+
+    /// <summary>Dipanggil dari menu tray.</summary>
+    internal void ConvertClipboard() => _overlay?.ShowClipboard();
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -64,6 +69,8 @@ public partial class App : Application
 
         Converter.TextRecognizer = new WindowsTextRecognizer();
         var overlay = new OverlayWindow();
+        _overlay = overlay;
+        _clipboardHotkey = new ClipboardHotkey(overlay.ShowClipboard);
         _detector = new DragShiftDetector();
         _detector.ShiftPressedDuringDrag += overlay.BeginProbe;
         _detector.DragEnded += overlay.OnGlobalDragEnded;
@@ -121,6 +128,7 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        _clipboardHotkey?.Dispose();
         _detector?.Dispose();
         if (_trayIcon is not null)
         {

@@ -58,7 +58,10 @@ public sealed class RadialWheel : Canvas
     readonly ScaleTransform _checkScale = new(1, 1);
     readonly Ellipse _confirmRing;
     readonly ScaleTransform _confirmRingScale = new(1, 1);
+    // Kursor berhenti sebentar di irisan EDIT/BACK: halamannya berganti (cara ini jalan juga selama drag).
+    readonly System.Windows.Threading.DispatcherTimer _dwell = new() { Interval = TimeSpan.FromMilliseconds(200) };
     FileCategory? _category;
+    IReadOnlyList<ConvertTarget> _rootTargets = [];
     int _selectedIndex = -1;
     double _selectorAngle;
     bool _selectorShown;
@@ -68,6 +71,7 @@ public sealed class RadialWheel : Canvas
 
     public RadialWheel()
     {
+        _dwell.Tick += (_, _) => OpenHighlightedGroup();
         Width = Height = Size;
         RenderTransformOrigin = new Point(0.5, 0.5);
         RenderTransform = new ScaleTransform(1, 1);
@@ -257,17 +261,57 @@ public sealed class RadialWheel : Canvas
     /// <summary>Drag mode (default): pilihan dibuat dengan melepas file; false = dengan klik.</summary>
     public bool ChooseOnRelease { get; set; } = true;
 
-    public ConvertTarget? SelectedTarget =>
-        _category is null || _selectedIndex < 0 ? null : _category.Targets[_selectedIndex];
+    /// <summary>Pilihan yang akan dikerjakan; null untuk irisan yang hanya membuka halaman (EDIT, BACK).</summary>
+    public ConvertTarget? SelectedTarget => Highlighted is { Action: not TargetAction.Group } target ? target : null;
+
+    ConvertTarget? Highlighted => _category is null || _selectedIndex < 0 ? null : _category.Targets[_selectedIndex];
 
     public void Load(FileCategory category)
     {
-        _segmentLayer.Children.Clear();
-        _segments.Clear();
-        _selectedIndex = -1;
         // Roda selalu dibuka dengan titik tengah di kursor.
         _inCenter = true;
         _category = category;
+        _rootTargets = category.Targets;
+        _dwell.Stop();
+        BuildSegments();
+    }
+
+    /// <summary>Buka halaman dari irisan yang disorot (EDIT atau BACK). False kalau yang disorot bukan irisan seperti itu.</summary>
+    public bool OpenHighlightedGroup()
+    {
+        if (Highlighted is not { Action: TargetAction.Group } group)
+            return false;
+        _dwell.Stop();
+
+        double span = 360.0 / _segments.Count;
+        double pointer = _selectedIndex * span;
+        IReadOnlyList<ConvertTarget> page;
+        int selected;
+        if (group.Children is null)
+        {
+            page = _rootTargets;
+            selected = page.ToList().FindIndex(t => t.Action == TargetAction.Group);
+        }
+        else
+        {
+            selected = (int)Math.Round(pointer / (360.0 / (group.Children.Count + 1))) % (group.Children.Count + 1);
+            page = FormatCatalog.PageOf(group, selected);
+        }
+
+        _category = _category! with { Targets = page };
+        BuildSegments();
+        // Tanpa memulai jeda lagi: kursor masih diam di sini, jangan sampai halaman bolak-balik sendiri.
+        Select(selected, startDwell: false);
+        PlayEntrance();
+        return true;
+    }
+
+    void BuildSegments()
+    {
+        var category = _category!;
+        _segmentLayer.Children.Clear();
+        _segments.Clear();
+        _selectedIndex = -1;
 
         // Pilihan sedikit (misal folder: hanya ZIP): sisanya slot kosong seperti di GTA V,
         // supaya roda tidak jadi satu cincin besar.
@@ -370,12 +414,15 @@ public sealed class RadialWheel : Canvas
         _confirmRing.BeginAnimation(OpacityProperty, new DoubleAnimation(0.9, 0, burst));
     }
 
-    void Select(int index)
+    void Select(int index, bool startDwell = true)
     {
         if (index >= _category!.Targets.Count)
             index = -1; // slot kosong: tidak ada pilihan, drop dibatalkan
         if (index == _selectedIndex)
             return;
+        _dwell.Stop();
+        if (startDwell && index >= 0 && _category.Targets[index].Action == TargetAction.Group)
+            _dwell.Start();
         if (_selectedIndex >= 0)
             _segments[_selectedIndex].SetHighlighted(false);
         _selectedIndex = index;
@@ -426,7 +473,7 @@ public sealed class RadialWheel : Canvas
         string extension = System.IO.Path.GetExtension(_category.FileName).TrimStart('.');
         _sourceBadge.Text = (extension.Length > 0 ? extension : L.T(_category.Name)).ToUpperInvariant();
 
-        if (SelectedTarget is { } target)
+        if (Highlighted is { } target)
         {
             _centerTitle.Text = L.T(target.Label);
             _centerDescription.Text = L.T(target.Description);

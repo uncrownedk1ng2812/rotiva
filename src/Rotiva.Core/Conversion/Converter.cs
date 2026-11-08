@@ -26,8 +26,12 @@ public static partial class Converter
     // Batas waktu untuk gambar & dokumen. FFmpeg tidak dibatasi karena video panjang memang lama.
     static readonly TimeSpan ToolTimeout = TimeSpan.FromMinutes(3);
 
-    // Format gambar yang hasil kompresnya disimpan sebagai JPG (tidak ada mode lossy yang berguna).
-    static readonly string[] CompressToJpg = [".bmp", ".tiff", ".heic", ".heif", ".jfif"];
+    // Format gambar yang hasil kompresnya tetap formatnya sendiri; sisanya (BMP, HEIC, RAW, ...) jadi JPG.
+    static readonly string[] CompressKeepsFormat = [".png", ".jpg", ".webp", ".avif", ".gif", ".ico"];
+
+    // Format yang bisa ditulis lagi setelah diedit. HEIC dan RAW tidak bisa ditulis, jadi JPG; sisanya PNG.
+    static readonly string[] EditKeepsFormat =
+        [".png", ".jpg", ".webp", ".avif", ".bmp", ".tiff", ".gif", ".ico", ".jfif", ".jxl", ".tga"];
 
     public static async Task<string> ConvertAsync(string source, ConvertTarget target, IProgress<double?> progress)
     {
@@ -40,6 +44,10 @@ public static partial class Converter
             return await CompressAsync(source, category.Engine, progress);
         if (target.Action == TargetAction.ExtractText)
             return await ExtractTextAsync(source, category.Engine, progress);
+        if (target.Action == TargetAction.Edit)
+            return category.Engine == ConversionEngine.FFmpeg
+                ? await EditMediaAsync(source, category.Name == "Video", target.Edit, progress)
+                : await EditImageAsync(source, target.Edit);
 
         // PDF → gambar / PDF per halaman: semua halaman, lewat Ghostscript (LibreOffice hanya halaman pertama).
         if (FormatCatalog.Normalize(Path.GetExtension(source)) == ".pdf"
@@ -85,8 +93,198 @@ public static partial class Converter
     {
         ConversionEngine.ImageMagick => ConvertImageAsync(source, extension, output),
         ConversionEngine.FFmpeg => ConvertMediaAsync(source, extension, output, progress),
+        ConversionEngine.Data => Task.Run(() => DataConverter.Convert(source, extension, output)),
         _ => ConvertDocumentAsync(source, extension, output),
     };
+
+    /// <summary>
+    /// Putar, balik, atau jadikan abu-abu: "nama (rotated).ext" di sebelah file asli, yang tidak disentuh.
+    /// GIF animasi tetap animasi.
+    /// </summary>
+    static async Task<string> EditImageAsync(string source, ImageEdit edit)
+    {
+        string extension = FormatCatalog.Normalize(Path.GetExtension(source));
+        string outputExtension = EditKeepsFormat.Contains(extension) ? extension
+            : extension is ".heic" or ".heif" || FormatCatalog.RawExtensions.Contains(extension) ? ".jpg"
+            : ".png";
+        var (suffix, operation) = edit switch
+        {
+            ImageEdit.RotateRight => (" (rotated)", new[] { "-rotate", "90" }),
+            ImageEdit.RotateLeft => (" (rotated)", ["-rotate", "-90"]),
+            ImageEdit.FlipHorizontal => (" (flipped)", ["-flop"]),
+            ImageEdit.FlipVertical => (" (flipped)", ["-flip"]),
+            _ => (" (grayscale)", ["-colorspace", "Gray"]),
+        };
+
+        string output = UniqueOutputPath(source, outputExtension, suffix);
+        bool animated = extension == ".gif";
+        var args = InputArgs(source, firstFrameOnly: !animated);
+        args.Add("-auto-orient");
+        if (animated)
+            args.Add("-coalesce");
+        args.AddRange(operation);
+        AddImageFormatOptions(args, outputExtension);
+        if (animated)
+            args.AddRange(["-layers", "Optimize"]);
+        args.Add(output);
+        string magick = Magick;
+        await ProduceAsync(output, () => RunMagickAsync(magick, args));
+        return output;
+    }
+
+    /// <summary>
+    /// Edit video/audio di sebelah file asli. Video diencode ulang, jadi formatnya hanya dipertahankan
+    /// kalau encoder-nya ada; selain itu jadi MP4 (video) atau M4A (audio).
+    /// </summary>
+    static async Task<string> EditMediaAsync(string source, bool video, ImageEdit edit, IProgress<double?> progress)
+    {
+        if (edit == ImageEdit.Cover)
+            return await ExtractCoverAsync(source);
+        if (edit == ImageEdit.Thumbnails)
+            return await VideoThumbnailsAsync(source);
+        if (edit == ImageEdit.Reverse && video
+            && await MediaDurationAsync(source) > MaxReverseVideoSeconds)
+            throw new ConversionException(L.F("Only videos up to {0} seconds can be reversed.", MaxReverseVideoSeconds));
+
+        string extension = FormatCatalog.Normalize(Path.GetExtension(source));
+        string[] keeps = video
+            ? [".mp4", ".mov", ".webm", ".avi"]
+            : [".mp3", ".wav", ".flac", ".ogg", ".opus", ".m4a", ".aac", ".aiff"];
+        string outputExtension = keeps.Contains(extension) ? extension : video ? ".mp4" : ".m4a";
+        var (suffix, filters) = edit switch
+        {
+            ImageEdit.RotateRight => (" (rotated)", new[] { "-vf", "transpose=1" }),
+            ImageEdit.RotateLeft => (" (rotated)", ["-vf", "transpose=2"]),
+            ImageEdit.FlipHorizontal => (" (flipped)", ["-vf", "hflip"]),
+            ImageEdit.FlipVertical => (" (flipped)", ["-vf", "vflip"]),
+            ImageEdit.Reverse when video => (" (reversed)", ["-vf", "reverse", "-af", "areverse"]),
+            ImageEdit.Reverse => (" (reversed)", ["-af", "areverse"]),
+            // loudnorm menaikkan sample rate ke 192 kHz di dalam filter; kembalikan ke nilai yang umum.
+            _ => (" (normalized)", ["-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", "48000"]),
+        };
+
+        string output = UniqueOutputPath(source, outputExtension, suffix);
+        await ProduceAsync(output, () => ConvertMediaAsync(source, outputExtension, output, progress, extraArgs: filters));
+        return output;
+    }
+
+    /// <summary>
+    /// Tempel subtitle ke gambar video: "nama (subtitled).mp4". Subtitle disalin ke folder sementara dan
+    /// FFmpeg dijalankan di sana, supaya path Windows tidak perlu di-escape untuk sintaks filter.
+    /// </summary>
+    public static async Task<string> BurnSubtitlesAsync(IReadOnlyList<string> files, IProgress<double?> progress)
+    {
+        var (video, subtitle) = FormatCatalog.SubtitlePair(files)
+            ?? throw new ConversionException(L.T("This file type is not supported."));
+        string output = UniqueOutputPath(video, ".mp4", " (subtitled)");
+        await ProduceAsync(output, () => WithTempDirectoryAsync(async tempDir =>
+        {
+            string name = "subtitle" + Path.GetExtension(subtitle).ToLowerInvariant();
+            File.Copy(subtitle, Path.Combine(tempDir, name));
+            string filter = "subtitles=" + name + (SniffCsv(subtitle).Utf8 ? "" : ":charenc=CP1252");
+            await ConvertMediaAsync(video, ".mp4", output, progress, extraArgs: ["-vf", filter], workingDirectory: tempDir);
+        }));
+        return output;
+    }
+
+    // Filter reverse menahan semua frame di RAM (1080p: sekitar 90 MB per detik).
+    const int MaxReverseVideoSeconds = 30;
+
+    static async Task<double> MediaDurationAsync(string source)
+    {
+        string ffmpeg = FFmpegPath;
+        double seconds = 0;
+        try
+        {
+            // Tanpa output FFmpeg selalu keluar dengan error; yang dibutuhkan hanya info durasi di stderr.
+            await RunAsync(ffmpeg, ["-hide_banner", "-nostdin", "-i", source], onStderr: line =>
+            {
+                if (seconds == 0 && DurationPattern().Match(line) is { Success: true } match)
+                    seconds = TimeSpan.ParseExact(match.Groups[1].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture).TotalSeconds;
+            }, timeout: ToolTimeout);
+        }
+        catch (ConversionException)
+        {
+        }
+        return seconds;
+    }
+
+    /// <summary>16 cuplikan merata dari video dalam grid 4x4: "nama (thumbnails).jpg".</summary>
+    static async Task<string> VideoThumbnailsAsync(string source)
+    {
+        double seconds = await MediaDurationAsync(source);
+        if (seconds <= 0)
+            throw new ConversionException(L.T("Couldn't read the length of this video."));
+        string ffmpeg = FFmpegPath;
+        string rate = (16 / seconds).ToString("0.######", CultureInfo.InvariantCulture);
+        string output = UniqueOutputPath(source, ".jpg", " (thumbnails)");
+        await ProduceAsync(output, () => RunAsync(ffmpeg,
+        [
+            "-hide_banner", "-nostdin", "-y", "-i", source, "-an", "-vf",
+            $"fps={rate},scale=480:-2,tile=4x4:padding=4:margin=4:color=white", "-frames:v", "1", "-q:v", "3", output,
+        ]));
+        return output;
+    }
+
+    /// <summary>Gambar album yang tertanam di file audio, disimpan sebagai "nama (cover).jpg".</summary>
+    static async Task<string> ExtractCoverAsync(string source)
+    {
+        string ffmpeg = FFmpegPath;
+        string output = UniqueOutputPath(source, ".jpg", " (cover)");
+        await ProduceAsync(output, async () =>
+        {
+            try
+            {
+                await RunAsync(ffmpeg, ["-hide_banner", "-nostdin", "-y", "-i", source, "-map", "0:v:0", "-frames:v", "1", "-q:v", "2", output],
+                    timeout: ToolTimeout);
+            }
+            catch (ConversionException ex) when (ex.Message.Contains("matches no streams", StringComparison.OrdinalIgnoreCase)
+                                                 || ex.Message.Contains("does not contain any stream", StringComparison.OrdinalIgnoreCase)
+                                                 || !File.Exists(output))
+            {
+                throw new ConversionException(L.T("This file has no album art."));
+            }
+        });
+        return output;
+    }
+
+    static string FFmpegPath => ToolLocator.FFmpeg
+        ?? throw new ConversionException(L.T("FFmpeg is not installed (winget install Gyan.FFmpeg)."));
+
+    /// <summary>
+    /// Awal perintah ImageMagick. SVG dirender 3x (ukuran bawaannya sering hanya ikon kecil) dengan latar
+    /// transparan. [0] = frame/halaman pertama saja, supaya GIF animasi tidak pecah jadi banyak file.
+    /// </summary>
+    static List<string> InputArgs(string source, bool firstFrameOnly)
+    {
+        var args = new List<string>();
+        if (FormatCatalog.Normalize(Path.GetExtension(source)) is ".svg" or ".svgz")
+            args.AddRange(["-background", "none", "-density", "288"]);
+        args.Add(firstFrameOnly ? source + "[0]" : source);
+        return args;
+    }
+
+    static void AddImageFormatOptions(List<string> args, string extension)
+    {
+        switch (extension)
+        {
+            case ".jpg" or ".jfif":
+                args.AddRange(["-background", "white", "-alpha", "remove", "-alpha", "off", "-quality", "92"]);
+                break;
+            case ".bmp":
+                args.AddRange(["-background", "white", "-alpha", "remove", "-alpha", "off"]);
+                break;
+            case ".webp":
+                args.AddRange(["-quality", "90"]);
+                break;
+            case ".avif":
+                args.AddRange(["-quality", "80"]);
+                break;
+            case ".ico":
+                args.AddRange(["-background", "none", "-define", "icon:auto-resize=256,128,64,48,32,16"]);
+                break;
+        }
+    }
 
     /// <summary>Jalankan <paramref name="work"/>; kalau gagal atau tidak menghasilkan file, sisa output dihapus.</summary>
     static async Task ProduceAsync(string output, Func<Task> work)
@@ -114,7 +312,7 @@ public static partial class Converter
         string outputExtension = engine switch
         {
             ConversionEngine.FFmpeg => ".mp4",
-            _ when CompressToJpg.Contains(extension) => ".jpg",
+            ConversionEngine.ImageMagick when !CompressKeepsFormat.Contains(extension) => ".jpg",
             _ => extension,
         };
         string output = UniqueOutputPath(source, outputExtension, " (compressed)");
@@ -350,6 +548,52 @@ public static partial class Converter
     }
 
     /// <summary>
+    /// ZIP berpassword (AES-256) lewat 7-Zip, dengan nama seperti <see cref="ZipAsync"/>. Password dikirim
+    /// lewat stdin, bukan argumen, supaya tidak terlihat di daftar proses.
+    /// </summary>
+    public static async Task<string> ZipWithPasswordAsync(IReadOnlyList<string> sources, string password)
+    {
+        if (!IsValidZipPassword(password))
+            throw new ConversionException(L.T("Use only English letters, numbers and common symbols."));
+        string sevenZip = ToolLocator.SevenZip
+            ?? throw new ConversionException(L.T("7-Zip is not installed (winget install 7zip.7zip)."));
+        var items = sources.Select(source => source.TrimEnd('\\', '/')).ToList();
+        string directory = Path.GetDirectoryName(items[0])
+            ?? throw new ConversionException(L.T("A whole drive can't be zipped; pick a folder inside it."));
+        string name = items.Count > 1 ? "Archive"
+            : Directory.Exists(items[0]) ? Path.GetFileName(items[0])
+            : Path.GetFileNameWithoutExtension(items[0]);
+        string output = UniquePath(directory, name, ".zip");
+        await ProduceAsync(output, () => RunAsync(sevenZip,
+            ["a", "-tzip", "-mem=AES256", "-p", "-bso0", "-bsp0", output, .. items],
+            timeout: TimeSpan.FromMinutes(30), standardInput: $"{password}\n{password}\n"));
+        return output;
+    }
+
+    /// <summary>7-Zip menolak password ZIP di luar ASCII yang bisa dicetak ("The parameter is incorrect").</summary>
+    public static bool IsValidZipPassword(string password) =>
+        password.Length > 0 && password.All(c => c is >= ' ' and <= '~');
+
+    /// <summary>Semua gambar dalam satu grid, "Contact sheet.jpg" di folder gambar pertama.</summary>
+    public static async Task<string> ContactSheetAsync(IReadOnlyList<string> images)
+    {
+        string magick = Magick;
+        int columns = (int)Math.Ceiling(Math.Sqrt(images.Count));
+        string output = UniquePath(Path.GetDirectoryName(images[0])!, "Contact sheet", ".jpg");
+        // ImageMagick 6 (sebagian distro Linux) punya program montage sendiri di samping convert.
+        bool legacy = Path.GetFileNameWithoutExtension(magick) == "convert";
+        string exe = legacy ? Path.Combine(Path.GetDirectoryName(magick)!, "montage") : magick;
+        string[] command = legacy ? [] : ["montage"];
+        await ProduceAsync(output, () => RunAsync(exe,
+        [
+            .. command, "-auto-orient", .. images.Select(image => image + "[0]"),
+            "-geometry", "480x480>+6+6", "-tile", $"{columns}x", "-background", "white", "-quality", "90", output,
+        ], environment: legacy ? null : new() { ["MAGICK_HOME"] = Path.GetDirectoryName(magick)! },
+           timeout: TimeSpan.FromMinutes(10)));
+        return output;
+    }
+
+    /// <summary>
     /// Buka arsip (.zip, .rar, .7z, .tar.gz, ...) ke folder baru bernama sama di sebelahnya, lewat 7-Zip.
     /// </summary>
     static async Task<string> ExtractArchiveAsync(string source)
@@ -431,7 +675,8 @@ public static partial class Converter
 
         // Sisi terpanjang maks. 2560 px (">" = hanya diperkecil, tidak pernah diperbesar).
         // Metadata EXIF (termasuk lokasi GPS) dibuang, profil warna ICC dipertahankan.
-        var args = new List<string> { animated ? source : source + "[0]", "-auto-orient" };
+        var args = InputArgs(source, firstFrameOnly: !animated);
+        args.Add("-auto-orient");
         if (animated)
             args.Add("-coalesce");
         args.AddRange(["-resize", "2560x2560>", "+profile", "!icc,*"]);
@@ -461,27 +706,9 @@ public static partial class Converter
     static Task ConvertImageAsync(string source, string extension, string output)
     {
         string magick = Magick;
-
-        // [0] = frame/halaman pertama saja, supaya GIF animasi tidak pecah jadi banyak file.
-        var args = new List<string> { source + "[0]", "-auto-orient" };
-        switch (extension)
-        {
-            case ".jpg":
-                args.AddRange(["-background", "white", "-alpha", "remove", "-alpha", "off", "-quality", "92"]);
-                break;
-            case ".bmp":
-                args.AddRange(["-background", "white", "-alpha", "remove", "-alpha", "off"]);
-                break;
-            case ".webp":
-                args.AddRange(["-quality", "90"]);
-                break;
-            case ".avif":
-                args.AddRange(["-quality", "80"]);
-                break;
-            case ".ico":
-                args.AddRange(["-background", "none", "-define", "icon:auto-resize=256,128,64,48,32,16"]);
-                break;
-        }
+        var args = InputArgs(source, firstFrameOnly: true);
+        args.Add("-auto-orient");
+        AddImageFormatOptions(args, extension);
         args.Add(output);
         return RunMagickAsync(magick, args);
     }
@@ -511,10 +738,9 @@ public static partial class Converter
     }
 
     static async Task ConvertMediaAsync(string source, string extension, string output, IProgress<double?> progress,
-        bool compress = false)
+        bool compress = false, string[]? extraArgs = null, string? workingDirectory = null)
     {
-        string ffmpeg = ToolLocator.FFmpeg
-            ?? throw new ConversionException(L.T("FFmpeg is not installed (winget install Gyan.FFmpeg)."));
+        string ffmpeg = FFmpegPath;
 
         string[] codecArgs = compress
             // Sisi terpendek maks. 1080 px (portrait maupun landscape), CRF 28 ≈ kualitas video medsos.
@@ -535,15 +761,21 @@ public static partial class Converter
             ".flac" => ["-vn", "-c:a", "flac"],
             ".ogg" => ["-vn", "-c:a", "libvorbis", "-q:a", "6"],
             ".opus" => ["-vn", "-c:a", "libopus", "-b:a", "160k"],
-            ".m4a" => ["-vn", "-c:a", "aac", "-b:a", "256k"],
+            ".m4a" or ".aac" => ["-vn", "-c:a", "aac", "-b:a", "256k"],
+            ".aiff" => ["-vn", "-c:a", "pcm_s16be"],
+            ".srt" or ".vtt" or ".ass" or ".lrc" => [],
             _ => throw new ConversionException(L.F("The {0} format is not supported yet.", extension)),
         };
 
         // Progres dihitung dari durasi total (stderr) dan posisi saat ini (-progress ke stdout).
         double totalSeconds = 0;
         progress.Report(null);
+        // Subtitle lama sering ANSI; tanpa ini FFmpeg berhenti di huruf yang bukan UTF-8.
+        string[] inputArgs = FormatCatalog.ForFile(source).Name == "Subtitle" && !SniffCsv(source).Utf8
+            ? ["-sub_charenc", "CP1252"]
+            : [];
         await RunAsync(ffmpeg,
-            ["-hide_banner", "-nostdin", "-y", "-i", source, .. codecArgs, "-progress", "pipe:1", "-nostats", output],
+            ["-hide_banner", "-nostdin", "-y", .. inputArgs, "-i", source, .. codecArgs, .. extraArgs ?? [], "-progress", "pipe:1", "-nostats", output],
             onStdout: line =>
             {
                 if (totalSeconds > 0 && line.StartsWith("out_time_us=", StringComparison.Ordinal)
@@ -556,19 +788,34 @@ public static partial class Converter
             {
                 if (totalSeconds == 0 && DurationPattern().Match(line) is { Success: true } match)
                     totalSeconds = TimeSpan.ParseExact(match.Groups[1].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture).TotalSeconds;
-            });
+            },
+            workingDirectory: workingDirectory);
     }
 
     static async Task ConvertDocumentAsync(string source, string extension, string output)
     {
         string sourceExtension = FormatCatalog.Normalize(Path.GetExtension(source));
 
+        // Spreadsheet → JSON: CSV dibaca langsung; Excel/ODS lewat CSV dari LibreOffice (sheet pertama).
+        if (extension == ".json")
+        {
+            if (sourceExtension is ".csv" or ".tsv")
+                await Task.Run(() => DataConverter.Convert(source, extension, output));
+            else
+                await WithTempFileAsync(".csv", async csv =>
+                {
+                    await RunLibreOfficeAsync(source, "csv:Text - txt - csv (StarCalc):44,34,76,1", csv);
+                    DataConverter.Convert(csv, extension, output);
+                });
+            return;
+        }
+
         // Pembagian kerja:
         // - LibreOffice tidak bisa membaca/menulis Markdown, dan ekspor TXT-nya macet (bug), jadi
         //   tujuan .txt/.md dan sumber .md ditangani Pandoc.
         // - Pandoc tidak bisa membaca .doc lama, jadi .doc diubah dulu ke .docx oleh LibreOffice.
         // - Pandoc tidak bisa membuat PDF tanpa LaTeX, jadi Markdown → PDF lewat .docx lalu LibreOffice.
-        bool viaPandoc = extension is ".txt" or ".md" || sourceExtension == ".md";
+        bool viaPandoc = extension is ".txt" or ".md" or ".epub" || sourceExtension is ".md" or ".epub" or ".fb2";
         if (!viaPandoc)
         {
             // CSV: pisah koma, tanda kutip ", UTF-8 (76), mulai baris 1.
@@ -680,6 +927,15 @@ public static partial class Converter
     /// </summary>
     static string CsvImportOptions(string path)
     {
+        var (separator, utf8) = SniffCsv(path);
+        // CSV titik koma biasanya memakai koma desimal ("1500,5"): baca angkanya dengan bahasa Indonesia (LCID 1057).
+        string language = separator == ';' ? ",,1057" : "";
+        return $"{(int)separator},34,{(utf8 ? 76 : 1)},1{language}";
+    }
+
+    /// <summary>Tebak pemisah kolom (dari baris pertama) dan apakah isi file UTF-8 valid.</summary>
+    internal static (char Separator, bool Utf8) SniffCsv(string path)
+    {
         byte[] head = new byte[64 * 1024];
         int length;
         using (var stream = File.OpenRead(path))
@@ -714,18 +970,18 @@ public static partial class Converter
         char separator = new[] { ',', ';', '\t', '|' }.MaxBy(Count);
         if (Count(separator) == 0)
             separator = FormatCatalog.Normalize(Path.GetExtension(path)) == ".tsv" ? '\t' : ',';
-
-        // CSV titik koma biasanya memakai koma desimal ("1500,5"): baca angkanya dengan bahasa Indonesia (LCID 1057).
-        string language = separator == ';' ? ",,1057" : "";
-        return $"{(int)separator},34,{(utf8 ? 76 : 1)},1{language}";
+        return (separator, utf8);
     }
 
     internal static async Task RunAsync(string exe, IEnumerable<string> args,
         Action<string>? onStdout = null, Action<string>? onStderr = null, Dictionary<string, string>? environment = null,
-        TimeSpan? timeout = null)
+        TimeSpan? timeout = null, string? workingDirectory = null, string? standardInput = null)
     {
         var startInfo = new ProcessStartInfo(exe)
         {
+            WorkingDirectory = workingDirectory ?? "",
+            RedirectStandardInput = standardInput is not null,
+            StandardInputEncoding = standardInput is not null ? new UTF8Encoding(false) : null,
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,
@@ -764,6 +1020,11 @@ public static partial class Converter
         process.Start();
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
+        if (standardInput is not null)
+        {
+            await process.StandardInput.WriteAsync(standardInput);
+            process.StandardInput.Close();
+        }
         using (var cancellation = new CancellationTokenSource(timeout ?? Timeout.InfiniteTimeSpan))
         {
             try

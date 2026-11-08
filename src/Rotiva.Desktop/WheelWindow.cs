@@ -142,10 +142,12 @@ sealed class WheelWindow : Window
     void Load(IReadOnlyList<string> files, double scale)
     {
         _files = files;
-        _category = FormatCatalog.ForFile(files[0], multipleFiles: files.Count > 1);
+        _category = FormatCatalog.ForSelection(files);
         // TEXT (OCR) hanya kalau OS punya mesin OCR yang terpasang ke Rotiva.Core.
         var targets = _category.Targets
             .Where(t => t.Action != TargetAction.ExtractText || Converter.TextRecognizer is not null)
+            // Jendela password baru ada di versi Windows.
+            .Where(t => t.Action != TargetAction.ZipPassword)
             .ToList();
         _wheel.ChooseOnRelease = _dragMode;
         _wheel.Load(_category, targets, scale);

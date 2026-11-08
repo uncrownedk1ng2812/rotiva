@@ -64,7 +64,7 @@ public sealed class SlidesTests : IDisposable
         Assert.Equal("Slides", category.Name);
         Assert.Equal(ConversionEngine.Office, category.Engine);
         var ids = category.Targets.Select(FormatCatalog.IdOf).ToList();
-        Assert.Equal(["pdf", "odp", "png", "jpg"], ids);
+        Assert.Equal(["pdf", "odp", "png", "jpg", FormatCatalog.LockId], ids);
         Assert.True(FormatCatalog.CanMergeToPdf("talk.ppt"));
     }
 
