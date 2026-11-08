@@ -33,6 +33,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="أحدث إصدار"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -45,6 +46,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 الموقع والعرض المباشر</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ تنزيل المثبّت</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ ادعمنا على Ko-fi</b></a>
 </p>
@@ -148,7 +151,7 @@ Rotiva مفتوح المصدر بموجب **GPL-3.0**. يوجد التطبيق �
 
 ## توقيع الشيفرة
 
-مُثبِّتات Windows غير موقَّعة رقميًا بعد، لذلك قد يعرض Windows SmartScreen تحذيرًا عند تشغيلها أول مرة. يتضمن كل إصدار مجاميع SHA-256 في `SHA256SUMS.txt` لتتحقق من الملف الذي نزّلته. يجري تحضير نسخة لمتجر Microsoft Store موقَّعة من Microsoft.
+مُثبِّتات Windows غير موقَّعة رقميًا بعد، لذلك قد يعرض Windows SmartScreen تحذيرًا عند تشغيلها أول مرة. يتضمن كل إصدار مجاميع SHA-256 في `SHA256SUMS.txt` لتتحقق من الملف الذي نزّلته. هل تفضّل نسخة موقَّعة؟ Rotiva متوفر أيضًا على [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5) بتوقيع Microsoft.
 
 **الخصوصية:** لا يرسل Rotiva أي معلومات إلى أنظمة أخرى على الشبكة. تجري التحويلات على حاسوبك، وروابط القائمة
 (الموقع وGitHub والدعم) لا تفتح المتصفح إلا عند النقر عليها.

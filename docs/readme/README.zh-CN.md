@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="最新版本"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 网站与在线演示</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ 下载安装程序</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ 在 Ko-fi 上支持</b></a>
 </p>
@@ -142,7 +145,7 @@ Rotiva 以 **GPL-3.0** 协议开源。应用代码在 [`src/Rotiva`](../../src/R
 
 ## 代码签名
 
-Windows 安装程序目前还没有代码签名，因此首次运行时 Windows SmartScreen 可能会显示警告。每个版本都在 `SHA256SUMS.txt` 中提供 SHA-256 校验和，方便你核对下载的文件。由 Microsoft 签名的 Microsoft Store 版本正在准备中。
+Windows 安装程序目前还没有代码签名，因此首次运行时 Windows SmartScreen 可能会显示警告。每个版本都在 `SHA256SUMS.txt` 中提供 SHA-256 校验和，方便你核对下载的文件。想要已签名的版本？Rotiva 也已上架 [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5)，由 Microsoft 签名。
 
 **隐私：** Rotiva 不会向网络中的其他系统发送任何信息。转换在你的电脑上完成；菜单中的链接（网站、GitHub、支持）
 只有在你点击时才会打开浏览器。

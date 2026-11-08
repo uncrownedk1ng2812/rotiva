@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Dernière version"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS : Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 Site web et démo</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Télécharger l'installateur</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Soutenir sur Ko-fi</b></a>
 </p>
@@ -146,7 +149,7 @@ signalez-les en privé comme indiqué dans [SECURITY.md](../../SECURITY.md).
 
 ## Signature du code
 
-Les installateurs Windows ne sont pas encore signés, donc Windows SmartScreen peut afficher un avertissement la première fois que vous en lancez un. Chaque version fournit les sommes SHA-256 dans `SHA256SUMS.txt` pour vérifier votre téléchargement. Une version Microsoft Store, signée par Microsoft, est en préparation.
+Les installateurs Windows ne sont pas encore signés, donc Windows SmartScreen peut afficher un avertissement la première fois que vous en lancez un. Chaque version fournit les sommes SHA-256 dans `SHA256SUMS.txt` pour vérifier votre téléchargement. Vous préférez une version signée ? Rotiva est aussi disponible sur le [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5), signé par Microsoft.
 
 **Confidentialité :** Rotiva n'envoie aucune information à d'autres systèmes du réseau. Les conversions ont lieu sur
 votre ordinateur ; les liens du menu (site, GitHub, soutien) n'ouvrent le navigateur que lorsque vous cliquez dessus.

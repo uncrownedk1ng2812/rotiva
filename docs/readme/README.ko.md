@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="최신 버전"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 웹사이트 및 라이브 데모</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ 설치 프로그램 다운로드</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Ko-fi로 후원하기</b></a>
 </p>
@@ -146,7 +149,7 @@ Rotiva는 **GPL-3.0** 오픈 소스입니다. 앱은 [`src/Rotiva`](../../src/Ro
 
 ## 코드 서명
 
-Windows 설치 프로그램은 아직 코드 서명되지 않았으므로 처음 실행할 때 Windows SmartScreen 경고가 표시될 수 있습니다. 각 릴리스에는 다운로드를 확인할 수 있도록 `SHA256SUMS.txt`에 SHA-256 체크섬이 포함되어 있습니다. Microsoft가 서명하는 Microsoft Store 버전을 준비 중입니다.
+Windows 설치 프로그램은 아직 코드 서명되지 않았으므로 처음 실행할 때 Windows SmartScreen 경고가 표시될 수 있습니다. 각 릴리스에는 다운로드를 확인할 수 있도록 `SHA256SUMS.txt`에 SHA-256 체크섬이 포함되어 있습니다. 서명된 버전을 원하시면 Microsoft가 서명한 [Microsoft Store 버전](https://apps.microsoft.com/detail/9N5FPM017GN5)을 이용하세요.
 
 **개인정보:** Rotiva는 네트워크의 다른 시스템으로 어떤 정보도 보내지 않습니다. 변환은 사용자의 컴퓨터에서
 이루어지며, 메뉴의 링크(웹사이트, GitHub, 후원)는 클릭할 때만 브라우저를 엽니다.

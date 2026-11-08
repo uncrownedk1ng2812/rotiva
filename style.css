@@ -285,6 +285,8 @@ h3 { font-size: 24px; text-transform: uppercase; letter-spacing: .02em; }
 .download { background: radial-gradient(60% 80% at 50% 0%, rgba(255, 138, 31, .14), transparent 70%); }
 .dl-card { text-align: center; display: grid; justify-items: center; }
 .dl-card .section-lead { margin: 14px auto 30px; }
+.dl-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.dl-actions [hidden] { display: none; }
 .dl-icon { margin-bottom: 22px; filter: drop-shadow(0 10px 30px rgba(255, 138, 31, .35)); animation: float 5s ease-in-out infinite; }
 @keyframes float { 50% { transform: translateY(-8px) rotate(8deg); } }
 .dl-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 40px; width: 100%; text-align: left; }

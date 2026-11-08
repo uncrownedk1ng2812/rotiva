@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Ultima versione"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 Sito e demo</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Scarica il programma di installazione</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Supporta su Ko-fi</b></a>
 </p>
@@ -146,7 +149,7 @@ segnalali in privato come spiegato in [SECURITY.md](../../SECURITY.md).
 
 ## Firma del codice
 
-Gli installer per Windows non sono ancora firmati, quindi Windows SmartScreen può mostrare un avviso la prima volta che ne avvii uno. Ogni versione include i checksum SHA-256 in `SHA256SUMS.txt` per verificare il download. È in preparazione una versione per il Microsoft Store, firmata da Microsoft.
+Gli installer per Windows non sono ancora firmati, quindi Windows SmartScreen può mostrare un avviso la prima volta che ne avvii uno. Ogni versione include i checksum SHA-256 in `SHA256SUMS.txt` per verificare il download. Preferisci una versione firmata? Rotiva è disponibile anche su [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5), firmata da Microsoft.
 
 **Privacy:** Rotiva non invia alcuna informazione ad altri sistemi in rete. Le conversioni avvengono sul tuo
 computer; i link del menu (sito, GitHub, supporto) aprono il browser solo quando ci fai clic.

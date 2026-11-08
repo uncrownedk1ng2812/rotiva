@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Najnowsza wersja"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 Strona i demo na żywo</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Pobierz instalator</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Wesprzyj na Ko-fi</b></a>
 </p>
@@ -146,7 +149,7 @@ zgłaszaj prywatnie, jak opisano w [SECURITY.md](../../SECURITY.md).
 
 ## Podpisywanie kodu
 
-Instalatory dla Windows nie są jeszcze podpisane, więc przy pierwszym uruchomieniu Windows SmartScreen może wyświetlić ostrzeżenie. Każde wydanie zawiera sumy SHA-256 w `SHA256SUMS.txt`, aby można było sprawdzić pobrany plik. Przygotowywana jest wersja w Microsoft Store, podpisana przez Microsoft.
+Instalatory dla Windows nie są jeszcze podpisane, więc przy pierwszym uruchomieniu Windows SmartScreen może wyświetlić ostrzeżenie. Każde wydanie zawiera sumy SHA-256 w `SHA256SUMS.txt`, aby można było sprawdzić pobrany plik. Wolisz podpisaną wersję? Rotiva jest też dostępna w [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5), podpisana przez Microsoft.
 
 **Prywatność:** Rotiva nie wysyła żadnych informacji do innych systemów w sieci. Konwersje odbywają się na Twoim
 komputerze; linki w menu (strona, GitHub, wsparcie) otwierają przeglądarkę tylko wtedy, gdy je klikniesz.

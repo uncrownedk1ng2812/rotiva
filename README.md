@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Latest version"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <!-- Re-enable once downloads pass ~500:
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases"><img src="https://img.shields.io/github/downloads/uncrownedk1ng2812/rotiva/total?label=downloads&color=ff8a1f" alt="Total downloads"></a>
   -->
@@ -48,6 +49,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/id/"><b>🇮🇩 Bahasa Indonesia</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Download the installer</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Support on Ko-fi</b></a>
 </p>
@@ -149,7 +152,7 @@ and the [Code of Conduct](CODE_OF_CONDUCT.md). Security problems: please report 
 
 ## Code signing
 
-Windows installers are not code-signed yet, so Windows SmartScreen may show a warning the first time you run one. Every release lists SHA-256 checksums in `SHA256SUMS.txt` so you can check your download. A Microsoft Store version, signed by Microsoft, is in preparation.
+Windows installers are not code-signed yet, so Windows SmartScreen may show a warning the first time you run one. Every release lists SHA-256 checksums in `SHA256SUMS.txt` so you can check your download. Prefer a signed build? Rotiva is also on the [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5), signed by Microsoft.
 
 **Privacy:** Rotiva does not send any information to other networked systems. Conversions run on your
 computer; links in the menu (website, GitHub, support) only open your browser when you click them.

@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="เวอร์ชันล่าสุด"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 เว็บไซต์และเดโม</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ ดาวน์โหลดตัวติดตั้ง</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ สนับสนุนผ่าน Ko-fi</b></a>
 </p>
@@ -145,7 +148,7 @@ Rotiva เป็นโอเพนซอร์สภายใต้ **GPL-3.0** 
 
 ## การลงนามโค้ด
 
-ตัวติดตั้งสำหรับ Windows ยังไม่ได้ลงนามโค้ด ดังนั้น Windows SmartScreen อาจแสดงคำเตือนเมื่อเรียกใช้ครั้งแรก ทุกรุ่นมีค่า SHA-256 ใน `SHA256SUMS.txt` ให้ตรวจสอบไฟล์ที่ดาวน์โหลด เวอร์ชันสำหรับ Microsoft Store ที่ลงนามโดย Microsoft กำลังอยู่ระหว่างการเตรียม
+ตัวติดตั้งสำหรับ Windows ยังไม่ได้ลงนามโค้ด ดังนั้น Windows SmartScreen อาจแสดงคำเตือนเมื่อเรียกใช้ครั้งแรก ทุกรุ่นมีค่า SHA-256 ใน `SHA256SUMS.txt` ให้ตรวจสอบไฟล์ที่ดาวน์โหลด ต้องการเวอร์ชันที่ลงนามแล้ว? Rotiva มีให้ดาวน์โหลดบน [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5) ด้วย โดยลงนามโดย Microsoft
 
 **ความเป็นส่วนตัว:** Rotiva ไม่ส่งข้อมูลใด ๆ ไปยังระบบอื่นในเครือข่าย การแปลงไฟล์ทำบนคอมพิวเตอร์ของคุณ
 ลิงก์ในเมนู (เว็บไซต์, GitHub, การสนับสนุน) จะเปิดเบราว์เซอร์ก็ต่อเมื่อคุณคลิกเท่านั้น

@@ -773,6 +773,7 @@ function initPhone() {
   dl.classList.add('btn-ghost');
   dl.querySelector('[data-cta-label]').textContent = tr('Download anyway (.exe)');
   document.querySelectorAll('[data-phone-only]').forEach(n => { n.hidden = false; });
+  document.querySelectorAll('[data-store-link]').forEach(n => { n.hidden = true; });
   document.querySelectorAll('[data-share-url]').forEach(n => { n.textContent = url; });
 
   document.querySelector('[data-email-link]').href = 'mailto:?subject=' + encodeURIComponent(tr('Rotiva: install on my PC')) +

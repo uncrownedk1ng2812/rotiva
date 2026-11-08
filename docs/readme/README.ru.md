@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Последняя версия"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 Сайт и демо</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Скачать установщик</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Поддержать на Ko-fi</b></a>
 </p>
@@ -146,7 +149,7 @@ Rotiva распространяется как open source по лицензии
 
 ## Подпись кода
 
-Установщики для Windows пока не подписаны, поэтому при первом запуске Windows SmartScreen может показать предупреждение. В каждом выпуске есть контрольные суммы SHA-256 в `SHA256SUMS.txt`, чтобы вы могли проверить загрузку. Готовится версия для Microsoft Store, подписанная Microsoft.
+Установщики для Windows пока не подписаны, поэтому при первом запуске Windows SmartScreen может показать предупреждение. В каждом выпуске есть контрольные суммы SHA-256 в `SHA256SUMS.txt`, чтобы вы могли проверить загрузку. Нужна подписанная версия? Rotiva также есть в [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5), с подписью Microsoft.
 
 **Конфиденциальность:** Rotiva не передаёт никакую информацию другим системам в сети. Конвертация выполняется на вашем
 компьютере; ссылки в меню (сайт, GitHub, поддержка) открывают браузер только при нажатии.

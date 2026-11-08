@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Son sürüm"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 Web sitesi ve canlı demo</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Yükleyiciyi indir</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Ko-fi'de destek ol</b></a>
 </p>
@@ -146,7 +149,7 @@ Güvenlik sorunlarını [SECURITY.md](../../SECURITY.md) dosyasında anlatıldı
 
 ## Kod imzalama
 
-Windows yükleyicileri henüz kod imzalı değildir, bu yüzden ilk çalıştırmada Windows SmartScreen bir uyarı gösterebilir. Her sürüm, indirdiğiniz dosyayı kontrol edebilmeniz için `SHA256SUMS.txt` içinde SHA-256 sağlama toplamlarını içerir. Microsoft tarafından imzalanan bir Microsoft Store sürümü hazırlanıyor.
+Windows yükleyicileri henüz kod imzalı değildir, bu yüzden ilk çalıştırmada Windows SmartScreen bir uyarı gösterebilir. Her sürüm, indirdiğiniz dosyayı kontrol edebilmeniz için `SHA256SUMS.txt` içinde SHA-256 sağlama toplamlarını içerir. İmzalı bir sürüm mü istiyorsunuz? Rotiva, Microsoft tarafından imzalanmış olarak [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5) üzerinde de mevcut.
 
 **Gizlilik:** Rotiva ağdaki başka sistemlere hiçbir bilgi göndermez. Dönüştürmeler bilgisayarınızda yapılır;
 menüdeki bağlantılar (web sitesi, GitHub, destek) yalnızca tıkladığınızda tarayıcıyı açar.

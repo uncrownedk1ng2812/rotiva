@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="नवीनतम संस्करण"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/"><b>🌐 वेबसाइट और लाइव डेमो</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ इंस्टॉलर डाउनलोड करें</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://ko-fi.com/denishchairany"><b>☕ Ko-fi पर सहयोग करें</b></a>
 </p>
@@ -145,7 +148,7 @@ Rotiva **GPL-3.0** के तहत ओपन सोर्स है। ऐप [
 
 ## कोड साइनिंग
 
-Windows इंस्टॉलर पर अभी कोड साइन नहीं है, इसलिए पहली बार चलाने पर Windows SmartScreen चेतावनी दिखा सकता है। हर रिलीज़ में `SHA256SUMS.txt` में SHA-256 चेकसम होते हैं, ताकि आप डाउनलोड जाँच सकें। Microsoft द्वारा साइन किया गया Microsoft Store संस्करण तैयार किया जा रहा है।
+Windows इंस्टॉलर पर अभी कोड साइन नहीं है, इसलिए पहली बार चलाने पर Windows SmartScreen चेतावनी दिखा सकता है। हर रिलीज़ में `SHA256SUMS.txt` में SHA-256 चेकसम होते हैं, ताकि आप डाउनलोड जाँच सकें। साइन किया हुआ संस्करण चाहिए? Rotiva [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5) पर भी उपलब्ध है, जिस पर Microsoft के हस्ताक्षर हैं।
 
 **गोपनीयता:** Rotiva नेटवर्क के किसी दूसरे सिस्टम को कोई जानकारी नहीं भेजता। कन्वर्ज़न आपके कंप्यूटर पर होते हैं;
 मेन्यू के लिंक (वेबसाइट, GitHub, सहयोग) सिर्फ़ क्लिक करने पर ब्राउज़र खोलते हैं।

@@ -31,6 +31,7 @@
 
 <p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Versi terbaru"></a>
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-555" alt="macOS: Apple Silicon | Intel">
   <img src="https://img.shields.io/badge/Linux-AppImage-e95420" alt="Linux AppImage">
@@ -43,6 +44,8 @@
   <a href="https://uncrownedk1ng2812.github.io/rotiva/id/"><b>🌐 Website & demo langsung</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><b>⬇️ Download installer</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><b>🛍️ Microsoft Store</b></a>
   &nbsp;·&nbsp;
   <a href="https://sociabuzz.com/kianaldrich"><b>☕ Dukung lewat SociaBuzz</b></a>
 </p>
@@ -146,7 +149,7 @@ privat seperti dijelaskan di [SECURITY.md](../../SECURITY.md).
 
 ## Code signing
 
-Installer Windows belum ditandatangani (code signing), jadi Windows SmartScreen bisa menampilkan peringatan saat pertama kali dijalankan. Setiap rilis menyertakan checksum SHA-256 di `SHA256SUMS.txt` supaya kamu bisa memeriksa file yang diunduh. Versi Microsoft Store, yang ditandatangani oleh Microsoft, sedang disiapkan.
+Installer Windows belum ditandatangani (code signing), jadi Windows SmartScreen bisa menampilkan peringatan saat pertama kali dijalankan. Setiap rilis menyertakan checksum SHA-256 di `SHA256SUMS.txt` supaya kamu bisa memeriksa file yang diunduh. Mau versi yang sudah ditandatangani? Rotiva juga tersedia di [Microsoft Store](https://apps.microsoft.com/detail/9N5FPM017GN5), ditandatangani oleh Microsoft.
 
 **Privasi:** Rotiva tidak mengirim informasi apa pun ke sistem lain di jaringan. Konversi berjalan di
 komputer kamu; link di menu (website, GitHub, dukungan) hanya membuka browser saat kamu mengkliknya.
