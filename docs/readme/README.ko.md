@@ -90,14 +90,17 @@ Rotiva는 시스템 트레이에 상주하는 작은 앱입니다. 사진, 동�
 
 | 종류 | 변환 전 | 변환 후 |
 |---|---|---|
-| 🖼️ 이미지 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **압축**, **텍스트 (OCR)** |
-| 🎬 동영상 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **압축** |
-| 🎵 오디오 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 문서 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 스프레드시트 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ 이미지 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **압축**, **텍스트 (OCR)**, **편집** |
+| 🎬 동영상 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **압축**, **편집** |
+| 🎵 오디오 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **편집** |
+| 📄 문서 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 스프레드시트 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ 슬라이드 | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **분할**, **압축**, **텍스트 (OCR)** |
 | 🗜️ 압축 파일 | ZIP, RAR, 7Z, TAR.GZ, … | **압축 풀기**, ZIP |
+| 📚 전자책 | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 자막 | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 데이터 | JSON, YAML | JSON, YAML, CSV |
 
 ## 기능
 
@@ -110,6 +113,12 @@ Rotiva는 시스템 트레이에 상주하는 작은 앱입니다. 사진, 동�
 - **텍스트 복사 (OCR)** — 이미지나 스캔한 PDF의 글자를 Windows 내장 OCR로 읽어 바로 클립보드에 넣습니다.
 - **PDF 분할** — 페이지마다 별도의 PDF로, 또는 각 페이지를 PNG/JPG로 내보냅니다.
 - **ZIP과 압축 풀기** — 여러 파일과 폴더를 ZIP 하나로 묶고, .zip, .rar, .7z, .tar.gz는 한 번에 풉니다.
+- **편집** — **EDIT** 세그먼트를 선택하면 두 번째 페이지가 열립니다. 이미지 회전·뒤집기·흑백, 동영상 회전·뒤집기·역재생(역재생은 30초까지), 오디오 음량 평준화·역재생, 커버 이미지 저장을 할 수 있습니다.
+- **자막 입히기** — 동영상 하나와 자막 파일 하나를 함께 드래그한 뒤 **BURN IN**을 선택합니다.
+- **암호 ZIP (Windows)** — **LOCK**은 파일을 AES-256 ZIP으로 묶습니다. 7-Zip이나 WinRAR로 여세요.
+- **콘택트 시트** — **SHEET**는 여러 사진 또는 동영상의 16프레임을 한 장의 이미지로 만듭니다.
+- **클립보드 변환 (Windows)** — 파일이나 이미지를 복사하거나 스크린샷을 찍은 뒤 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>를 누릅니다.
+- **내장 가이드 (Windows)** — 트레이 메뉴의 **Guide**에서 단계별 안내를 볼 수 있습니다.
 - **가볍고 빠름** — 휠은 커서 위치에 열리는 작은 창이고 전체 화면 효과가 없어서, 4K 화면에서도
   즉시 열립니다. 크기(**S / M / L**)는 트레이 메뉴에서 고를 수 있습니다.
 - **마음이 바뀌었나요?** 휠 가운데로 돌아가서 놓으면 아무것도 변환되지 않습니다.

@@ -93,14 +93,17 @@ The wheel adapts to the file you drag. The file's own format is hidden automatic
 
 | Type | From | To |
 |---|---|---|
-| 🖼️ Images | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Compress**, **Text (OCR)** |
-| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Compress** |
-| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Documents | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Spreadsheets | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Images | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Compress**, **Text (OCR)**, **Edit** |
+| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Compress**, **Edit** |
+| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Edit** |
+| 📄 Documents | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Spreadsheets | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Slides | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Split**, **Compress**, **Text (OCR)** |
 | 🗜️ Archives | ZIP, RAR, 7Z, TAR.GZ, … | **Extract**, ZIP |
+| 📚 E-books | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Subtitles | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Data | JSON, YAML | JSON, YAML, CSV |
 
 ## Features
 
@@ -113,6 +116,12 @@ The wheel adapts to the file you drag. The file's own format is hidden automatic
 - **Grab text (OCR)** — read the words in an image or scanned PDF with Windows' built-in OCR, straight to your clipboard.
 - **Split PDFs** — one PDF per page, or export every page as PNG/JPG.
 - **ZIP & extract** — pack many files/folders into one ZIP; .zip, .rar, .7z and .tar.gz extract in one move.
+- **Edit** — the **EDIT** segment opens a second page: rotate, flip or gray out images; rotate, flip or reverse videos (reverse up to 30 s); even out or reverse audio, or save its cover art.
+- **Burn in subtitles** — drag one video and one subtitle file together and pick **BURN IN**.
+- **Password-protected ZIP (Windows)** — **LOCK** packs files into an AES-256 ZIP. Open it with 7-Zip or WinRAR.
+- **Contact sheet** — **SHEET** puts several photos, or 16 frames of a video, into one picture.
+- **Convert the clipboard (Windows)** — copy files or an image, or take a screenshot, then press <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Built-in guide (Windows)** — open **Guide** from the tray menu for step-by-step help.
 - **Light & fast** — the wheel is a small window right at your cursor, with no full-screen effects, so it opens
   instantly even on 4K screens. Pick **S / M / L** size from the tray menu.
 - **Changed your mind?** Move back to the center of the wheel and let go: nothing is converted.

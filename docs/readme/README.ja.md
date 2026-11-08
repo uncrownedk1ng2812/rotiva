@@ -90,14 +90,17 @@ Rotiva はシステムトレイに常駐する小さなアプリです。写真�
 
 | 種類 | 変換元 | 変換先 |
 |---|---|---|
-| 🖼️ 画像 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **圧縮**, **テキスト (OCR)** |
-| 🎬 動画 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **圧縮** |
-| 🎵 音声 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 文書 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 表計算 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ 画像 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **圧縮**, **テキスト (OCR)**, **編集** |
+| 🎬 動画 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **圧縮**, **編集** |
+| 🎵 音声 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **編集** |
+| 📄 文書 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 表計算 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ スライド | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **分割**, **圧縮**, **テキスト (OCR)** |
 | 🗜️ アーカイブ | ZIP, RAR, 7Z, TAR.GZ, … | **展開**, ZIP |
+| 📚 電子書籍 | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 字幕 | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 データ | JSON, YAML | JSON, YAML, CSV |
 
 ## 機能
 
@@ -110,6 +113,12 @@ Rotiva はシステムトレイに常駐する小さなアプリです。写真�
 - **テキストを取得 (OCR)** — 画像やスキャンした PDF の文字を Windows 標準の OCR で読み取り、そのままクリップボードへ。
 - **PDF を分割** — 1 ページずつ別の PDF に、または各ページを PNG/JPG に書き出します。
 - **ZIP と展開** — 複数のファイルやフォルダーを 1 つの ZIP に。.zip、.rar、.7z、.tar.gz はワンアクションで展開。
+- **編集** — **EDIT** セグメントで 2 ページ目が開きます。画像の回転・反転・グレースケール、動画の回転・反転・逆再生（逆再生は 30 秒まで）、音声の音量均一化・逆再生、カバー画像の保存ができます。
+- **字幕の焼き込み** — 動画 1 本と字幕ファイル 1 つを一緒にドラッグして **BURN IN** を選びます。
+- **パスワード付き ZIP（Windows）** — **LOCK** でファイルを AES-256 の ZIP にまとめます。7-Zip または WinRAR で開けます。
+- **コンタクトシート** — **SHEET** で複数の写真、または動画の 16 フレームを 1 枚の画像にまとめます。
+- **クリップボードの変換（Windows）** — ファイルや画像をコピーするかスクリーンショットを撮り、<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> を押します。
+- **内蔵ガイド（Windows）** — トレイメニューの **Guide** で手順を確認できます。
 - **軽くて速い** — ホイールはカーソル位置に開く小さなウィンドウで、全画面エフェクトがないため、4K 画面でも
   すぐに開きます。サイズ（**S / M / L**）はトレイメニューで選べます。
 - **やっぱりやめたい？** ホイールの中央に戻って離せば、何も変換されません。

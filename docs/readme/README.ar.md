@@ -92,14 +92,17 @@ Rotiva تطبيق صغير يعمل من علبة النظام. أثناء سح�
 
 | النوع | من | إلى |
 |---|---|---|
-| 🖼️ الصور | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **ضغط**, **نص (OCR)** |
-| 🎬 الفيديو | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **ضغط** |
-| 🎵 الصوت | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 المستندات | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 جداول البيانات | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ الصور | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **ضغط**, **نص (OCR)**, **تحرير** |
+| 🎬 الفيديو | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **ضغط**, **تحرير** |
+| 🎵 الصوت | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **تحرير** |
+| 📄 المستندات | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 جداول البيانات | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ العروض التقديمية | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **تقسيم**, **ضغط**, **نص (OCR)** |
 | 🗜️ الأرشيفات | ZIP, RAR, 7Z, TAR.GZ, … | **فك الضغط**, ZIP |
+| 📚 الكتب الإلكترونية | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 الترجمات | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 البيانات | JSON, YAML | JSON, YAML, CSV |
 
 ## المزايا
 
@@ -112,6 +115,12 @@ Rotiva تطبيق صغير يعمل من علبة النظام. أثناء سح�
 - **استخراج النص (OCR)** — اقرأ الكلمات من صورة أو ملف PDF ممسوح ضوئيًا باستخدام OCR المدمج في Windows، مباشرةً إلى الحافظة.
 - **تقسيم ملفات PDF** — ملف PDF لكل صفحة، أو صدِّر كل صفحة بصيغة PNG/JPG.
 - **ZIP وفك الضغط** — اجمع ملفات ومجلدات كثيرة في ملف ZIP واحد؛ وتُفك ملفات ‎.zip و‎.rar و‎.7z و‎.tar.gz بحركة واحدة.
+- **التحرير** — يفتح مقطع **EDIT** صفحة ثانية: تدوير الصور أو قلبها أو تحويلها إلى الرمادي؛ تدوير الفيديو أو قلبه أو عكسه (العكس حتى 30 ثانية)؛ موازنة مستوى الصوت أو عكسه أو حفظ صورة الغلاف.
+- **دمج الترجمة في الفيديو** — اسحب فيديو وملف ترجمة معًا ثم اختر **BURN IN**.
+- **ZIP بكلمة مرور (Windows)** — يحزم **LOCK** الملفات في ZIP بتشفير AES-256. افتحه باستخدام 7-Zip أو WinRAR.
+- **ورقة معاينة** — يجمع **SHEET** عدة صور، أو 16 لقطة من فيديو، في صورة واحدة.
+- **تحويل الحافظة (Windows)** — انسخ ملفات أو صورة، أو التقط لقطة شاشة، ثم اضغط <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **دليل مدمج (Windows)** — افتح **Guide** من قائمة علبة النظام للحصول على الخطوات.
 - **خفيف وسريع** — العجلة نافذة صغيرة بجوار المؤشر بلا مؤثرات ملء الشاشة، لذا تُفتح فورًا حتى على شاشات 4K.
   اختر الحجم **S / M / L** من قائمة علبة النظام.
 - **غيّرت رأيك؟** عُد إلى منتصف العجلة وأفلِت: لن يُحوَّل أي شيء.

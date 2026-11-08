@@ -90,14 +90,17 @@ Rotiva — небольшая программа, которая живёт в �
 
 | Тип | Из | В |
 |---|---|---|
-| 🖼️ Изображения | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Сжать**, **Текст (OCR)** |
-| 🎬 Видео | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Сжать** |
-| 🎵 Аудио | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Документы | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Таблицы | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Изображения | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Сжать**, **Текст (OCR)**, **Правка** |
+| 🎬 Видео | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Сжать**, **Правка** |
+| 🎵 Аудио | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Правка** |
+| 📄 Документы | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Таблицы | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Презентации | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Разделить**, **Сжать**, **Текст (OCR)** |
 | 🗜️ Архивы | ZIP, RAR, 7Z, TAR.GZ, … | **Распаковать**, ZIP |
+| 📚 Электронные книги | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Субтитры | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Данные | JSON, YAML | JSON, YAML, CSV |
 
 ## Возможности
 
@@ -110,6 +113,12 @@ Rotiva — небольшая программа, которая живёт в �
 - **Скопировать текст (OCR)** — распознавайте текст на изображении или в отсканированном PDF встроенным OCR Windows, сразу в буфер обмена.
 - **Разделение PDF** — по одному PDF на страницу или экспорт каждой страницы в PNG/JPG.
 - **ZIP и распаковка** — упакуйте много файлов и папок в один ZIP; .zip, .rar, .7z и .tar.gz распаковываются одним движением.
+- **Правка** — сегмент **EDIT** открывает вторую страницу: поворот, отражение и оттенки серого для изображений; поворот, отражение и обратное воспроизведение для видео (до 30 с); выравнивание громкости и реверс аудио, сохранение обложки.
+- **Вшивание субтитров** — перетащите вместе видео и файл субтитров и выберите **BURN IN**.
+- **ZIP с паролем (Windows)** — **LOCK** упаковывает файлы в ZIP с AES-256. Открывайте его в 7-Zip или WinRAR.
+- **Контактный лист** — **SHEET** собирает несколько фото или 16 кадров видео в одно изображение.
+- **Конвертация буфера обмена (Windows)** — скопируйте файлы или изображение либо сделайте снимок экрана и нажмите <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Встроенное руководство (Windows)** — откройте **Guide** в меню в трее.
 - **Лёгкая и быстрая** — колесо — это маленькое окно у курсора без полноэкранных эффектов, поэтому оно открывается
   мгновенно даже на 4K-экранах. Размер **S / M / L** выбирается в меню значка в трее.
 - **Передумали?** Верните курсор в центр колеса и отпустите: ничего не будет сконвертировано.

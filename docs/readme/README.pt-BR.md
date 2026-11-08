@@ -90,14 +90,17 @@ A roda se adapta ao arquivo que você arrasta. O formato do próprio arquivo é 
 
 | Tipo | De | Para |
 |---|---|---|
-| 🖼️ Imagens | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Comprimir**, **Texto (OCR)** |
-| 🎬 Vídeo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Comprimir** |
-| 🎵 Áudio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Documentos | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Planilhas | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Imagens | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Comprimir**, **Texto (OCR)**, **Editar** |
+| 🎬 Vídeo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Comprimir**, **Editar** |
+| 🎵 Áudio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Editar** |
+| 📄 Documentos | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Planilhas | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Apresentações | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Dividir**, **Comprimir**, **Texto (OCR)** |
 | 🗜️ Arquivos compactados | ZIP, RAR, 7Z, TAR.GZ, … | **Extrair**, ZIP |
+| 📚 E-books | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Legendas | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Dados | JSON, YAML | JSON, YAML, CSV |
 
 ## Recursos
 
@@ -110,6 +113,12 @@ A roda se adapta ao arquivo que você arrasta. O formato do próprio arquivo é 
 - **Copiar texto (OCR)**: leia as palavras de uma imagem ou de um PDF escaneado com o OCR do próprio Windows, direto para a área de transferência.
 - **Dividir PDFs**: um PDF por página, ou exporte cada página como PNG/JPG.
 - **ZIP e extração**: junte vários arquivos e pastas em um ZIP; .zip, .rar, .7z e .tar.gz são extraídos com um gesto só.
+- **Editar**: o segmento **EDIT** abre uma segunda página: gire, espelhe ou deixe imagens em cinza; gire, espelhe ou inverta vídeos (inverter até 30 s); iguale o volume ou inverta áudio, ou salve a capa.
+- **Embutir legendas**: arraste juntos um vídeo e um arquivo de legendas e escolha **BURN IN**.
+- **ZIP com senha (Windows)**: **LOCK** compacta os arquivos em um ZIP AES-256. Abra com 7-Zip ou WinRAR.
+- **Folha de contatos**: **SHEET** reúne várias fotos, ou 16 quadros de um vídeo, em uma só imagem.
+- **Converter a área de transferência (Windows)**: copie arquivos ou uma imagem, ou tire um print, e pressione <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Guia integrado (Windows)**: abra **Guide** no menu da bandeja.
 - **Leve e rápido**: a roda é uma janela pequena no cursor, sem efeitos de tela cheia, então abre na hora
   mesmo em telas 4K. Escolha o tamanho **S / M / L** no menu da bandeja.
 - **Mudou de ideia?** Volte para o centro da roda e solte: nada é convertido.

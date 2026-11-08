@@ -90,14 +90,17 @@ Rotiva คือแอปเล็ก ๆ ที่อยู่ในถาด�
 
 | ประเภท | จาก | เป็น |
 |---|---|---|
-| 🖼️ รูปภาพ | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **บีบอัด**, **ข้อความ (OCR)** |
-| 🎬 วิดีโอ | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **บีบอัด** |
-| 🎵 เสียง | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 เอกสาร | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 สเปรดชีต | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ รูปภาพ | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **บีบอัด**, **ข้อความ (OCR)**, **แก้ไข** |
+| 🎬 วิดีโอ | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **บีบอัด**, **แก้ไข** |
+| 🎵 เสียง | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **แก้ไข** |
+| 📄 เอกสาร | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 สเปรดชีต | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ สไลด์ | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **แยกหน้า**, **บีบอัด**, **ข้อความ (OCR)** |
 | 🗜️ ไฟล์บีบอัด | ZIP, RAR, 7Z, TAR.GZ, … | **แตกไฟล์**, ZIP |
+| 📚 อีบุ๊ก | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 คำบรรยาย | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 ข้อมูล | JSON, YAML | JSON, YAML, CSV |
 
 ## ฟีเจอร์
 
@@ -110,6 +113,12 @@ Rotiva คือแอปเล็ก ๆ ที่อยู่ในถาด�
 - **ดึงข้อความ (OCR)** — อ่านข้อความจากรูปภาพหรือ PDF ที่สแกนด้วย OCR ในตัวของ Windows แล้วคัดลอกไปยังคลิปบอร์ดทันที
 - **แยก PDF** — แยกเป็น PDF หน้าละไฟล์ หรือส่งออกแต่ละหน้าเป็น PNG/JPG
 - **ZIP และแตกไฟล์** — รวมไฟล์และโฟลเดอร์หลายรายการเป็น ZIP เดียว ส่วน .zip, .rar, .7z และ .tar.gz แตกได้ในครั้งเดียว
+- **แก้ไข** — ส่วน **EDIT** จะเปิดหน้าที่สอง: หมุน พลิก หรือทำภาพเป็นสีเทา; หมุน พลิก หรือเล่นวิดีโอย้อนกลับ (ย้อนกลับได้ถึง 30 วินาที); ปรับระดับเสียงให้สม่ำเสมอ เล่นเสียงย้อนกลับ หรือบันทึกภาพปก
+- **ฝังคำบรรยาย** — ลากวิดีโอหนึ่งไฟล์พร้อมไฟล์คำบรรยายหนึ่งไฟล์ แล้วเลือก **BURN IN**
+- **ZIP แบบมีรหัสผ่าน (Windows)** — **LOCK** รวมไฟล์เป็น ZIP แบบ AES-256 เปิดด้วย 7-Zip หรือ WinRAR
+- **แผ่นรวมภาพ** — **SHEET** รวมภาพหลายภาพ หรือ 16 เฟรมจากวิดีโอ ไว้ในภาพเดียว
+- **แปลงคลิปบอร์ด (Windows)** — คัดลอกไฟล์หรือรูปภาพ หรือจับภาพหน้าจอ แล้วกด <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>
+- **คู่มือในตัว (Windows)** — เปิด **Guide** จากเมนูถาดระบบเพื่อดูขั้นตอน
 - **เบาและเร็ว** — วงล้อเป็นหน้าต่างเล็ก ๆ ตรงเคอร์เซอร์ ไม่มีเอฟเฟกต์เต็มจอ จึงเปิดได้ทันทีแม้บนจอ 4K
   เลือกขนาด **S / M / L** ได้จากเมนูในถาดระบบ
 - **เปลี่ยนใจ?** กลับไปที่กลางวงล้อแล้วปล่อย: จะไม่มีการแปลงใด ๆ

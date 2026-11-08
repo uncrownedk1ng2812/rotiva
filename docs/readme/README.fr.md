@@ -90,14 +90,17 @@ La roue s'adapte au fichier que vous faites glisser. Le format du fichier lui-m�
 
 | Type | Depuis | Vers |
 |---|---|---|
-| 🖼️ Images | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Compresser**, **Texte (OCR)** |
-| 🎬 Vidéo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Compresser** |
-| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Documents | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Tableurs | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Images | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Compresser**, **Texte (OCR)**, **Modifier** |
+| 🎬 Vidéo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Compresser**, **Modifier** |
+| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Modifier** |
+| 📄 Documents | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Tableurs | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Présentations | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Scinder**, **Compresser**, **Texte (OCR)** |
 | 🗜️ Archives | ZIP, RAR, 7Z, TAR.GZ, … | **Extraire**, ZIP |
+| 📚 Livres numériques | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Sous-titres | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Données | JSON, YAML | JSON, YAML, CSV |
 
 ## Fonctionnalités
 
@@ -110,6 +113,12 @@ La roue s'adapte au fichier que vous faites glisser. Le format du fichier lui-m�
 - **Récupérer le texte (OCR)** : lisez le texte d'une image ou d'un PDF scanné avec l'OCR intégré de Windows, directement dans le presse-papiers.
 - **Scinder un PDF** : un PDF par page, ou exportez chaque page en PNG/JPG.
 - **ZIP et extraction** : regroupez fichiers et dossiers dans un seul ZIP ; .zip, .rar, .7z et .tar.gz s'extraient d'un seul geste.
+- **Modifier** : le segment **EDIT** ouvre une seconde page : pivotez, retournez ou passez en gris les images ; pivotez, retournez ou inversez les vidéos (inversion jusqu'à 30 s) ; égalisez le volume ou inversez l'audio, ou enregistrez sa pochette.
+- **Incruster des sous-titres** : glissez ensemble une vidéo et un fichier de sous-titres, puis choisissez **BURN IN**.
+- **ZIP avec mot de passe (Windows)** : **LOCK** crée un ZIP AES-256. Ouvrez-le avec 7-Zip ou WinRAR.
+- **Planche contact** : **SHEET** réunit plusieurs photos, ou 16 images d'une vidéo, en une seule image.
+- **Convertir le presse-papiers (Windows)** : copiez des fichiers ou une image, ou faites une capture, puis appuyez sur <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Guide intégré (Windows)** : ouvrez **Guide** dans le menu de la zone de notification.
 - **Léger et rapide** : la roue est une petite fenêtre sous le curseur, sans effet plein écran, elle s'ouvre donc
   instantanément même sur un écran 4K. Choisissez la taille **S / M / L** dans le menu de la zone de notification.
 - **Vous changez d'avis ?** Revenez au centre de la roue et relâchez : rien n'est converti.

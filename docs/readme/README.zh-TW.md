@@ -89,14 +89,17 @@ Rotiva 是一款常駐在系統匣的小程式。拖曳照片、影片、文件�
 
 | 類型 | 來源格式 | 目標格式 |
 |---|---|---|
-| 🖼️ 圖片 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **壓縮**, **文字 (OCR)** |
-| 🎬 影片 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **壓縮** |
-| 🎵 音訊 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 文件 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 試算表 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ 圖片 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **壓縮**, **文字 (OCR)**, **編輯** |
+| 🎬 影片 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **壓縮**, **編輯** |
+| 🎵 音訊 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **編輯** |
+| 📄 文件 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 試算表 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ 簡報 | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **分割**, **壓縮**, **文字 (OCR)** |
 | 🗜️ 壓縮檔 | ZIP, RAR, 7Z, TAR.GZ, … | **解壓縮**, ZIP |
+| 📚 電子書 | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 字幕 | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 資料 | JSON, YAML | JSON, YAML, CSV |
 
 ## 功能
 
@@ -109,6 +112,12 @@ Rotiva 是一款常駐在系統匣的小程式。拖曳照片、影片、文件�
 - **擷取文字 (OCR)**——用 Windows 內建的 OCR 辨識圖片或掃描 PDF 裡的文字，直接複製到剪貼簿。
 - **分割 PDF**——每頁一個 PDF，或把每一頁匯出成 PNG/JPG。
 - **ZIP 與解壓縮**——把多個檔案與資料夾打包成一個 ZIP；.zip、.rar、.7z 與 .tar.gz 一個動作就能解壓縮。
+- **編輯**——**EDIT** 區塊會開啟第二頁：旋轉、翻轉圖片或轉為灰階；旋轉、翻轉或倒轉影片（倒轉最長 30 秒）；統一音訊音量、倒轉音訊或儲存封面。
+- **燒錄字幕**——將一部影片和一個字幕檔一起拖曳，然後選擇 **BURN IN**。
+- **有密碼的 ZIP（Windows）**——**LOCK** 將檔案打包成 AES-256 加密的 ZIP，可用 7-Zip 或 WinRAR 開啟。
+- **縮圖總覽**——**SHEET** 將多張照片或影片的 16 個畫面合成一張圖片。
+- **轉換剪貼簿（Windows）**——複製檔案或圖片，或擷取螢幕，然後按 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>。
+- **內建指南（Windows）**——從系統匣選單開啟 **Guide** 查看操作步驟。
 - **輕巧快速**——轉盤是游標旁的小視窗，沒有全螢幕特效，即使在 4K 螢幕上也能立刻開啟。
   可在系統匣選單選擇 **S / M / L** 尺寸。
 - **改變心意？** 回到轉盤中心再放開，就不會轉換任何東西。

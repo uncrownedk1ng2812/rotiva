@@ -90,14 +90,17 @@ Koło dopasowuje się do przeciąganego pliku. Format samego pliku jest automaty
 
 | Typ | Z | Na |
 |---|---|---|
-| 🖼️ Obrazy | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Kompresja**, **Tekst (OCR)** |
-| 🎬 Wideo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Kompresja** |
-| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Dokumenty | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Arkusze kalkulacyjne | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Obrazy | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Kompresja**, **Tekst (OCR)**, **Edycja** |
+| 🎬 Wideo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Kompresja**, **Edycja** |
+| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Edycja** |
+| 📄 Dokumenty | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Arkusze kalkulacyjne | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Prezentacje | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Podział**, **Kompresja**, **Tekst (OCR)** |
 | 🗜️ Archiwa | ZIP, RAR, 7Z, TAR.GZ, … | **Wypakuj**, ZIP |
+| 📚 E-booki | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Napisy | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Dane | JSON, YAML | JSON, YAML, CSV |
 
 ## Funkcje
 
@@ -110,6 +113,12 @@ Koło dopasowuje się do przeciąganego pliku. Format samego pliku jest automaty
 - **Kopiuj tekst (OCR)** — odczytaj tekst z obrazu lub zeskanowanego PDF-a wbudowanym OCR Windows, prosto do schowka.
 - **Dzielenie PDF** — jeden PDF na stronę albo eksport każdej strony do PNG/JPG.
 - **ZIP i wypakowywanie** — spakuj wiele plików i folderów do jednego ZIP-a; .zip, .rar, .7z i .tar.gz wypakujesz jednym ruchem.
+- **Edycja** — segment **EDIT** otwiera drugą stronę: obracaj, odbijaj lub zamieniaj obrazy na szarość; obracaj, odbijaj lub odwracaj wideo (odwracanie do 30 s); wyrównuj głośność lub odwracaj dźwięk albo zapisz okładkę.
+- **Wtapianie napisów** — przeciągnij razem wideo i plik napisów, a potem wybierz **BURN IN**.
+- **ZIP z hasłem (Windows)** — **LOCK** pakuje pliki do ZIP-a AES-256. Otworzysz go w 7-Zip lub WinRAR.
+- **Arkusz miniatur** — **SHEET** łączy kilka zdjęć lub 16 klatek wideo w jeden obraz.
+- **Konwersja schowka (Windows)** — skopiuj pliki lub obraz albo zrób zrzut ekranu i naciśnij <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Wbudowany przewodnik (Windows)** — otwórz **Guide** z menu w zasobniku.
 - **Lekka i szybka** — koło to małe okno przy kursorze, bez efektów pełnoekranowych, więc otwiera się
   natychmiast nawet na ekranach 4K. Rozmiar **S / M / L** wybierzesz w menu zasobnika.
 - **Zmiana zdania?** Wróć na środek koła i puść: nic nie zostanie przekonwertowane.

@@ -90,14 +90,17 @@ La ruota si adatta al file che trascini. Il formato del file stesso viene nascos
 
 | Tipo | Da | A |
 |---|---|---|
-| 🖼️ Immagini | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Comprimi**, **Testo (OCR)** |
-| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Comprimi** |
-| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Documenti | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Fogli di calcolo | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Immagini | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Comprimi**, **Testo (OCR)**, **Modifica** |
+| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Comprimi**, **Modifica** |
+| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Modifica** |
+| 📄 Documenti | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Fogli di calcolo | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Presentazioni | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Dividi**, **Comprimi**, **Testo (OCR)** |
 | 🗜️ Archivi | ZIP, RAR, 7Z, TAR.GZ, … | **Estrai**, ZIP |
+| 📚 E-book | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Sottotitoli | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Dati | JSON, YAML | JSON, YAML, CSV |
 
 ## Funzionalità
 
@@ -110,6 +113,12 @@ La ruota si adatta al file che trascini. Il formato del file stesso viene nascos
 - **Copia il testo (OCR)**: leggi le parole di un'immagine o di un PDF scansionato con l'OCR integrato di Windows, direttamente negli appunti.
 - **Dividi i PDF**: un PDF per pagina, oppure esporta ogni pagina in PNG/JPG.
 - **ZIP ed estrazione**: raccogli tanti file e cartelle in un unico ZIP; .zip, .rar, .7z e .tar.gz si estraggono con un solo gesto.
+- **Modifica**: il segmento **EDIT** apre una seconda pagina: ruota, capovolgi o porta in grigio le immagini; ruota, capovolgi o inverti i video (inversione fino a 30 s); uniforma il volume o inverti l'audio, oppure salva la copertina.
+- **Sottotitoli impressi**: trascina insieme un video e un file di sottotitoli e scegli **BURN IN**.
+- **ZIP con password (Windows)**: **LOCK** crea uno ZIP AES-256. Aprilo con 7-Zip o WinRAR.
+- **Foglio provini**: **SHEET** riunisce più foto, o 16 fotogrammi di un video, in un'unica immagine.
+- **Converti gli appunti (Windows)**: copia file o un'immagine, o fai uno screenshot, poi premi <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Guida integrata (Windows)**: apri **Guide** dal menu dell'area di notifica.
 - **Leggero e veloce**: la ruota è una piccola finestra sotto il cursore, senza effetti a schermo intero, quindi si apre
   all'istante anche su schermi 4K. Scegli la dimensione **S / M / L** dal menu dell'area di notifica.
 - **Hai cambiato idea?** Torna al centro della ruota e rilascia: non viene convertito nulla.

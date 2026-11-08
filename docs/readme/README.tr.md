@@ -90,14 +90,17 @@ Sağ tıklamayı mı tercih edersiniz? Çarktaki her şey Dosya Gezgini'nin sağ
 
 | Tür | Kaynak | Hedef |
 |---|---|---|
-| 🖼️ Görseller | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Sıkıştır**, **Metin (OCR)** |
-| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Sıkıştır** |
-| 🎵 Ses | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Belgeler | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Tablolar | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Görseller | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Sıkıştır**, **Metin (OCR)**, **Düzenle** |
+| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Sıkıştır**, **Düzenle** |
+| 🎵 Ses | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Düzenle** |
+| 📄 Belgeler | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Tablolar | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Sunumlar | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Böl**, **Sıkıştır**, **Metin (OCR)** |
 | 🗜️ Arşivler | ZIP, RAR, 7Z, TAR.GZ, … | **Çıkart**, ZIP |
+| 📚 E-kitaplar | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Altyazılar | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Veri | JSON, YAML | JSON, YAML, CSV |
 
 ## Özellikler
 
@@ -110,6 +113,12 @@ Sağ tıklamayı mı tercih edersiniz? Çarktaki her şey Dosya Gezgini'nin sağ
 - **Metni kopyala (OCR)** — bir görseldeki veya taranmış PDF'teki yazıları Windows'un yerleşik OCR'ı ile okuyup doğrudan panoya alın.
 - **PDF böl** — her sayfa için ayrı bir PDF ya da her sayfayı PNG/JPG olarak dışa aktarın.
 - **ZIP ve çıkartma** — birçok dosya ve klasörü tek bir ZIP'te toplayın; .zip, .rar, .7z ve .tar.gz tek hamlede çıkartılır.
+- **Düzenle** — **EDIT** dilimi ikinci bir sayfa açar: görselleri döndürün, çevirin veya griye çevirin; videoları döndürün, çevirin veya tersine oynatın (en fazla 30 sn); sesi dengeleyin, tersine çevirin veya kapak görselini kaydedin.
+- **Altyazı gömme** — bir video ile bir altyazı dosyasını birlikte sürükleyip **BURN IN** seçin.
+- **Parolalı ZIP (Windows)** — **LOCK** dosyaları AES-256 ZIP olarak paketler. 7-Zip veya WinRAR ile açın.
+- **Kontakt baskı** — **SHEET** birkaç fotoğrafı veya bir videonun 16 karesini tek görselde toplar.
+- **Panoyu dönüştürme (Windows)** — dosya veya görsel kopyalayın ya da ekran görüntüsü alın, sonra <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> tuşlarına basın.
+- **Yerleşik kılavuz (Windows)** — adım adım yardım için tepsi menüsünden **Guide** öğesini açın.
 - **Hafif ve hızlı** — çark, imlecin yanında açılan küçük bir penceredir; tam ekran efekti olmadığı için 4K ekranlarda
   bile anında açılır. **S / M / L** boyutunu tepsi menüsünden seçin.
 - **Fikrinizi mi değiştirdiniz?** Çarkın ortasına dönüp bırakın: hiçbir şey dönüştürülmez.

@@ -60,6 +60,15 @@ const ID = {
   'Image': 'Gambar',
   'Document': 'Dokumen',
   'Slides': 'Slide',
+  'Wide compatibility': 'Paling kompatibel',
+  'Uncompressed for Apple': 'Tanpa kompresi untuk Apple',
+  'Structured data': 'Data terstruktur',
+  'Readable config': 'Konfigurasi mudah dibaca',
+  'Most compatible': 'Paling kompatibel',
+  'For the web': 'Untuk web',
+  'Styled subtitles': 'Subtitle bergaya',
+  'Song lyrics': 'Lirik lagu',
+  'Subtitle': 'Subtitle',
   'Archive': 'Arsip',
   'File': 'File',
   'Folder': 'Folder',
@@ -124,7 +133,7 @@ const EXTRACT = T('EXTRACT', 'Unpack to a folder', '', 'folder', 'extract');
 const CATEGORIES = [
   {
     id: 'image', name: 'Image', color: '#2b6cff',
-    exts: ['png', 'jpg', 'webp', 'avif', 'heic', 'heif', 'bmp', 'tiff', 'gif', 'ico', 'jfif'],
+    exts: ['png', 'jpg', 'webp', 'avif', 'heic', 'heif', 'bmp', 'tiff', 'gif', 'ico', 'jfif', 'psd', 'svg', 'jxl', 'dng', 'cr2', 'nef', 'arw'],
     targets: [
       compress('Shrink file size'),
       T('PNG', 'Lossless, transparent', '.png', 'image'),
@@ -141,7 +150,7 @@ const CATEGORIES = [
   },
   {
     id: 'video', name: 'Video', color: '#9b4dff',
-    exts: ['mp4', 'mkv', 'mov', 'avi', 'webm', 'wmv', 'flv', 'm4v', '3gp', 'ts'],
+    exts: ['mp4', 'mkv', 'mov', 'avi', 'webm', 'wmv', 'flv', 'm4v', '3gp', 'ts', 'mpg', 'vob'],
     targets: [
       compress('MP4 up to 1080p'),
       T('MP4', 'H.264, most compatible', '.mp4', 'video'),
@@ -157,7 +166,7 @@ const CATEGORIES = [
   },
   {
     id: 'audio', name: 'Audio', color: '#e0457b',
-    exts: ['mp3', 'wav', 'flac', 'ogg', 'opus', 'm4a', 'aac', 'wma', 'aiff'],
+    exts: ['mp3', 'wav', 'flac', 'ogg', 'opus', 'm4a', 'aac', 'wma', 'aiff', 'm4b', 'amr', 'ape'],
     targets: [
       T('MP3', '320 kbps', '.mp3', 'audio'),
       T('WAV', 'Uncompressed', '.wav', 'audio'),
@@ -165,6 +174,8 @@ const CATEGORIES = [
       T('OGG', 'Vorbis', '.ogg', 'audio'),
       T('OPUS', 'Most efficient', '.opus', 'audio'),
       T('M4A', 'AAC for Apple', '.m4a', 'audio'),
+      T('AAC', 'Wide compatibility', '.aac', 'audio'),
+      T('AIFF', 'Uncompressed for Apple', '.aiff', 'audio'),
       ZIP,
     ],
   },
@@ -179,6 +190,7 @@ const CATEGORIES = [
       T('HTML', 'Web page', '.html', 'doc'),
       T('MD', 'Markdown', '.md', 'doc'),
       T('RTF', 'Rich Text', '.rtf', 'doc'),
+      T('EPUB', 'E-book', '.epub', 'doc'),
       MERGE,
       ZIP,
     ],
@@ -193,6 +205,7 @@ const CATEGORIES = [
       T('PDF', 'Ready to print & share', '.pdf', 'pdf'),
       T('XLS', 'Excel 97-2003', '.xls', 'sheet'),
       T('HTML', 'Web page table', '.html', 'doc'),
+      T('JSON', 'Structured data', '.json', 'doc'),
       MERGE,
       ZIP,
     ],
@@ -229,6 +242,40 @@ const CATEGORIES = [
     id: 'archive', name: 'Archive', color: '#b8892a',
     exts: ['zip', 'rar', '7z', 'tar', 'gz', 'tgz', 'bz2', 'xz'],
     targets: [EXTRACT, ZIP],
+  },
+  {
+    id: 'ebook', name: 'E-book', color: '#7a5cd6',
+    exts: ['epub', 'fb2'],
+    targets: [
+      T('PDF', 'Ready to print & share', '.pdf', 'pdf'),
+      T('EPUB', 'E-book', '.epub', 'doc'),
+      T('DOCX', 'Microsoft Word', '.docx', 'doc'),
+      T('HTML', 'Web page', '.html', 'doc'),
+      T('TXT', 'Plain text', '.txt', 'doc'),
+      T('MD', 'Markdown', '.md', 'doc'),
+      ZIP,
+    ],
+  },
+  {
+    id: 'subtitle', name: 'Subtitle', color: '#2a9d8f',
+    exts: ['srt', 'vtt', 'ass', 'ssa', 'smi', 'lrc'],
+    targets: [
+      T('SRT', 'Most compatible', '.srt', 'text'),
+      T('VTT', 'For the web', '.vtt', 'text'),
+      T('ASS', 'Styled subtitles', '.ass', 'text'),
+      T('LRC', 'Song lyrics', '.lrc', 'text'),
+      ZIP,
+    ],
+  },
+  {
+    id: 'data', name: 'Data', color: '#607d8b',
+    exts: ['json', 'yaml'],
+    targets: [
+      T('JSON', 'Structured data', '.json', 'doc'),
+      T('YAML', 'Readable config', '.yaml', 'doc'),
+      T('CSV', 'Comma-separated text', '.csv', 'sheet'),
+      ZIP,
+    ],
   },
 ];
 

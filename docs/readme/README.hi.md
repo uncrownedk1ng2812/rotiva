@@ -90,14 +90,17 @@ Rotiva एक छोटा ऐप है जो सिस्टम ट्रे 
 
 | प्रकार | से | में |
 |---|---|---|
-| 🖼️ इमेज | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **कंप्रेस**, **टेक्स्ट (OCR)** |
-| 🎬 वीडियो | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **कंप्रेस** |
-| 🎵 ऑडियो | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 दस्तावेज़ | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 स्प्रेडशीट | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ इमेज | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **कंप्रेस**, **टेक्स्ट (OCR)**, **एडिट** |
+| 🎬 वीडियो | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **कंप्रेस**, **एडिट** |
+| 🎵 ऑडियो | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **एडिट** |
+| 📄 दस्तावेज़ | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 स्प्रेडशीट | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ स्लाइड | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **स्प्लिट**, **कंप्रेस**, **टेक्स्ट (OCR)** |
 | 🗜️ आर्काइव | ZIP, RAR, 7Z, TAR.GZ, … | **एक्सट्रैक्ट**, ZIP |
+| 📚 ई-बुक | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 सबटाइटल | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 डेटा | JSON, YAML | JSON, YAML, CSV |
 
 ## सुविधाएँ
 
@@ -110,6 +113,12 @@ Rotiva एक छोटा ऐप है जो सिस्टम ट्रे 
 - **टेक्स्ट निकालें (OCR)** — Windows के बिल्ट-इन OCR से किसी इमेज या स्कैन किए गए PDF के शब्द पढ़ें, सीधे क्लिपबोर्ड पर।
 - **PDF स्प्लिट करें** — हर पेज की अलग PDF, या हर पेज को PNG/JPG के रूप में एक्सपोर्ट करें।
 - **ZIP और एक्सट्रैक्ट** — कई फ़ाइलें/फ़ोल्डर एक ZIP में पैक करें; .zip, .rar, .7z और .tar.gz एक ही बार में एक्सट्रैक्ट।
+- **एडिट** — **EDIT** सेगमेंट दूसरा पेज खोलता है: इमेज को घुमाएँ, पलटें या ग्रे करें; वीडियो को घुमाएँ, पलटें या उल्टा चलाएँ (30 सेकंड तक); ऑडियो की आवाज़ बराबर करें, उल्टा करें या कवर आर्ट सेव करें।
+- **सबटाइटल बर्न करें** — एक वीडियो और एक सबटाइटल फ़ाइल साथ में ड्रैग करके **BURN IN** चुनें।
+- **पासवर्ड वाला ZIP (Windows)** — **LOCK** फ़ाइलों को AES-256 ZIP में पैक करता है। इसे 7-Zip या WinRAR से खोलें।
+- **कॉन्टैक्ट शीट** — **SHEET** कई फ़ोटो या वीडियो के 16 फ़्रेम एक ही इमेज में रखता है।
+- **क्लिपबोर्ड कन्वर्ट करें (Windows)** — फ़ाइलें या इमेज कॉपी करें या स्क्रीनशॉट लें, फिर <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> दबाएँ।
+- **बिल्ट-इन गाइड (Windows)** — चरणों के लिए ट्रे मेनू से **Guide** खोलें।
 - **हल्का और तेज़** — व्हील कर्सर के पास एक छोटी विंडो है, बिना फ़ुल-स्क्रीन इफ़ेक्ट के, इसलिए 4K स्क्रीन पर भी
   तुरंत खुलता है। ट्रे मेन्यू से **S / M / L** साइज़ चुनें।
 - **मन बदल गया?** व्हील के बीच में वापस जाएँ और छोड़ दें: कुछ भी कन्वर्ट नहीं होगा।

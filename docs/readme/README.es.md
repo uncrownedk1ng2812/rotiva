@@ -90,14 +90,17 @@ La rueda se adapta al archivo que arrastras. El formato del propio archivo se oc
 
 | Tipo | Desde | Hacia |
 |---|---|---|
-| 🖼️ Imágenes | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Comprimir**, **Texto (OCR)** |
-| 🎬 Vídeo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Comprimir** |
-| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Documentos | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Hojas de cálculo | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Imágenes | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Comprimir**, **Texto (OCR)**, **Editar** |
+| 🎬 Vídeo | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Comprimir**, **Editar** |
+| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Editar** |
+| 📄 Documentos | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Hojas de cálculo | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Presentaciones | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Dividir**, **Comprimir**, **Texto (OCR)** |
 | 🗜️ Archivos comprimidos | ZIP, RAR, 7Z, TAR.GZ, … | **Extraer**, ZIP |
+| 📚 Libros electrónicos | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Subtítulos | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Datos | JSON, YAML | JSON, YAML, CSV |
 
 ## Funciones
 
@@ -110,6 +113,12 @@ La rueda se adapta al archivo que arrastras. El formato del propio archivo se oc
 - **Extraer texto (OCR)**: lee las palabras de una imagen o de un PDF escaneado con el OCR integrado de Windows y cópialas al portapapeles.
 - **Dividir PDF**: un PDF por página, o exporta cada página como PNG/JPG.
 - **ZIP y extracción**: junta muchos archivos y carpetas en un ZIP; .zip, .rar, .7z y .tar.gz se extraen de un solo gesto.
+- **Editar**: el segmento **EDIT** abre una segunda página: gira, voltea o pasa a gris imágenes; gira, voltea o invierte vídeos (invertir hasta 30 s); iguala el volumen o invierte audio, o guarda su carátula.
+- **Incrustar subtítulos**: arrastra juntos un vídeo y un archivo de subtítulos y elige **BURN IN**.
+- **ZIP con contraseña (Windows)**: **LOCK** empaqueta archivos en un ZIP AES-256. Ábrelo con 7-Zip o WinRAR.
+- **Hoja de contactos**: **SHEET** reúne varias fotos, o 16 fotogramas de un vídeo, en una sola imagen.
+- **Convertir el portapapeles (Windows)**: copia archivos o una imagen, o haz una captura, y pulsa <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Guía integrada (Windows)**: abre **Guide** en el menú de la bandeja para ver los pasos.
 - **Ligero y rápido**: la rueda es una ventana pequeña junto al cursor, sin efectos a pantalla completa, así que se abre
   al instante incluso en pantallas 4K. Elige el tamaño **S / M / L** en el menú de la bandeja.
 - **¿Has cambiado de idea?** Vuelve al centro de la rueda y suelta: no se convierte nada.

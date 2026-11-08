@@ -89,14 +89,17 @@ Rotiva 是一款常驻系统托盘的小应用。拖动照片、视频、文档�
 
 | 类型 | 源格式 | 目标格式 |
 |---|---|---|
-| 🖼️ 图片 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **压缩**, **文字 (OCR)** |
-| 🎬 视频 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **压缩** |
-| 🎵 音频 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 文档 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 电子表格 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ 图片 | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **压缩**, **文字 (OCR)**, **编辑** |
+| 🎬 视频 | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **压缩**, **编辑** |
+| 🎵 音频 | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **编辑** |
+| 📄 文档 | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 电子表格 | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ 幻灯片 | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **拆分**, **压缩**, **文字 (OCR)** |
 | 🗜️ 压缩包 | ZIP, RAR, 7Z, TAR.GZ, … | **解压**, ZIP |
+| 📚 电子书 | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 字幕 | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 数据 | JSON, YAML | JSON, YAML, CSV |
 
 ## 功能
 
@@ -109,6 +112,12 @@ Rotiva 是一款常驻系统托盘的小应用。拖动照片、视频、文档�
 - **提取文字 (OCR)**——用 Windows 内置 OCR 识别图片或扫描版 PDF 中的文字，直接复制到剪贴板。
 - **拆分 PDF**——每页一个 PDF，或将每页导出为 PNG/JPG。
 - **ZIP 与解压**——把多个文件和文件夹打包成一个 ZIP；.zip、.rar、.7z 和 .tar.gz 一步解压。
+- **编辑**——**EDIT** 扇区会打开第二页：旋转、翻转图片或转为灰度；旋转、翻转或倒放视频（倒放最长 30 秒）；统一音频响度、倒放音频或保存封面。
+- **烧录字幕**——把一个视频和一个字幕文件一起拖动，然后选择 **BURN IN**。
+- **带密码的 ZIP（Windows）**——**LOCK** 将文件打包为 AES-256 加密的 ZIP，可用 7-Zip 或 WinRAR 打开。
+- **联系表**——**SHEET** 把多张照片或视频的 16 帧合成一张图片。
+- **转换剪贴板（Windows）**——复制文件或图片，或截图，然后按 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>。
+- **内置指南（Windows）**——从托盘菜单打开 **Guide** 查看操作步骤。
 - **轻快**——转盘是光标处的一个小窗口，没有全屏特效，即使在 4K 屏幕上也能瞬间打开。
   可在托盘菜单中选择 **S / M / L** 尺寸。
 - **改主意了？** 回到转盘中心再松开，就不会转换任何东西。

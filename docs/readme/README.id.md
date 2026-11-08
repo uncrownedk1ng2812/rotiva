@@ -90,14 +90,17 @@ Roda menyesuaikan dengan file yang kamu drag. Format file itu sendiri otomatis d
 
 | Jenis | Dari | Ke |
 |---|---|---|
-| 🖼️ Gambar | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Kompres**, **Teks (OCR)** |
-| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Kompres** |
-| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA | MP3, WAV, FLAC, OGG, OPUS, M4A |
-| 📄 Dokumen | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF |
-| 📊 Spreadsheet | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML |
+| 🖼️ Gambar | PNG, JPG, WEBP, AVIF, HEIC, BMP, TIFF, GIF, ICO, PSD, SVG, JXL, DNG, CR2, NEF, ARW, … | PNG, JPG, WEBP, AVIF, PDF, ICO, TIFF, **Kompres**, **Teks (OCR)**, **Edit** |
+| 🎬 Video | MP4, MKV, MOV, AVI, WEBM, WMV, FLV, 3GP, MPG, TS, VOB, … | MP4, WEBM, MOV, MKV, AVI, GIF, MP3, WAV, **Kompres**, **Edit** |
+| 🎵 Audio | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, WMA, AIFF, M4B, AMR, APE, … | MP3, WAV, FLAC, OGG, OPUS, M4A, AAC, AIFF, **Edit** |
+| 📄 Dokumen | DOCX, DOC, ODT, RTF, TXT, MD, HTML | PDF, DOCX, ODT, TXT, HTML, MD, RTF, EPUB |
+| 📊 Spreadsheet | XLSX, XLS, CSV, TSV, ODS | XLSX, CSV, ODS, PDF, XLS, HTML, JSON |
 | 📽️ Slide | PPTX, PPT, ODP, PPSX, PPS | PDF, PPTX, ODP, PNG, JPG |
 | 📕 PDF | PDF | DOCX, ODT, PNG, JPG, **Pisah**, **Kompres**, **Teks (OCR)** |
 | 🗜️ Arsip | ZIP, RAR, 7Z, TAR.GZ, … | **Ekstrak**, ZIP |
+| 📚 E-book | EPUB, FB2 | PDF, EPUB, DOCX, HTML, TXT, MD |
+| 💬 Subtitle | SRT, VTT, ASS, SSA, SMI, LRC | SRT, VTT, ASS, LRC |
+| 🧾 Data | JSON, YAML | JSON, YAML, CSV |
 
 ## Fitur
 
@@ -110,6 +113,12 @@ Roda menyesuaikan dengan file yang kamu drag. Format file itu sendiri otomatis d
 - **Ambil teks (OCR)** — baca tulisan di gambar atau PDF hasil scan dengan OCR bawaan Windows, langsung ke clipboard.
 - **Pisah PDF** — satu PDF per halaman, atau ekspor tiap halaman jadi PNG/JPG.
 - **ZIP & ekstrak** — satukan banyak file/folder jadi satu ZIP; .zip, .rar, .7z, dan .tar.gz diekstrak sekali gerak.
+- **Edit** — segmen **EDIT** membuka halaman kedua: putar, balik, atau hitam-putihkan gambar; putar, balik, atau mundurkan video (mundur hingga 30 detik); ratakan volume atau mundurkan audio, atau simpan gambar sampulnya.
+- **Tempel subtitle** — drag satu video dan satu file subtitle sekaligus, lalu pilih **TEMPEL**.
+- **ZIP berpassword (Windows)** — **KUNCI** mengemas file jadi ZIP AES-256. Buka dengan 7-Zip atau WinRAR.
+- **Lembar kontak** — **LEMBAR** menyatukan beberapa foto, atau 16 cuplikan video, dalam satu gambar.
+- **Konversi clipboard (Windows)** — salin file atau gambar, atau ambil screenshot, lalu tekan <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>.
+- **Panduan bawaan (Windows)** — buka **Panduan** dari menu tray untuk langkah-langkahnya.
 - **Ringan & cepat** — roda berupa jendela kecil tepat di kursor, tanpa efek layar penuh, jadi langsung terbuka
   bahkan di layar 4K. Pilih ukuran **S / M / L** dari menu tray.
 - **Berubah pikiran?** Kembalikan kursor ke tengah roda lalu lepas: tidak ada yang dikonversi.
