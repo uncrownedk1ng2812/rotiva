@@ -30,8 +30,11 @@
 </p>
 
 <p align="center">
+  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="assets/microsoft-store-badge.svg" alt="Get it from Microsoft Store" width="240"></a>
+</p>
+
+<p align="center">
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases/latest"><img src="https://img.shields.io/github/v/release/uncrownedk1ng2812/rotiva?label=version&color=ff8a1f" alt="Latest version"></a>
-  <a href="https://apps.microsoft.com/detail/9N5FPM017GN5"><img src="https://img.shields.io/badge/Microsoft%20Store-Get%20it-0078d4" alt="Microsoft Store"></a>
   <!-- Re-enable once downloads pass ~500:
   <a href="https://github.com/uncrownedk1ng2812/rotiva/releases"><img src="https://img.shields.io/github/downloads/uncrownedk1ng2812/rotiva/total?label=downloads&color=ff8a1f" alt="Total downloads"></a>
   -->

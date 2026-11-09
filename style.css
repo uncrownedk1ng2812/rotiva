@@ -94,7 +94,11 @@ h3 { font-size: 24px; text-transform: uppercase; letter-spacing: .02em; }
 .hero h1 em { font-style: normal; color: var(--accent); }
 .lead { font-size: clamp(17px, 1.6vw, 20px); color: var(--muted); max-width: 34em; margin: 24px 0 32px; }
 .lead b { color: var(--text); font-weight: 600; }
-.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.store-badge { display: inline-flex; border-radius: 7px; box-shadow: 0 0 0 1.5px var(--line-2); transition: transform .15s, box-shadow .15s; }
+.store-badge:hover { transform: translateY(-2px); box-shadow: 0 0 0 1.5px var(--text); }
+.store-badge[hidden] { display: none; }
+.store-badge img { display: block; width: auto; height: 56px; }
 .meta { color: var(--muted); font-size: 14px; margin: 18px 0 0; letter-spacing: .02em; }
 .hero-visual { position: relative; display: grid; justify-items: center; gap: 18px; }
 .hero-visual .wheel { width: min(560px, 100%); }
