@@ -84,5 +84,16 @@ mkdir -p "$staging"
 cp -R "$app" "$staging/"
 ln -s /Applications "$staging/Applications"
 rm -f "$output"
-hdiutil create -volname "Rotiva" -srcfolder "$staging" -ov -format UDZO "$output" >/dev/null
+# hdiutil di runner GitHub kadang gagal "Resource busy"; coba ulang beberapa kali.
+for attempt in 1 2 3 4 5; do
+  if hdiutil create -volname "Rotiva" -srcfolder "$staging" -ov -format UDZO "$output" >/dev/null; then
+    break
+  fi
+  if [ "$attempt" -eq 5 ]; then
+    echo "hdiutil gagal setelah $attempt percobaan" >&2
+    exit 1
+  fi
+  echo "==> hdiutil gagal (percobaan $attempt), coba lagi..."
+  sleep $((attempt * 5))
+done
 echo "==> Selesai: $output ($(du -h "$output" | cut -f1))"
